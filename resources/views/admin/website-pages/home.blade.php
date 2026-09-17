@@ -611,106 +611,128 @@
                                 $cardImage = $card['image'] ?? ('images/' . ($index === 0 ? 'dahi_vada.jpg' : ($index === 1 ? 'lucknow_heritage.jpg' : 'chaat.jpg')));
                                 $cardImageSrc = str_starts_with($cardImage, 'http') ? $cardImage : asset($cardImage);
                             @endphp
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="card border border-light-subtle shadow-sm h-100 highlight-editor-card" data-card-index="{{ $index }}" style="border-radius: 12px; overflow: hidden; background: #fafbfc;">
-                                    <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="badge bg-primary px-2 py-1 fs-11 fw-bold">Card #{{ $index + 1 }}</span>
-                                            <span class="fs-13 fw-bold text-dark text-truncate card-header-title" style="max-width: 170px;">
-                                                {{ !empty($card['heading']) ? $card['heading'] : 'Feature Card ' . ($index + 1) }}
+                            <!-- Card {{ $index + 1 }} (Ek ke Niche Ek) -->
+                            <div class="col-12">
+                                <div class="card border border-light-subtle shadow-sm highlight-editor-card" data-card-index="{{ $index }}" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                                    <!-- Card Header -->
+                                    <div class="card-header bg-white py-3 px-4 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                        <div class="d-flex align-items-center gap-2.5">
+                                            <span class="badge bg-primary px-3 py-1.5 fs-12 fw-bold rounded-pill">
+                                                <i class="bi bi-card-heading me-1"></i> Card {{ $index + 1 }}
                                             </span>
+                                            <h6 class="fs-14 fw-bold text-dark mb-0 card-header-title">
+                                                {{ !empty($card['heading']) ? $card['heading'] : 'Card ' . ($index + 1) . ' Title' }}
+                                            </h6>
                                         </div>
-                                        <span class="badge bg-light text-muted border fs-11">Slot {{ $index + 1 }} of 3</span>
+                                        <span class="badge bg-light text-muted border px-2.5 py-1 fs-11">
+                                            Highlights Strip Item {{ $index + 1 }} of 3
+                                        </span>
                                     </div>
 
-                                    <div class="card-body p-3.5 d-flex flex-column gap-3">
-                                        <!-- Subheading (Gold Accent) -->
-                                        <div>
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                <i class="bi bi-stars text-warning me-1"></i> Subheading / Gold Accent:
-                                            </label>
-                                            <input type="text"
-                                                   name="cards[{{ $index }}][subheading]"
-                                                   class="form-control form-control-sm modern-input highlight-subheading-input"
-                                                   value="{{ $card['subheading'] ?? '' }}"
-                                                   placeholder="e.g. Since 1976 / ABOUT OUR HERITAGE">
-                                            <small class="text-muted fs-11">Card par golden italic font me dikhta hai.</small>
-                                        </div>
+                                    <!-- Card Body with Left Inputs and Right Live Card Preview -->
+                                    <div class="card-body p-4">
+                                        <div class="row g-4 align-items-stretch">
+                                            <!-- Left Side: Inputs -->
+                                            <div class="col-lg-7 col-md-12 d-flex flex-column gap-3 justify-content-between">
+                                                <div class="row g-3">
+                                                    <!-- Subheading (Gold Accent) -->
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                            <i class="bi bi-stars text-warning me-1"></i> Subheading / Gold Accent:
+                                                        </label>
+                                                        <input type="text"
+                                                               name="cards[{{ $index }}][subheading]"
+                                                               class="form-control form-control-sm modern-input highlight-subheading-input"
+                                                               value="{{ $card['subheading'] ?? '' }}"
+                                                               placeholder="e.g. Since 1976 / ABOUT OUR HERITAGE">
+                                                        <small class="text-muted fs-11">Card par golden italic font me dikhta hai.</small>
+                                                    </div>
 
-                                        <!-- Main Heading -->
-                                        <div>
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                <i class="bi bi-type-h1 text-primary me-1"></i> Main Heading / Title:
-                                            </label>
-                                            <input type="text"
-                                                   name="cards[{{ $index }}][heading]"
-                                                   class="form-control form-control-sm modern-input highlight-heading-input"
-                                                   value="{{ $card['heading'] ?? '' }}"
-                                                   placeholder="e.g. THE ORIGINAL TASTE OF LUCKNOW">
-                                            <small class="text-muted fs-11">Card ka bold main title.</small>
-                                        </div>
+                                                    <!-- Main Heading -->
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                            <i class="bi bi-type-h1 text-primary me-1"></i> Main Heading / Title:
+                                                        </label>
+                                                        <input type="text"
+                                                               name="cards[{{ $index }}][heading]"
+                                                               class="form-control form-control-sm modern-input highlight-heading-input"
+                                                               value="{{ $card['heading'] ?? '' }}"
+                                                               placeholder="e.g. THE ORIGINAL TASTE OF LUCKNOW">
+                                                        <small class="text-muted fs-11">Card ka bold main title.</small>
+                                                    </div>
+                                                </div>
 
-                                        <!-- Short Paragraph -->
-                                        <div>
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                <i class="bi bi-text-paragraph text-success me-1"></i> Short Paragraph (Chota Paragraph):
-                                            </label>
-                                            <textarea name="cards[{{ $index }}][description]"
-                                                      rows="2"
-                                                      class="form-control form-control-sm modern-input highlight-desc-input"
-                                                      placeholder="Enter brief description...">{{ $card['description'] ?? '' }}</textarea>
-                                            <small class="text-muted fs-11">Card ke bottom me clean 1-2 lines description.</small>
-                                        </div>
+                                                <!-- Short Paragraph -->
+                                                <div>
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                        <i class="bi bi-text-paragraph text-success me-1"></i> Short Paragraph (Chota Paragraph):
+                                                    </label>
+                                                    <textarea name="cards[{{ $index }}][description]"
+                                                              rows="3"
+                                                              class="form-control form-control-sm modern-input highlight-desc-input"
+                                                              placeholder="Enter brief description (1-2 lines)...">{{ $card['description'] ?? '' }}</textarea>
+                                                    <small class="text-muted fs-11">Card ke bottom me clean 1-2 lines description.</small>
+                                                </div>
 
-                                        <!-- Card Image Upload -->
-                                        <div class="pt-2 border-top">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
-                                                <span><i class="bi bi-image-fill text-info me-1"></i> Card Background Image:</span>
-                                                <span class="fs-10 text-muted">Badi image bhi exact fit hogi</span>
-                                            </label>
-                                            <input type="file"
-                                                   name="cards[{{ $index }}][image_file]"
-                                                   class="form-control form-control-sm highlight-image-file-input mb-1"
-                                                   accept="image/*">
-                                            <input type="hidden"
-                                                   name="cards[{{ $index }}][image]"
-                                                   class="highlight-image-path-hidden"
-                                                   value="{{ $card['image'] ?? '' }}">
-                                            <div class="d-flex align-items-center justify-content-between mt-1">
-                                                <span class="text-muted fs-11 text-truncate highlight-image-path-display font-monospace" style="max-width: 220px;">
-                                                    {{ $card['image'] ?? 'Default Image' }}
-                                                </span>
+                                                <!-- Card Image Upload -->
+                                                <div class="p-3 bg-light rounded-3 border border-light-subtle">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
+                                                        <span><i class="bi bi-image-fill text-info me-1"></i> Card Background Image:</span>
+                                                        <span class="badge bg-info-subtle text-info fs-10 border border-info-subtle">
+                                                            <i class="bi bi-lock-fill me-0.5"></i> Height locked 360px
+                                                        </span>
+                                                    </label>
+                                                    <input type="file"
+                                                           name="cards[{{ $index }}][image_file]"
+                                                           class="form-control form-control-sm highlight-image-file-input mb-1 bg-white"
+                                                           accept="image/*">
+                                                    <input type="hidden"
+                                                           name="cards[{{ $index }}][image]"
+                                                           class="highlight-image-path-hidden"
+                                                           value="{{ $card['image'] ?? '' }}">
+                                                    <div class="d-flex align-items-center justify-content-between mt-1.5">
+                                                        <span class="text-muted fs-11 text-truncate highlight-image-path-display font-monospace" style="max-width: 350px;">
+                                                            <i class="bi bi-folder2-open me-1"></i> Current: {{ $card['image'] ?? 'Default Image' }}
+                                                        </span>
+                                                        <small class="text-muted fs-11">Badi image bhi exact fit hogi</small>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Live Card Replica Mockup -->
-                                        <div class="mt-1">
-                                            <label class="fs-11 fw-bold text-muted text-uppercase mb-1 d-block letter-spacing-1">
-                                                <i class="bi bi-eye-fill me-1 text-primary"></i> Live Card Preview:
-                                            </label>
-                                            <!-- Mini replica of the frontend card -->
-                                            <div class="highlight-mini-card position-relative overflow-hidden rounded-3 shadow-sm"
-                                                 style="height: 220px; background: #083b3c; border: 1px solid rgba(255,255,255,0.15);">
-                                                <img src="{{ $cardImageSrc }}"
-                                                     alt="Preview"
-                                                     class="highlight-mini-img position-absolute w-100 h-100"
-                                                     style="top:0; left:0; object-fit: cover; object-position: center; transition: transform 0.3s ease;">
-                                                <div class="position-absolute w-100 h-100"
-                                                     style="top:0; left:0; pointer-events: none; background: linear-gradient(to top, rgba(8,59,60,0.98) 0%, rgba(8,59,60,0.85) 30%, rgba(8,59,60,0.4) 60%, rgba(8,59,60,0.05) 100%);"></div>
-                                                <div class="position-absolute w-100 p-3 text-center d-flex flex-column align-items-center justify-content-end"
-                                                     style="bottom: 0; left: 0; z-index: 3;">
-                                                    <h6 class="highlight-preview-heading text-white fw-bold mb-1 fs-12 text-uppercase"
-                                                        style="font-family: serif; letter-spacing: 0.5px; line-height: 1.25; text-shadow: 0 2px 6px rgba(0,0,0,0.6);">
-                                                        {{ $card['heading'] ?? 'THE ORIGINAL TASTE OF LUCKNOW' }}
-                                                    </h6>
-                                                    <span class="highlight-preview-subheading fs-11 fst-italic fw-semibold mb-1"
-                                                          style="color: #f1b347; font-family: serif; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
-                                                        {{ $card['subheading'] ?? 'Since 1976' }}
-                                                    </span>
-                                                    <p class="highlight-preview-desc fs-10 text-white-50 mb-0 text-truncate-2"
-                                                       style="line-height: 1.25; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
-                                                        {{ $card['description'] ?? 'A traditional Lucknow recipe perfected over generations.' }}
-                                                    </p>
+                                            <!-- Right Side: Live Card Replica Mockup -->
+                                            <div class="col-lg-5 col-md-12">
+                                                <div class="d-flex flex-column h-100">
+                                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                                        <label class="fs-11 fw-bold text-muted text-uppercase mb-0 letter-spacing-1">
+                                                            <i class="bi bi-eye-fill me-1 text-primary"></i> Live Card {{ $index + 1 }} Preview:
+                                                        </label>
+                                                        <span class="badge bg-dark-subtle text-dark fs-10">Exact Ratio</span>
+                                                    </div>
+                                                    <!-- Mini replica matching the website card styling -->
+                                                    <div class="highlight-mini-card position-relative overflow-hidden rounded-3 shadow-sm flex-grow-1"
+                                                         style="min-height: 240px; background: #083b3c; border: 1px solid rgba(255,255,255,0.18);">
+                                                        <img src="{{ $cardImageSrc }}"
+                                                             alt="Preview"
+                                                             class="highlight-mini-img position-absolute w-100 h-100"
+                                                             style="top:0; left:0; object-fit: cover; object-position: center; transition: transform 0.3s ease;">
+                                                        <div class="position-absolute w-100 h-100"
+                                                             style="top:0; left:0; pointer-events: none; background: linear-gradient(to top, rgba(8,59,60,0.98) 0%, rgba(8,59,60,0.85) 30%, rgba(8,59,60,0.4) 60%, rgba(8,59,60,0.05) 100%);"></div>
+                                                        <div class="position-absolute w-100 p-3.5 text-center d-flex flex-column align-items-center justify-content-end"
+                                                             style="bottom: 0; left: 0; z-index: 3;">
+                                                            <h6 class="highlight-preview-heading text-white fw-bold mb-1 fs-13 text-uppercase"
+                                                                style="font-family: serif; letter-spacing: 0.5px; line-height: 1.25; text-shadow: 0 2px 6px rgba(0,0,0,0.6);">
+                                                                {{ $card['heading'] ?? 'THE ORIGINAL TASTE OF LUCKNOW' }}
+                                                            </h6>
+                                                            <span class="highlight-preview-subheading fs-11 fst-italic fw-semibold mb-1"
+                                                                  style="color: #f1b347; font-family: serif; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+                                                                {{ $card['subheading'] ?? 'Since 1976' }}
+                                                            </span>
+                                                            <p class="highlight-preview-desc fs-11 text-white-50 mb-0 text-truncate-2"
+                                                               style="line-height: 1.3; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+                                                                {{ $card['description'] ?? 'A traditional Lucknow recipe perfected over generations.' }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

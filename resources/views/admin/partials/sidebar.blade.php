@@ -27,12 +27,24 @@
                 </li>
 
                 <li class="menu-title px-3 py-2 text-uppercase fs-11 fw-semibold mt-2" style="color: #6d7899; letter-spacing: 0.8px;">
-                    <span>Website Pages</span>
+                    <span>Website Content</span>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link px-3 py-2 d-flex align-items-center gap-2.5 text-white {{ request()->routeIs('admin.website-pages.*') ? 'active text-white' : '' }}" href="{{ route('admin.website-pages.index') }}" style="{{ request()->routeIs('admin.website-pages.*') ? 'background: rgba(1, 98, 232, 0.2); color: #ffffff !important; border-left: 3px solid #0162e8;' : '' }}">
+                    <a class="nav-link menu-link px-3 py-2 d-flex align-items-center gap-2.5 text-white {{ request()->routeIs('admin.website-pages.index') ? 'active text-white' : '' }}" href="{{ route('admin.website-pages.index') }}" style="{{ request()->routeIs('admin.website-pages.index') ? 'background: rgba(1, 98, 232, 0.2); color: #ffffff !important; border-left: 3px solid #0162e8;' : '' }}">
                         <i class="bi bi-layout-text-window-reverse fs-15 text-primary"></i>
-                        <span class="fs-13">Website Pages</span>
+                        <span class="fs-13">All Website Pages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link px-3 py-2 d-flex align-items-center gap-2.5 text-white {{ request()->fullUrlIs('*section=highlights_strip*') ? 'active text-white' : '' }}" href="{{ route('admin.website-pages.home', ['section' => 'highlights_strip']) }}" style="{{ request()->fullUrlIs('*section=highlights_strip*') ? 'background: rgba(1, 98, 232, 0.2); color: #ffffff !important; border-left: 3px solid #0162e8;' : '' }}">
+                        <i class="bi bi-collection-play-fill fs-15 text-warning"></i>
+                        <span class="fs-13">Highlights Strip</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link px-3 py-2 d-flex align-items-center gap-2.5 text-white {{ request()->fullUrlIs('*section=hero_section*') ? 'active text-white' : '' }}" href="{{ route('admin.website-pages.home', ['section' => 'hero_section']) }}" style="{{ request()->fullUrlIs('*section=hero_section*') ? 'background: rgba(1, 98, 232, 0.2); color: #ffffff !important; border-left: 3px solid #0162e8;' : '' }}">
+                        <i class="bi bi-images fs-15 text-info"></i>
+                        <span class="fs-13">Hero Banner Slider</span>
                     </a>
                 </li>
             </ul>

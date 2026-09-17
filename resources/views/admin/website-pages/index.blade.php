@@ -59,11 +59,14 @@
                             <td><code>pages.home</code></td>
                             <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1">Active</span></td>
                             <td class="pe-4 text-end">
-                                <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-light text-primary border" title="Preview Page">
-                                    <i class="bi bi-eye"></i> 
+                                <a href="{{ route('admin.website-pages.home', ['section' => 'highlights_strip']) }}" class="btn btn-sm btn-light text-warning border fw-semibold" title="Edit Highlights Strip (3 Cards)">
+                                    <i class="bi bi-collection-play-fill me-1"></i> Highlights Strip
                                 </a>
-                                <a href="{{ route('admin.website-pages.home') }}" class="btn btn-sm btn-light text-primary border" title="Edit Page">
-                                    <i class="bi bi-pencil"></i> 
+                                <a href="{{ route('admin.website-pages.home') }}" class="btn btn-sm btn-light text-primary border" title="Edit Home Page">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-light text-secondary border" title="Preview Live Page">
+                                    <i class="bi bi-eye"></i> 
                                 </a>
                             </td>
                         </tr>
