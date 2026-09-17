@@ -883,20 +883,23 @@
                                         </div>
                                     </div>
 
-                                    <!-- Paragraph 1: Founder & Origin Story -->
-                                    <div>
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                            <i class="bi bi-award-fill text-warning me-1"></i> Founder Story (Sant Ram Gupta Ji & 1976 Origin):
-                                        </label>
-                                        <textarea name="welcome[founder_story]" rows="3" class="form-control form-control-sm modern-input welcome-input-founder" placeholder="Enter founder origin story...">{{ $welcome['founder_story'] ?? '' }}</textarea>
-                                    </div>
+                                    <!-- Row: Left = Founder Story, Right = Brand Philosophy -->
+                                    <div class="row g-3">
+                                        <!-- Left Column: Founder Story -->
+                                        <div class="col-md-6 col-sm-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-award-fill text-warning me-1"></i> Founder Story (Sant Ram Gupta Ji & 1976 Origin):
+                                            </label>
+                                            <textarea name="welcome[founder_story]" rows="4" class="form-control form-control-sm modern-input welcome-input-founder" style="min-height: 105px;" placeholder="Enter founder origin story...">{{ $welcome['founder_story'] ?? '' }}</textarea>
+                                        </div>
 
-                                    <!-- Paragraph 2: Philosophy -->
-                                    <div>
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                            <i class="bi bi-gem text-success me-1"></i> Brand Philosophy / Core Values:
-                                        </label>
-                                        <textarea name="welcome[philosophy]" rows="2" class="form-control form-control-sm modern-input welcome-input-philosophy" placeholder="e.g. Our philosophy has always remained simple: Authentic taste...">{{ $welcome['philosophy'] ?? '' }}</textarea>
+                                        <!-- Right Column: Brand Philosophy -->
+                                        <div class="col-md-6 col-sm-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-gem text-success me-1"></i> Brand Philosophy / Core Values:
+                                            </label>
+                                            <textarea name="welcome[philosophy]" rows="4" class="form-control form-control-sm modern-input welcome-input-philosophy" style="min-height: 105px;" placeholder="e.g. Our philosophy has always remained simple: Authentic taste...">{{ $welcome['philosophy'] ?? '' }}</textarea>
+                                        </div>
                                     </div>
 
                                     <!-- Paragraph 3: Current Journey -->
