@@ -657,7 +657,7 @@
                                                 <!-- Short Paragraph -->
                                                 <div>
                                                     <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                        <i class="bi bi-text-paragraph text-success me-1"></i> Short Paragraph (Chota Paragraph):
+                                                        <i class="bi bi-text-paragraph text-success me-1"></i> Short Paragraph / Description:
                                                     </label>
                                                     <textarea name="cards[{{ $index }}][description]"
                                                               rows="3"

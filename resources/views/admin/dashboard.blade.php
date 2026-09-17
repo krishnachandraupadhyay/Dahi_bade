@@ -46,7 +46,7 @@
                             Highlights Strip (3 Feature Cards)
                         </h4>
                         <p class="fs-13 text-white-50 mb-3" style="line-height: 1.5;">
-                            Home page ke hero banner ke turant neeche aane wale 3 cards (Card 1, Card 2, Card 3) ka <strong>image, main heading, gold subheading aur chota paragraph</strong> direct yahan se edit karein.
+                            Home page ke hero banner ke turant neeche aane wale 3 cards (Card 1, Card 2, Card 3) ka <strong>image, main heading, gold subheading aur short description</strong> direct yahan se edit karein.
                         </p>
                         <div class="d-flex flex-wrap gap-2 mb-3">
                             <span class="badge bg-white bg-opacity-10 text-white fs-11 border border-white border-opacity-10">
