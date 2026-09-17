@@ -401,7 +401,7 @@ class WebpageController extends Controller
         $savedSlides = [];
 
         if (!is_array($inputSlides) || count($inputSlides) === 0) {
-            return back()->with('error', 'Kam se kam ek slide honi chahiye.');
+            return back()->with('error', 'At least one slide is required.');
         }
 
         $uploadDir = public_path('uploads/hero');

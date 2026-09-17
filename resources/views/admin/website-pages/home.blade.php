@@ -603,7 +603,7 @@
                                 $cardImage = $card['image'] ?? ('images/' . ($index === 0 ? 'dahi_vada.jpg' : ($index === 1 ? 'lucknow_heritage.jpg' : 'chaat.jpg')));
                                 $cardImageSrc = str_starts_with($cardImage, 'http') ? $cardImage : asset($cardImage);
                             @endphp
-                            <!-- Card {{ $index + 1 }} (Ek ke Niche Ek) -->
+                            <!-- Card {{ $index + 1 }} (Stacked vertically) -->
                             <div class="col-12">
                                 <div class="card border border-light-subtle shadow-sm highlight-editor-card" data-card-index="{{ $index }}" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
                                     <!-- Card Header -->
@@ -801,7 +801,7 @@
                                                         <i class="bi bi-folder2-open me-1"></i> Current: {{ $welcome['image'] ?? 'images/storefront.jpg' }}
                                                     </span>
                                                     <small class="text-muted fs-11 d-block">
-                                                        <i class="bi bi-info-circle me-1"></i> Homepage par vertical outlet photo dikhta hai.
+                                                        <i class="bi bi-info-circle me-1"></i> Displayed as a vertical storefront photo on the homepage.
                                                     </small>
                                                 </div>
                                                 <div class="col-md-5 col-sm-12">
@@ -1015,7 +1015,7 @@
                                 <span class="badge bg-success text-white rounded-pill px-2.5 py-1 fs-11">Header</span>
                                 <h6 class="fs-14 fw-bold text-dark mb-0">Section Titles & Badges</h6>
                             </div>
-                            <small class="text-muted fs-12">Website par card grid ke theek upar show hota hai</small>
+                            <small class="text-muted fs-12">Displayed directly above the feature card grid on the website</small>
                         </div>
                         <div class="card-body p-4">
                             <div class="row g-3">
@@ -1058,7 +1058,7 @@
                                 <span class="badge bg-primary text-white rounded-pill px-2.5 py-1 fs-11">Grid Items</span>
                                 <div>
                                     <h6 class="fs-14 fw-bold text-dark mb-0">Feature Cards (Add / Remove / Edit)</h6>
-                                    <small class="text-muted fs-11">Front website grid me responsive layout me render honge</small>
+                                    <small class="text-muted fs-11">Rendered dynamically in a responsive grid layout on the website</small>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-sm btn-success px-3 py-1.5 fs-12 fw-bold d-flex align-items-center gap-1.5 shadow-sm" id="btn_add_why_gpo_card">
@@ -1202,7 +1202,7 @@
                                                         <i class="bi bi-folder2-open me-1"></i> Current: {{ $starDish['image'] ?? 'images/dahi_vada.jpg' }}
                                                     </span>
                                                     <small class="text-muted fs-11 d-block">
-                                                        <i class="bi bi-info-circle me-1"></i> Left side par large showcase image ke roop me display hota hai.
+                                                        <i class="bi bi-info-circle me-1"></i> Displayed as the large showcase feature dish image on the left.
                                                     </small>
                                                 </div>
                                                 <div class="col-md-5 col-sm-12">
@@ -1239,7 +1239,7 @@
                                             </div>
                                             <div class="p-2.5 rounded-2 bg-light-subtle border mt-2">
                                                 <small class="text-muted fs-11 d-block">
-                                                    <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Button click hone par user Menu page par order karne pahunchega.
+                                                    <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Clicking this button directs the user to the Menu page to order.
                                                 </small>
                                             </div>
                                         </div>
@@ -1256,7 +1256,7 @@
                                         <span class="badge bg-danger text-white rounded-pill px-2.5 py-1 fs-11">Header</span>
                                         <h6 class="fs-14 fw-bold text-dark mb-0">Headings & Highlight Quote</h6>
                                     </div>
-                                    <small class="text-muted fs-12">Star section ke right column ka top & bottom punchline</small>
+                                    <small class="text-muted fs-12">Top heading and highlight punchline on the right column</small>
                                 </div>
                                 <div class="card-body p-4">
                                     <div class="row g-3">
@@ -1294,7 +1294,7 @@
                                         <span class="badge bg-danger text-white rounded-pill px-2.5 py-1 fs-11">Story</span>
                                         <div>
                                             <h6 class="fs-14 fw-bold text-dark mb-0">Dish Flavour & Experience Paragraphs (Add / Remove)</h6>
-                                            <small class="text-muted fs-11">Website par heading ke niche render hote hain</small>
+                                            <small class="text-muted fs-11">Rendered below the heading on the website</small>
                                         </div>
                                     </div>
                                     <button type="button" class="btn btn-sm btn-danger px-3 py-1.5 fs-12 fw-bold d-flex align-items-center gap-1.5 shadow-sm" id="btn_add_star_paragraph">
@@ -1369,7 +1369,7 @@
                 <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
                     <i class="bi bi-cup-hot fs-32 text-dark mb-2 d-block"></i>
                     <h6 class="fw-bold text-dark mb-1">Favourite Dishes Section</h6>
-                    <p class="fs-13 text-muted mb-0">6 dishes (Dahi Bade, Chilla, Samosa, Chaat, etc.) ka data yahan aayega.</p>
+                    <p class="fs-13 text-muted mb-0">Manage items for the 6 favourite dishes (Dahi Bade, Chilla, Samosa, Chaat, etc.) here.</p>
                 </div>
             </div>
 
@@ -1403,7 +1403,7 @@
                                 <span class="badge bg-primary text-white rounded-pill px-2.5 py-1 fs-11">Headings</span>
                                 <h6 class="fs-14 fw-bold text-dark mb-0">Section Titles & Heading</h6>
                             </div>
-                            <small class="text-muted fs-12">Website par feature strip ke theek upar show hota hai</small>
+                            <small class="text-muted fs-12">Displayed directly above the feature strip on the website</small>
                         </div>
                         <div class="card-body p-4">
                             <div class="row g-3">
@@ -1435,7 +1435,7 @@
                                 <span class="badge bg-success text-white rounded-pill px-2.5 py-1 fs-11">Strip Items</span>
                                 <div>
                                     <h6 class="fs-14 fw-bold text-dark mb-0">Experience Feature Items (Add / Remove / Edit)</h6>
-                                    <small class="text-muted fs-11">Front website experience strip me 4-column layout me render honge</small>
+                                    <small class="text-muted fs-11">Rendered across a 4-column strip layout on the live website</small>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-sm btn-success px-3 py-1.5 fs-12 fw-bold d-flex align-items-center gap-1.5 shadow-sm" id="btn_add_experience_item">
@@ -1533,7 +1533,7 @@
                 <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
                     <i class="bi bi-chat-heart fs-32 text-warning mb-2 d-block"></i>
                     <h6 class="fw-bold text-dark mb-1">Customer Reviews Section</h6>
-                    <p class="fs-13 text-muted mb-0">Customer ratings, feedback reviews aur titles yahan aayenge.</p>
+                    <p class="fs-13 text-muted mb-0">Manage customer ratings, feedback reviews, and testimonials here.</p>
                 </div>
             </div>
 
@@ -1548,7 +1548,7 @@
                 <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
                     <i class="bi bi-geo-alt-fill fs-32 text-info mb-2 d-block"></i>
                     <h6 class="fw-bold text-dark mb-1">Store & Location Section</h6>
-                    <p class="fs-13 text-muted mb-0">Hazratganj store address, timings, phone, email aur map link yahan aayenge.</p>
+                    <p class="fs-13 text-muted mb-0">Manage store address, operational timings, phone, email, and map location here.</p>
                 </div>
             </div>
 
@@ -1563,7 +1563,7 @@
                 <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
                     <i class="bi bi-briefcase fs-32 text-secondary mb-2 d-block"></i>
                     <h6 class="fw-bold text-dark mb-1">Franchise CTA Section</h6>
-                    <p class="fs-13 text-muted mb-0">Franchise call-to-action text, buttons aur banner info yahan add hoga.</p>
+                    <p class="fs-13 text-muted mb-0">Manage franchise call-to-action text, buttons, and banner details here.</p>
                 </div>
             </div>
         </div>
@@ -1654,7 +1654,7 @@
                     const buttonsList = pane.querySelector('.slide-buttons-list');
                     const rows = buttonsList ? buttonsList.querySelectorAll('.slide-button-row') : [];
                     if (rows.length <= 1) {
-                        if (!confirm('Kya aap is aakhiri button ko bhi hatana chahte hain? (Slide bina kisi button ke dikhegi)')) {
+                        if (!confirm('Are you sure you want to remove the last button? (The slide will display without any buttons)')) {
                             return;
                         }
                     }
@@ -1772,11 +1772,11 @@
                 removeBtn.addEventListener('click', function () {
                     const allPanes = panesContainer.querySelectorAll('.slide-tab-pane');
                     if (allPanes.length <= 1) {
-                        alert('Kam se kam ek slide rehna anivarya hai! Aap ise remove nahi kar sakte.');
+                        alert('At least one slide is required! You cannot remove it.');
                         return;
                     }
 
-                    if (confirm('Kya aap sach me is slide ko remove karna chahte hain?')) {
+                    if (confirm('Are you sure you want to remove this slide?')) {
                         const paneIndex = pane.getAttribute('data-slide-index');
                         const correspondingTab = tabsContainer.querySelector(`.slide-nav-item[data-slide-index="${paneIndex}"]`);
 
@@ -2348,10 +2348,10 @@
                     const item = removeBtn.closest('.welcome-paragraph-item');
                     const totalItems = welcomeParaContainer.querySelectorAll('.welcome-paragraph-item').length;
                     if (totalItems <= 1) {
-                        alert('Kam se kam ek story paragraph hona zaroori hai.');
+                        alert('At least one story paragraph is required.');
                         return;
                     }
-                    if (confirm('Kya aap is paragraph ko remove karna chahte hain?')) {
+                    if (confirm('Are you sure you want to remove this paragraph?')) {
                         item.style.transition = 'all 0.25s ease';
                         item.style.opacity = '0';
                         item.style.transform = 'scale(0.95)';
@@ -2490,11 +2490,11 @@
                 if (removeBtn) {
                     const totalCards = whyGpoContainer.querySelectorAll('.why-gpo-card-col').length;
                     if (totalCards <= 1) {
-                        alert('Kam se kam ek card hona zaroori hai!');
+                        alert('At least one card is required!');
                         return;
                     }
                     const col = removeBtn.closest('.why-gpo-card-col');
-                    if (col && confirm('Kya aap is card ko delete karna chahte hain?')) {
+                    if (col && confirm('Are you sure you want to delete this card?')) {
                         col.style.transition = 'all 0.25s ease';
                         col.style.opacity = '0';
                         col.style.transform = 'scale(0.9)';
@@ -2646,11 +2646,11 @@
                 if (removeBtn) {
                     const totalParas = starParaContainer.querySelectorAll('.star-paragraph-item').length;
                     if (totalParas <= 1) {
-                        alert('Kam se kam ek paragraph hona zaroori hai!');
+                        alert('At least one paragraph is required!');
                         return;
                     }
                     const item = removeBtn.closest('.star-paragraph-item');
-                    if (item && confirm('Kya aap is paragraph ko delete karna chahte hain?')) {
+                    if (item && confirm('Are you sure you want to delete this paragraph?')) {
                         item.style.transition = 'all 0.25s ease';
                         item.style.opacity = '0';
                         item.style.transform = 'scale(0.95)';
@@ -2769,11 +2769,11 @@
                 if (removeBtn) {
                     const totalItems = experienceContainer.querySelectorAll('.experience-item-col').length;
                     if (totalItems <= 1) {
-                        alert('Kam se kam ek feature item hona zaroori hai!');
+                        alert('At least one feature item is required!');
                         return;
                     }
                     const col = removeBtn.closest('.experience-item-col');
-                    if (col && confirm('Kya aap is experience item ko delete karna chahte hain?')) {
+                    if (col && confirm('Are you sure you want to delete this experience item?')) {
                         col.style.transition = 'all 0.25s ease';
                         col.style.opacity = '0';
                         col.style.transform = 'scale(0.9)';

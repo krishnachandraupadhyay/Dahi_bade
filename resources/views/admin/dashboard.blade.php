@@ -46,7 +46,7 @@
                             Highlights Strip (3 Feature Cards)
                         </h4>
                         <p class="fs-13 text-white-50 mb-3" style="line-height: 1.5;">
-                            Home page ke hero banner ke turant neeche aane wale 3 cards (Card 1, Card 2, Card 3) ka <strong>image, main heading, gold subheading aur short description</strong> direct yahan se edit karein.
+                            Directly manage the 3 cards (Card 1, Card 2, Card 3) located below the hero banner: update <strong>background images, main headings, gold subheadings, and short descriptions</strong>.
                         </p>
                         <div class="d-flex flex-wrap gap-2 mb-3">
                             <span class="badge bg-white bg-opacity-10 text-white fs-11 border border-white border-opacity-10">
@@ -92,7 +92,7 @@
                             Hero Banner & Slider
                         </h4>
                         <p class="fs-13 text-muted mb-3" style="line-height: 1.5;">
-                            Homepage ke top banner me nayi slides add karein, remove karein, background image / video / GIF upload karein aur 12 premium color styles ke buttons configure karein.
+                            Add or remove slides in the homepage hero banner, upload background image/video/GIF media, and configure buttons with 12 distinct color styling options.
                         </p>
                         <div class="d-flex flex-wrap gap-2 mb-3">
                             <span class="badge bg-light text-dark fs-11 border">

@@ -1,0 +1,26 @@
+{
+    "heading": "THE GPO EXPERIENCE",
+    "subheading": "WHY A VISIT TO GPO FEELS DIFFERENT",
+    "items": [
+        {
+            "icon": "\ud83c\udf3f",
+            "title": "Traditional Taste",
+            "description": "Flavours rooted in the food culture and traditions of Lucknow."
+        },
+        {
+            "icon": "\u2615",
+            "title": "Familiar Comfort",
+            "description": "Food that feels familiar, satisfying and easy to love."
+        },
+        {
+            "icon": "\ud83e\udd63",
+            "title": "Freshly Prepared",
+            "description": "Our dishes are prepared with attention to freshness and quality."
+        },
+        {
+            "icon": "\ud83c\udf89",
+            "title": "Made for Every Occasion",
+            "description": "Whether it\u2019s a quick snack, family outing, casual meet-up or craving \u2014 GPO has something for you."
+        }
+    ]
+}
