@@ -1153,17 +1153,194 @@
 
             <!-- ================= 5. SIGNATURE DISH PANEL ================= -->
             <div class="home-section-panel" id="panel_signature_dish" style="display: none;">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle">
+                <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-danger px-2.5 py-1.5 fs-12">Section 5</span>
-                        <h6 class="fw-bold text-dark mb-0 fs-15">Star of GPO (Thandey Dahi Bade)</h6>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 fs-16">The Star of GPO (Thandey Dahi Bade Feature)</h6>
+                            <small class="text-muted fs-12">Manage dish image, badge, heading, description paragraphs, highlight quote and order button.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-12"></i> View Live Website
+                        </a>
                     </div>
                 </div>
-                <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
-                    <i class="bi bi-star-fill fs-32 text-danger mb-2 d-block"></i>
-                    <h6 class="fw-bold text-dark mb-1">Star Signature Dish Section</h6>
-                    <p class="fs-13 text-muted mb-0">Signature dish content, tagline aur photo fields yahan aayenge.</p>
-                </div>
+
+                @php
+                    $starImage = $starDish['image'] ?? 'images/dahi_vada.jpg';
+                    $starImageSrc = str_starts_with($starImage, 'http') ? $starImage : asset($starImage);
+                @endphp
+
+                <form action="{{ route('admin.website-pages.home.star_dish.update') }}" method="POST" enctype="multipart/form-data" id="starDishForm">
+                    @csrf
+
+                    <div class="row g-4">
+                        <!-- Top Row: Photo Upload Card & Action Button Card (col-12) -->
+                        <div class="col-12">
+                            <div class="row g-4 align-items-stretch">
+                                <!-- Photo Upload Card (Left) -->
+                                <div class="col-md-7 col-sm-12">
+                                    <div class="card border border-light-subtle shadow-sm h-100" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                                        <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="bi bi-image-fill text-danger fs-15"></i>
+                                                <h6 class="fs-13 fw-bold text-dark mb-0">Signature Dish Photo</h6>
+                                            </div>
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-11">Featured Dish</span>
+                                        </div>
+                                        <div class="card-body p-3.5">
+                                            <div class="row g-3 align-items-center">
+                                                <div class="col-md-7 col-sm-12">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                        Upload New Dish Photo:
+                                                    </label>
+                                                    <input type="file" name="star_dish[image_file]" class="form-control form-control-sm modern-input mb-1.5 star-dish-image-input" accept="image/*">
+                                                    <input type="hidden" name="star_dish[image]" class="star-dish-image-hidden" value="{{ $starDish['image'] ?? 'images/dahi_vada.jpg' }}">
+                                                    <span class="text-muted fs-11 text-truncate font-monospace star-dish-image-display d-block mb-2" style="max-width: 100%;">
+                                                        <i class="bi bi-folder2-open me-1"></i> Current: {{ $starDish['image'] ?? 'images/dahi_vada.jpg' }}
+                                                    </span>
+                                                    <small class="text-muted fs-11 d-block">
+                                                        <i class="bi bi-info-circle me-1"></i> Left side par large showcase image ke roop me display hota hai.
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-5 col-sm-12">
+                                                    <label class="fs-11 fw-bold text-muted text-uppercase mb-1.5 d-block">Dish Preview:</label>
+                                                    <div class="position-relative overflow-hidden rounded-3 shadow-sm border border-light-subtle" style="height: 165px; background: #0d1636;">
+                                                        <img src="{{ $starImageSrc }}" alt="Star Dish Preview" class="w-100 h-100 star-dish-preview-img" style="object-fit: cover; object-position: center;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Button Card (Right) -->
+                                <div class="col-md-5 col-sm-12">
+                                    <div class="card border border-light-subtle shadow-sm h-100" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                                        <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="bi bi-cursor-fill text-danger fs-15"></i>
+                                                <h6 class="fs-13 fw-bold text-dark mb-0">Order Button Setting</h6>
+                                            </div>
+                                            <span class="badge bg-danger-subtle text-dark fs-10 border border-danger-subtle">Cinnamon Pill</span>
+                                        </div>
+                                        <div class="card-body p-3.5 d-flex flex-column justify-content-between">
+                                            <div>
+                                                <div class="mb-2.5">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">Button Text:</label>
+                                                    <input type="text" name="star_dish[button_text]" class="form-control form-control-sm modern-input" value="{{ old('star_dish.button_text', $starDish['button_text'] ?? 'ORDER DAHI BADE') }}" placeholder="e.g. ORDER DAHI BADE">
+                                                </div>
+                                                <div class="mb-0">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">Button Link URL:</label>
+                                                    <input type="text" name="star_dish[button_url]" class="form-control form-control-sm modern-input" value="{{ old('star_dish.button_url', $starDish['button_url'] ?? '/menu') }}" placeholder="e.g. /menu">
+                                                </div>
+                                            </div>
+                                            <div class="p-2.5 rounded-2 bg-light-subtle border mt-2">
+                                                <small class="text-muted fs-11 d-block">
+                                                    <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Button click hone par user Menu page par order karne pahunchega.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Middle Row: Titles & Highlight Quote (col-12) -->
+                        <div class="col-12">
+                            <div class="card border border-light-subtle shadow-sm" style="border-radius: 12px; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="badge bg-danger text-white rounded-pill px-2.5 py-1 fs-11">Header</span>
+                                        <h6 class="fs-14 fw-bold text-dark mb-0">Headings & Highlight Quote</h6>
+                                    </div>
+                                    <small class="text-muted fs-12">Star section ke right column ka top & bottom punchline</small>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row g-3">
+                                        <div class="col-md-3 col-sm-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-tag-fill text-warning me-1"></i> Small Badge / Label
+                                            </label>
+                                            <input type="text" name="star_dish[badge]" value="{{ old('star_dish.badge', $starDish['badge'] ?? 'The Star of GPO') }}" class="form-control modern-input" placeholder="e.g. The Star of GPO">
+                                            <small class="text-muted fs-11 mt-1 d-block">Italic serif accent label</small>
+                                        </div>
+                                        <div class="col-md-4 col-sm-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-type-h1 text-danger me-1"></i> Main Dish Heading
+                                            </label>
+                                            <input type="text" name="star_dish[heading]" value="{{ old('star_dish.heading', $starDish['heading'] ?? 'THANDEY DAHI BADE') }}" class="form-control modern-input fw-bold" placeholder="e.g. THANDEY DAHI BADE">
+                                            <small class="text-muted fs-11 mt-1 d-block">Large bold serif heading</small>
+                                        </div>
+                                        <div class="col-md-5 col-sm-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-stars text-danger me-1"></i> Highlight Quote / Slogan
+                                            </label>
+                                            <input type="text" name="star_dish[highlight_quote]" value="{{ old('star_dish.highlight_quote', $starDish['highlight_quote'] ?? 'ONE PLATE. ONE BITE. ONE UNFORGETTABLE TASTE.') }}" class="form-control modern-input fw-bold text-danger" placeholder="e.g. ONE PLATE. ONE BITE. ONE UNFORGETTABLE TASTE.">
+                                            <small class="text-muted fs-11 mt-1 d-block">Terracotta coral color bold slogan</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Row: 2 Description Paragraphs (Side by Side in col-lg-6) -->
+                        <div class="col-12">
+                            <div class="card border border-light-subtle shadow-sm" style="border-radius: 12px; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="badge bg-dark text-white rounded-pill px-2.5 py-1 fs-11">Story</span>
+                                        <h6 class="fs-14 fw-bold text-dark mb-0">Dish Flavour & Experience Paragraphs</h6>
+                                    </div>
+                                    <small class="text-muted fs-12">Website par heading ke niche dono paragraphs aate hain</small>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row g-3">
+                                        <!-- Paragraph 1 -->
+                                        <div class="col-lg-6 col-md-12">
+                                            <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
+                                                    <span><i class="bi bi-paragraph text-primary me-1"></i> Paragraph 1: Ingredients & Speciality</span>
+                                                    <span class="badge bg-primary-subtle text-primary fs-10">Lead Paragraph</span>
+                                                </label>
+                                                <textarea name="star_dish[lead_paragraph]" rows="5" class="form-control modern-input" style="font-size: 12px; line-height: 1.5; border-radius: 8px; min-height: 120px; background: #ffffff;" placeholder="Enter first paragraph...">{{ old('star_dish.lead_paragraph', $starDish['lead_paragraph'] ?? '') }}</textarea>
+                                                <small class="text-muted fs-11 mt-2 d-block">Mentions soft lentil dumplings, chilled creamy dahi and spices.</small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Paragraph 2 -->
+                                        <div class="col-lg-6 col-md-12">
+                                            <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
+                                                    <span><i class="bi bi-paragraph text-success me-1"></i> Paragraph 2: Taste Experience & Legacy</span>
+                                                    <span class="badge bg-success-subtle text-success fs-10">Supporting Paragraph</span>
+                                                </label>
+                                                <textarea name="star_dish[description_paragraph]" rows="5" class="form-control modern-input" style="font-size: 12px; line-height: 1.5; border-radius: 8px; min-height: 120px; background: #ffffff;" placeholder="Enter second paragraph...">{{ old('star_dish.description_paragraph', $starDish['description_paragraph'] ?? '') }}</textarea>
+                                                <small class="text-muted fs-11 mt-2 d-block">Mentions the refreshing, creamy, tangy taste experience.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Buttons -->
+                    <div class="d-flex flex-wrap align-items-center gap-2 pt-3 mt-4 border-top">
+                        <button type="submit" class="btn btn-danger px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-cloud-check-fill fs-16"></i>
+                            <span>Save Star of GPO Changes</span>
+                        </button>
+                        <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                        </button>
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
+                        </a>
+                    </div>
+                </form>
             </div>
 
             <!-- ================= 6. FAVOURITE DISHES PANEL ================= -->
@@ -2257,6 +2434,27 @@
                 const titleInput = colDiv.querySelector('.why-card-title-input');
                 if (titleInput) {
                     titleInput.focus();
+                }
+            });
+        }
+
+        // ================= STAR OF GPO IMAGE PREVIEW LOGIC =================
+        const starDishImageInput = document.querySelector('.star-dish-image-input');
+        const starDishPreviewImg = document.querySelector('.star-dish-preview-img');
+        const starDishImageDisplay = document.querySelector('.star-dish-image-display');
+
+        if (starDishImageInput && starDishPreviewImg) {
+            starDishImageInput.addEventListener('change', function () {
+                if (this.files && this.files[0]) {
+                    const file = this.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        starDishPreviewImg.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                    if (starDishImageDisplay) {
+                        starDishImageDisplay.innerHTML = `<i class="bi bi-file-earmark-arrow-up text-danger me-1"></i> Ready to upload: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
+                    }
                 }
             });
         }

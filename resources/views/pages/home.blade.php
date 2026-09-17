@@ -265,23 +265,39 @@
       </section>
 
       <!-- SECTION 03 — OUR SIGNATURE (Document Page 3) -->
+      @php
+        $starImage = $starDish['image'] ?? 'images/dahi_vada.jpg';
+        $starImageSrc = str_starts_with($starImage, 'http') ? $starImage : asset($starImage);
+      @endphp
       <section class="star-gpo-exact">
         <div class="star-gpo-exact-media">
-          <img src="{{ asset('images/dahi_vada.jpg') }}" alt="Star of GPO Thandey Dahi Bade">
+          <img src="{{ $starImageSrc }}" alt="{{ $starDish['heading'] ?? 'Star of GPO Thandey Dahi Bade' }}">
         </div>
         <div class="star-gpo-exact-text">
-          <h4>The Star of GPO</h4>
-          <h3>THANDEY DAHI BADE</h3>
-          <p style="font-size: 1rem; line-height: 1.6; margin-bottom: 14px;">
-            Our signature speciality brings together soft lentil dumplings, chilled creamy dahi and a carefully balanced combination of flavours and spices.
-          </p>
-          <p style="font-size: 0.95rem; color: var(--c-text-muted); margin-bottom: 16px;">
-            The result? A refreshing, creamy, tangy and satisfying experience that has kept customers coming back for years.
-          </p>
-          <div style="font-family: var(--font-serif); font-weight: 700; color: var(--c-terracotta-coral); font-size: 1.1rem; letter-spacing: 1px; margin-bottom: 22px;">
-            ONE PLATE. ONE BITE. ONE UNFORGETTABLE TASTE.
-          </div>
-          <a href="{{ route('menu') }}" class="btn-cinnamon-pill">ORDER DAHI BADE</a>
+          @if(!empty($starDish['badge']))
+            <h4>{{ $starDish['badge'] }}</h4>
+          @endif
+          @if(!empty($starDish['heading']))
+            <h3>{{ $starDish['heading'] }}</h3>
+          @endif
+          @if(!empty($starDish['lead_paragraph']))
+            <p style="font-size: 1rem; line-height: 1.6; margin-bottom: 14px;">
+              {{ $starDish['lead_paragraph'] }}
+            </p>
+          @endif
+          @if(!empty($starDish['description_paragraph']))
+            <p style="font-size: 0.95rem; color: var(--c-text-muted); margin-bottom: 16px;">
+              {{ $starDish['description_paragraph'] }}
+            </p>
+          @endif
+          @if(!empty($starDish['highlight_quote']))
+            <div style="font-family: var(--font-serif); font-weight: 700; color: var(--c-terracotta-coral); font-size: 1.1rem; letter-spacing: 1px; margin-bottom: 22px;">
+              {{ $starDish['highlight_quote'] }}
+            </div>
+          @endif
+          @if(!empty($starDish['button_text']))
+            <a href="{{ $starDish['button_url'] ?? route('menu') }}" class="btn-cinnamon-pill">{{ $starDish['button_text'] }}</a>
+          @endif
         </div>
       </section>
 

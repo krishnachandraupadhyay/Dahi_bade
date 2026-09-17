@@ -27,6 +27,11 @@ class WebpageController extends Controller
         return storage_path('app/website_content/home_why_gpo.json');
     }
 
+    private function getStarDishFilePath()
+    {
+        return storage_path('app/website_content/home_star_dish.json');
+    }
+
     private function normalizeSlide($slide)
     {
         if (!isset($slide['media'])) {
@@ -292,6 +297,28 @@ class WebpageController extends Controller
         ];
     }
 
+    public function getStarDishData()
+    {
+        $path = $this->getStarDishFilePath();
+        if (File::exists($path)) {
+            $content = json_decode(File::get($path), true);
+            if (is_array($content) && !empty($content)) {
+                return $content;
+            }
+        }
+
+        return [
+            'badge' => 'The Star of GPO',
+            'heading' => 'THANDEY DAHI BADE',
+            'lead_paragraph' => 'Our signature speciality brings together soft lentil dumplings, chilled creamy dahi and a carefully balanced combination of flavours and spices.',
+            'description_paragraph' => 'The result? A refreshing, creamy, tangy and satisfying experience that has kept customers coming back for years.',
+            'highlight_quote' => 'ONE PLATE. ONE BITE. ONE UNFORGETTABLE TASTE.',
+            'button_text' => 'ORDER DAHI BADE',
+            'button_url' => '/menu',
+            'image' => 'images/dahi_vada.jpg',
+        ];
+    }
+
     public function index()
     {
         return view('admin.website-pages.index');
@@ -303,7 +330,8 @@ class WebpageController extends Controller
         $highlights = $this->getHighlightsData();
         $welcome = $this->getWelcomeData();
         $whyGpo = $this->getWhyGpoData();
-        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo'));
+        $starDish = $this->getStarDishData();
+        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish'));
     }
 
     public function updateHero(Request $request)
@@ -536,5 +564,47 @@ class WebpageController extends Controller
 
         return redirect()->route('admin.website-pages.home', ['section' => 'why_gpo'])
             ->with('success', 'Why People Love GPO (Section 4) successfully updated!');
+    }
+
+    public function updateStarDish(Request $request)
+    {
+        $star = $request->input('star_dish', []);
+        $imagePath = $star['image'] ?? 'images/dahi_vada.jpg';
+
+        $uploadDir = public_path('uploads/star_dish');
+        if (!File::isDirectory($uploadDir)) {
+            File::makeDirectory($uploadDir, 0755, true, true);
+        }
+
+        if ($request->hasFile('star_dish.image_file')) {
+            $file = $request->file('star_dish.image_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_star_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $imagePath = 'uploads/star_dish/' . $filename;
+            }
+        }
+
+        $savedData = [
+            'badge' => trim($star['badge'] ?? 'The Star of GPO'),
+            'heading' => trim($star['heading'] ?? 'THANDEY DAHI BADE'),
+            'lead_paragraph' => trim($star['lead_paragraph'] ?? ''),
+            'description_paragraph' => trim($star['description_paragraph'] ?? ''),
+            'highlight_quote' => trim($star['highlight_quote'] ?? 'ONE PLATE. ONE BITE. ONE UNFORGETTABLE TASTE.'),
+            'button_text' => trim($star['button_text'] ?? 'ORDER DAHI BADE'),
+            'button_url' => trim($star['button_url'] ?? '/menu'),
+            'image' => $imagePath,
+        ];
+
+        $dir = dirname($this->getStarDishFilePath());
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true, true);
+        }
+
+        File::put($this->getStarDishFilePath(), json_encode($savedData, JSON_PRETTY_PRINT));
+
+        return redirect()->route('admin.website-pages.home', ['section' => 'signature_dish'])
+            ->with('success', 'Star of GPO (Thandey Dahi Bade) successfully updated!');
     }
 }
