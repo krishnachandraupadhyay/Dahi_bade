@@ -987,17 +987,168 @@
 
             <!-- ================= 4. WHY GPO PANEL ================= -->
             <div class="home-section-panel" id="panel_why_gpo" style="display: none;">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle">
+                <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-success px-2.5 py-1.5 fs-12">Section 4</span>
-                        <h6 class="fw-bold text-dark mb-0 fs-15">Why People Love GPO (6 Key Highlights)</h6>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 fs-16">Why People Love GPO (Key Highlights & Cards)</h6>
+                            <small class="text-muted fs-12">Manage Section Icon, Main Heading, Subheading & Dynamic Feature Cards.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 fs-12 rounded-pill fw-semibold" id="why_gpo_active_badge">
+                            <i class="bi bi-grid-3x3-gap me-1"></i> <span id="why_gpo_count_text">{{ count($whyGpo['items'] ?? []) }}</span> Cards Active
+                        </span>
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-12"></i> View Live
+                        </a>
                     </div>
                 </div>
-                <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
-                    <i class="bi bi-check-circle fs-32 text-success mb-2 d-block"></i>
-                    <h6 class="fw-bold text-dark mb-1">Why GPO 6 Points Section</h6>
-                    <p class="fs-13 text-muted mb-0">Points (Since 1976, The Original Experience, Authentic Flavours, etc.) ka data yahan aayega.</p>
-                </div>
+
+                <form action="{{ route('admin.website-pages.home.why_gpo.update') }}" method="POST" id="whyGpoForm">
+                    @csrf
+
+                    <!-- 1. Section Header & Badges Configuration Card -->
+                    <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                        <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-success text-white rounded-pill px-2.5 py-1 fs-11">Header</span>
+                                <h6 class="fs-14 fw-bold text-dark mb-0">Section Titles & Badges</h6>
+                            </div>
+                            <small class="text-muted fs-12">Website par card grid ke theek upar show hota hai</small>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-3">
+                                <!-- Badge Icon / Emoji -->
+                                <div class="col-md-2 col-sm-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        <i class="bi bi-emoji-smile text-success me-1"></i> Icon / Emoji
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" name="why_gpo[badge_icon]" value="{{ old('why_gpo.badge_icon', $whyGpo['badge_icon'] ?? '🌿') }}" class="form-control modern-input text-center fw-bold fs-16" placeholder="e.g. 🌿">
+                                    </div>
+                                    <small class="text-muted fs-11 mt-1 d-block">Emoji or symbol</small>
+                                </div>
+
+                                <!-- Main Heading -->
+                                <div class="col-md-5 col-sm-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        <i class="bi bi-type-h1 text-primary me-1"></i> Section Heading
+                                    </label>
+                                    <input type="text" name="why_gpo[heading]" value="{{ old('why_gpo.heading', $whyGpo['heading'] ?? 'WHY PEOPLE LOVE GPO') }}" class="form-control modern-input fw-bold" placeholder="e.g. WHY PEOPLE LOVE GPO">
+                                    <small class="text-muted fs-11 mt-1 d-block">All caps serif title on frontend</small>
+                                </div>
+
+                                <!-- Subheading -->
+                                <div class="col-md-5 col-sm-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        <i class="bi bi-card-text text-warning me-1"></i> Subheading / Tagline
+                                    </label>
+                                    <input type="text" name="why_gpo[subheading]" value="{{ old('why_gpo.subheading', $whyGpo['subheading'] ?? 'A Legacy Built on Taste') }}" class="form-control modern-input" placeholder="e.g. A Legacy Built on Taste">
+                                    <small class="text-muted fs-11 mt-1 d-block">Italic / light script style subtitle</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Dynamic Feature Cards List -->
+                    <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                        <div class="card-header bg-white py-3 px-4 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-primary text-white rounded-pill px-2.5 py-1 fs-11">Grid Items</span>
+                                <div>
+                                    <h6 class="fs-14 fw-bold text-dark mb-0">Feature Cards (Add / Remove / Edit)</h6>
+                                    <small class="text-muted fs-11">Front website grid me responsive layout me render honge</small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-success px-3 py-1.5 fs-12 fw-bold d-flex align-items-center gap-1.5 shadow-sm" id="btn_add_why_gpo_card">
+                                <i class="bi bi-plus-circle-fill fs-13"></i>
+                                <span>Add New Card</span>
+                            </button>
+                        </div>
+
+                        <div class="card-body p-4">
+                            <div class="row g-3" id="why_gpo_cards_container">
+                                @php
+                                    $whyItems = $whyGpo['items'] ?? [];
+                                @endphp
+                                @foreach($whyItems as $idx => $item)
+                                    @php
+                                        $isTerracotta = ($item['style'] ?? 'teal') === 'terracotta';
+                                    @endphp
+                                    <div class="col-lg-4 col-md-6 col-12 why-gpo-card-col" data-index="{{ $idx }}">
+                                        <div class="card border h-100 shadow-sm why-gpo-item-box" style="border-radius: 10px; background: #fbfcfe; border-color: #e2e8f0 !important; transition: all 0.2s ease;">
+                                            <!-- Card Header with Index & Remove button -->
+                                            <div class="card-header bg-white py-2 px-3 border-bottom d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="badge bg-dark rounded-circle why-card-num-badge" style="width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px;">{{ $idx + 1 }}</span>
+                                                    <span class="fw-bold fs-12 text-dark why-card-header-title">{{ !empty($item['title']) ? $item['title'] : 'Card ' . ($idx + 1) }}</span>
+                                                </div>
+                                                <button type="button" class="btn btn-outline-danger btn-sm p-0 d-flex align-items-center justify-content-center btn-remove-why-card" style="width: 26px; height: 26px; border-radius: 6px;" title="Remove this card">
+                                                    <i class="bi bi-trash fs-12"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                                <div>
+                                                    <!-- Card Title -->
+                                                    <div class="mb-2">
+                                                        <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                                            Card Title (Header)
+                                                        </label>
+                                                        <input type="text" name="why_gpo[items][{{ $idx }}][title]" value="{{ $item['title'] ?? '' }}" class="form-control form-control-sm modern-input fw-bold why-card-title-input" placeholder="e.g. SINCE 1976" style="border-radius: 6px; background: #ffffff;">
+                                                    </div>
+
+                                                    <!-- Heading Color Style (Terracotta vs Teal) -->
+                                                    <div class="mb-2">
+                                                        <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                                            Title Color Style
+                                                        </label>
+                                                        <select name="why_gpo[items][{{ $idx }}][style]" class="form-select form-select-sm modern-input fs-12 why-card-style-select" style="border-radius: 6px; background: #ffffff;">
+                                                            <option value="terracotta" {{ ($item['style'] ?? '') === 'terracotta' ? 'selected' : '' }}>🟧 Terracotta Coral (Accent / Warm)</option>
+                                                            <option value="teal" {{ ($item['style'] ?? 'teal') === 'teal' ? 'selected' : '' }}>🟦 Deep Teal (Royal / Elegant)</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Card Description -->
+                                                    <div class="mb-0">
+                                                        <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                                            Description Paragraph
+                                                        </label>
+                                                        <textarea name="why_gpo[items][{{ $idx }}][description]" rows="4" class="form-control form-control-sm modern-input why-card-desc-input" style="font-size: 12px; line-height: 1.5; border-radius: 6px; min-height: 90px; background: #ffffff;" placeholder="Enter card description...">{{ $item['description'] ?? '' }}</textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="pt-2 mt-2 border-top border-light-subtle d-flex align-items-center justify-content-between">
+                                                    <small class="text-muted fs-10">
+                                                        <i class="bi bi-grid me-1"></i> Slot <span class="why-slot-num">{{ $idx + 1 }}</span>
+                                                    </small>
+                                                    <span class="badge {{ $isTerracotta ? 'bg-danger-subtle text-danger' : 'bg-primary-subtle text-primary' }} px-2 py-0.5 fs-10 why-style-pill">
+                                                        {{ $isTerracotta ? 'Terracotta Coral' : 'Deep Teal' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Buttons -->
+                    <div class="d-flex flex-wrap align-items-center gap-2 pt-3 mt-4 border-top">
+                        <button type="submit" class="btn btn-success px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-cloud-check-fill fs-16"></i>
+                            <span>Save Why GPO Section Changes</span>
+                        </button>
+                        <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                        </button>
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
+                        </a>
+                    </div>
+                </form>
             </div>
 
             <!-- ================= 5. SIGNATURE DISH PANEL ================= -->
@@ -1932,6 +2083,180 @@
                 const newTextarea = colDiv.querySelector('textarea');
                 if (newTextarea) {
                     newTextarea.focus();
+                }
+            });
+        }
+
+        // ================= WHY GPO DYNAMIC CARDS LOGIC =================
+        const whyGpoContainer = document.getElementById('why_gpo_cards_container');
+        const btnAddWhyGpoCard = document.getElementById('btn_add_why_gpo_card');
+        const whyGpoCountText = document.getElementById('why_gpo_count_text');
+
+        function reindexWhyGpoCards() {
+            if (!whyGpoContainer) return;
+            const items = whyGpoContainer.querySelectorAll('.why-gpo-card-col');
+
+            items.forEach((item, idx) => {
+                item.setAttribute('data-index', idx);
+
+                const numBadge = item.querySelector('.why-card-num-badge');
+                if (numBadge) numBadge.textContent = idx + 1;
+
+                const slotNum = item.querySelector('.why-slot-num');
+                if (slotNum) slotNum.textContent = idx + 1;
+
+                const titleInput = item.querySelector('.why-card-title-input');
+                if (titleInput) {
+                    titleInput.setAttribute('name', `why_gpo[items][${idx}][title]`);
+                }
+
+                const styleSelect = item.querySelector('.why-card-style-select');
+                if (styleSelect) {
+                    styleSelect.setAttribute('name', `why_gpo[items][${idx}][style]`);
+                }
+
+                const descInput = item.querySelector('.why-card-desc-input');
+                if (descInput) {
+                    descInput.setAttribute('name', `why_gpo[items][${idx}][description]`);
+                }
+            });
+
+            if (whyGpoCountText) {
+                whyGpoCountText.textContent = items.length;
+            }
+        }
+
+        function bindWhyCardLiveEvents(cardCol) {
+            const titleInput = cardCol.querySelector('.why-card-title-input');
+            const headerTitle = cardCol.querySelector('.why-card-header-title');
+            const styleSelect = cardCol.querySelector('.why-card-style-select');
+            const stylePill = cardCol.querySelector('.why-style-pill');
+
+            if (titleInput && headerTitle) {
+                titleInput.addEventListener('input', function () {
+                    const idx = cardCol.getAttribute('data-index') || '0';
+                    headerTitle.textContent = this.value.trim() !== '' ? this.value.trim() : `Card ${parseInt(idx) + 1}`;
+                });
+            }
+
+            if (styleSelect && stylePill) {
+                styleSelect.addEventListener('change', function () {
+                    if (this.value === 'terracotta') {
+                        stylePill.className = 'badge bg-danger-subtle text-danger px-2 py-0.5 fs-10 why-style-pill';
+                        stylePill.textContent = 'Terracotta Coral';
+                    } else {
+                        stylePill.className = 'badge bg-primary-subtle text-primary px-2 py-0.5 fs-10 why-style-pill';
+                        stylePill.textContent = 'Deep Teal';
+                    }
+                });
+            }
+        }
+
+        // Bind existing why cards
+        if (whyGpoContainer) {
+            whyGpoContainer.querySelectorAll('.why-gpo-card-col').forEach(col => {
+                bindWhyCardLiveEvents(col);
+            });
+
+            // Delegate remove card button
+            whyGpoContainer.addEventListener('click', function (e) {
+                const removeBtn = e.target.closest('.btn-remove-why-card');
+                if (removeBtn) {
+                    const totalCards = whyGpoContainer.querySelectorAll('.why-gpo-card-col').length;
+                    if (totalCards <= 1) {
+                        alert('Kam se kam ek card hona zaroori hai!');
+                        return;
+                    }
+                    const col = removeBtn.closest('.why-gpo-card-col');
+                    if (col && confirm('Kya aap is card ko delete karna chahte hain?')) {
+                        col.style.transition = 'all 0.25s ease';
+                        col.style.opacity = '0';
+                        col.style.transform = 'scale(0.9)';
+                        setTimeout(() => {
+                            col.remove();
+                            reindexWhyGpoCards();
+                        }, 250);
+                    }
+                }
+            });
+        }
+
+        // Add Why GPO Card Handler
+        if (btnAddWhyGpoCard && whyGpoContainer) {
+            btnAddWhyGpoCard.addEventListener('click', function () {
+                const currentCount = whyGpoContainer.querySelectorAll('.why-gpo-card-col').length;
+                const nextIndex = currentCount;
+                const nextNum = currentCount + 1;
+                // Alternate terracotta and teal
+                const defaultStyle = nextIndex % 2 === 0 ? 'terracotta' : 'teal';
+                const isTerracotta = defaultStyle === 'terracotta';
+
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-lg-4 col-md-6 col-12 why-gpo-card-col';
+                colDiv.setAttribute('data-index', nextIndex);
+                colDiv.style.opacity = '0';
+                colDiv.style.transform = 'scale(0.9)';
+                colDiv.style.transition = 'all 0.25s ease';
+
+                colDiv.innerHTML = `
+                    <div class="card border h-100 shadow-sm why-gpo-item-box" style="border-radius: 10px; background: #fbfcfe; border-color: #e2e8f0 !important; transition: all 0.2s ease;">
+                        <div class="card-header bg-white py-2 px-3 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-dark rounded-circle why-card-num-badge" style="width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px;">${nextNum}</span>
+                                <span class="fw-bold fs-12 text-dark why-card-header-title">Card ${nextNum}</span>
+                            </div>
+                            <button type="button" class="btn btn-outline-danger btn-sm p-0 d-flex align-items-center justify-content-center btn-remove-why-card" style="width: 26px; height: 26px; border-radius: 6px;" title="Remove this card">
+                                <i class="bi bi-trash fs-12"></i>
+                            </button>
+                        </div>
+                        <div class="card-body p-3 d-flex flex-column justify-content-between">
+                            <div>
+                                <div class="mb-2">
+                                    <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                        Card Title (Header)
+                                    </label>
+                                    <input type="text" name="why_gpo[items][${nextIndex}][title]" value="" class="form-control form-control-sm modern-input fw-bold why-card-title-input" placeholder="e.g. SPECIAL RECIPE" style="border-radius: 6px; background: #ffffff;">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                        Title Color Style
+                                    </label>
+                                    <select name="why_gpo[items][${nextIndex}][style]" class="form-select form-select-sm modern-input fs-12 why-card-style-select" style="border-radius: 6px; background: #ffffff;">
+                                        <option value="terracotta" ${isTerracotta ? 'selected' : ''}>🟧 Terracotta Coral (Accent / Warm)</option>
+                                        <option value="teal" ${!isTerracotta ? 'selected' : ''}>🟦 Deep Teal (Royal / Elegant)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                        Description Paragraph
+                                    </label>
+                                    <textarea name="why_gpo[items][${nextIndex}][description]" rows="4" class="form-control form-control-sm modern-input why-card-desc-input" style="font-size: 12px; line-height: 1.5; border-radius: 6px; min-height: 90px; background: #ffffff;" placeholder="Enter card description..."></textarea>
+                                </div>
+                            </div>
+                            <div class="pt-2 mt-2 border-top border-light-subtle d-flex align-items-center justify-content-between">
+                                <small class="text-muted fs-10">
+                                    <i class="bi bi-grid me-1"></i> Slot <span class="why-slot-num">${nextNum}</span>
+                                </small>
+                                <span class="badge ${isTerracotta ? 'bg-danger-subtle text-danger' : 'bg-primary-subtle text-primary'} px-2 py-0.5 fs-10 why-style-pill">
+                                    ${isTerracotta ? 'Terracotta Coral' : 'Deep Teal'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                whyGpoContainer.appendChild(colDiv);
+                setTimeout(() => {
+                    colDiv.style.opacity = '1';
+                    colDiv.style.transform = 'scale(1)';
+                }, 10);
+
+                bindWhyCardLiveEvents(colDiv);
+                reindexWhyGpoCards();
+
+                const titleInput = colDiv.querySelector('.why-card-title-input');
+                if (titleInput) {
+                    titleInput.focus();
                 }
             });
         }

@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('/website-pages/home/hero', [WebpageController::class, 'updateHero'])->name('website-pages.home.hero.update');
     Route::post('/website-pages/home/highlights', [WebpageController::class, 'updateHighlights'])->name('website-pages.home.highlights.update');
     Route::post('/website-pages/home/welcome', [WebpageController::class, 'updateWelcome'])->name('website-pages.home.welcome.update');
+    Route::post('/website-pages/home/why-gpo', [WebpageController::class, 'updateWhyGpo'])->name('website-pages.home.why_gpo.update');
 
     Route::get('/menu', function () {
         return view('admin.menu.index');

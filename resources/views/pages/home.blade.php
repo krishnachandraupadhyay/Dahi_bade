@@ -236,46 +236,31 @@
 
       <!-- SECTION 02 — WHY GPO? (Document Pages 2-3: 6 Exact Items) -->
       <section class="why-love-section">
-        <div style="color: #6a9b85; font-size: 1.2rem; margin-bottom: 4px;">🌿</div>
-        <h3>WHY PEOPLE LOVE GPO</h3>
-        <p class="sub">A Legacy Built on Taste</p>
+        @if(!empty($whyGpo['badge_icon']))
+          <div style="color: #6a9b85; font-size: 1.2rem; margin-bottom: 4px;">{{ $whyGpo['badge_icon'] }}</div>
+        @endif
+        @if(!empty($whyGpo['heading']))
+          <h3>{{ $whyGpo['heading'] }}</h3>
+        @endif
+        @if(!empty($whyGpo['subheading']))
+          <p class="sub">{{ $whyGpo['subheading'] }}</p>
+        @endif
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; text-align: left;">
-          <!-- 1. SINCE 1976 -->
-          <div style="background: #ffffff; padding: 26px 22px; border-radius: var(--radius-md); border: 1px solid rgba(8,59,60,0.08); box-shadow: 0 4px 14px rgba(8,59,60,0.05);">
-            <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--c-terracotta-coral); margin-bottom: 6px;">SINCE 1976</div>
-            <p style="font-size: 0.88rem; color: var(--c-text-muted); line-height: 1.5;">Decades of serving Lucknow with a commitment to traditional flavours and authentic food.</p>
-          </div>
-
-          <!-- 2. THE ORIGINAL EXPERIENCE -->
-          <div style="background: #ffffff; padding: 26px 22px; border-radius: var(--radius-md); border: 1px solid rgba(8,59,60,0.08); box-shadow: 0 4px 14px rgba(8,59,60,0.05);">
-            <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--c-teal-deep); margin-bottom: 6px;">THE ORIGINAL EXPERIENCE</div>
-            <p style="font-size: 0.88rem; color: var(--c-text-muted); line-height: 1.5;">Our signature Thandey Dahi Bade remain at the heart of the GPO experience.</p>
-          </div>
-
-          <!-- 3. AUTHENTIC FLAVOURS -->
-          <div style="background: #ffffff; padding: 26px 22px; border-radius: var(--radius-md); border: 1px solid rgba(8,59,60,0.08); box-shadow: 0 4px 14px rgba(8,59,60,0.05);">
-            <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--c-teal-deep); margin-bottom: 6px;">AUTHENTIC FLAVOURS</div>
-            <p style="font-size: 0.88rem; color: var(--c-text-muted); line-height: 1.5;">Traditional recipes and carefully balanced flavours create the taste our customers remember.</p>
-          </div>
-
-          <!-- 4. FRESH & HYGIENIC -->
-          <div style="background: #ffffff; padding: 26px 22px; border-radius: var(--radius-md); border: 1px solid rgba(8,59,60,0.08); box-shadow: 0 4px 14px rgba(8,59,60,0.05);">
-            <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--c-teal-deep); margin-bottom: 6px;">FRESH & HYGIENIC</div>
-            <p style="font-size: 0.88rem; color: var(--c-text-muted); line-height: 1.5;">We believe delicious food should also be prepared with attention to freshness, hygiene and quality.</p>
-          </div>
-
-          <!-- 5. A LUCKNOW FAVOURITE -->
-          <div style="background: #ffffff; padding: 26px 22px; border-radius: var(--radius-md); border: 1px solid rgba(8,59,60,0.08); box-shadow: 0 4px 14px rgba(8,59,60,0.05);">
-            <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--c-teal-deep); margin-bottom: 6px;">A LUCKNOW FAVOURITE</div>
-            <p style="font-size: 0.88rem; color: var(--c-text-muted); line-height: 1.5;">A familiar name for people looking to experience the traditional taste of Dahi Bade in Lucknow.</p>
-          </div>
-
-          <!-- 6. MADE WITH CARE -->
-          <div style="background: #ffffff; padding: 26px 22px; border-radius: var(--radius-md); border: 1px solid rgba(8,59,60,0.08); box-shadow: 0 4px 14px rgba(8,59,60,0.05);">
-            <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: var(--c-terracotta-coral); margin-bottom: 6px;">MADE WITH CARE</div>
-            <p style="font-size: 0.88rem; color: var(--c-text-muted); line-height: 1.5;">Every plate represents our commitment to flavour, consistency and customer satisfaction.</p>
-          </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; text-align: left;">
+          @foreach($whyGpo['items'] ?? [] as $item)
+            @php
+              $isTerracotta = ($item['style'] ?? 'teal') === 'terracotta';
+              $titleColor = $isTerracotta ? 'var(--c-terracotta-coral)' : 'var(--c-teal-deep)';
+            @endphp
+            <div style="background: #ffffff; padding: 26px 22px; border-radius: var(--radius-md); border: 1px solid rgba(8,59,60,0.08); box-shadow: 0 4px 14px rgba(8,59,60,0.05); display: flex; flex-column: column; justify-content: flex-start;">
+              <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: {{ $titleColor }}; margin-bottom: 6px;">
+                {{ $item['title'] ?? '' }}
+              </div>
+              <p style="font-size: 0.88rem; color: var(--c-text-muted); line-height: 1.5; margin-bottom: 0;">
+                {{ $item['description'] ?? '' }}
+              </p>
+            </div>
+          @endforeach
         </div>
       </section>
 

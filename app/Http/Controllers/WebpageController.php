@@ -22,6 +22,11 @@ class WebpageController extends Controller
         return storage_path('app/website_content/home_welcome.json');
     }
 
+    private function getWhyGpoFilePath()
+    {
+        return storage_path('app/website_content/home_why_gpo.json');
+    }
+
     private function normalizeSlide($slide)
     {
         if (!isset($slide['media'])) {
@@ -233,6 +238,60 @@ class WebpageController extends Controller
         ];
     }
 
+    public function getWhyGpoData()
+    {
+        $defaultCards = [
+            [
+                'title' => 'SINCE 1976',
+                'description' => 'Decades of serving Lucknow with a commitment to traditional flavours and authentic food.',
+                'style' => 'terracotta',
+            ],
+            [
+                'title' => 'THE ORIGINAL EXPERIENCE',
+                'description' => 'Our signature Thandey Dahi Bade remain at the heart of the GPO experience.',
+                'style' => 'teal',
+            ],
+            [
+                'title' => 'AUTHENTIC FLAVOURS',
+                'description' => 'Traditional recipes and carefully balanced flavours create the taste our customers remember.',
+                'style' => 'teal',
+            ],
+            [
+                'title' => 'FRESH & HYGIENIC',
+                'description' => 'We believe delicious food should also be prepared with attention to freshness, hygiene and quality.',
+                'style' => 'teal',
+            ],
+            [
+                'title' => 'A LUCKNOW FAVOURITE',
+                'description' => 'A familiar name for people looking to experience the traditional taste of Dahi Bade in Lucknow.',
+                'style' => 'teal',
+            ],
+            [
+                'title' => 'MADE WITH CARE',
+                'description' => 'Every plate represents our commitment to flavour, consistency and customer satisfaction.',
+                'style' => 'terracotta',
+            ],
+        ];
+
+        $path = $this->getWhyGpoFilePath();
+        if (File::exists($path)) {
+            $content = json_decode(File::get($path), true);
+            if (is_array($content) && !empty($content)) {
+                if (!isset($content['items']) || !is_array($content['items'])) {
+                    $content['items'] = $defaultCards;
+                }
+                return $content;
+            }
+        }
+
+        return [
+            'badge_icon' => '🌿',
+            'heading' => 'WHY PEOPLE LOVE GPO',
+            'subheading' => 'A Legacy Built on Taste',
+            'items' => $defaultCards,
+        ];
+    }
+
     public function index()
     {
         return view('admin.website-pages.index');
@@ -243,7 +302,8 @@ class WebpageController extends Controller
         $slides = $this->getHeroData();
         $highlights = $this->getHighlightsData();
         $welcome = $this->getWelcomeData();
-        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome'));
+        $whyGpo = $this->getWhyGpoData();
+        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo'));
     }
 
     public function updateHero(Request $request)
@@ -436,5 +496,45 @@ class WebpageController extends Controller
 
         return redirect()->route('admin.website-pages.home', ['section' => 'welcome_section'])
             ->with('success', 'Welcome Section (GPO Story & Legacy) successfully updated!');
+    }
+
+    public function updateWhyGpo(Request $request)
+    {
+        $input = $request->input('why_gpo', []);
+        $items = $request->input('why_gpo.items', []);
+        $savedItems = [];
+
+        if (is_array($items)) {
+            foreach ($items as $item) {
+                $title = trim($item['title'] ?? '');
+                $desc = trim($item['description'] ?? '');
+                $style = in_array($item['style'] ?? 'teal', ['terracotta', 'teal']) ? $item['style'] : 'teal';
+
+                if ($title !== '' || $desc !== '') {
+                    $savedItems[] = [
+                        'title' => $title,
+                        'description' => $desc,
+                        'style' => $style,
+                    ];
+                }
+            }
+        }
+
+        $savedData = [
+            'badge_icon' => trim($input['badge_icon'] ?? '🌿'),
+            'heading' => trim($input['heading'] ?? 'WHY PEOPLE LOVE GPO'),
+            'subheading' => trim($input['subheading'] ?? 'A Legacy Built on Taste'),
+            'items' => $savedItems,
+        ];
+
+        $dir = dirname($this->getWhyGpoFilePath());
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true, true);
+        }
+
+        File::put($this->getWhyGpoFilePath(), json_encode($savedData, JSON_PRETTY_PRINT));
+
+        return redirect()->route('admin.website-pages.home', ['section' => 'why_gpo'])
+            ->with('success', 'Why People Love GPO (Section 4) successfully updated!');
     }
 }

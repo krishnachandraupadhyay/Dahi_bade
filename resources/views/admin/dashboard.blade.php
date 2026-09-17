@@ -178,13 +178,30 @@
             <div class="card border-0 shadow-sm" style="border-radius: 12px; background: #ffffff;">
                 <div class="card-body p-3.5 d-flex align-items-center gap-3">
                     <div class="rounded-3 bg-success-transparent text-success d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 20px;">
+                        <i class="bi bi-check2-circle"></i>
+                    </div>
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h6 class="fw-bold text-dark mb-0 fs-13 text-truncate">Why People Love GPO</h6>
+                        <small class="text-muted fs-11 text-truncate d-block">6 Feature Cards</small>
+                    </div>
+                    <a href="{{ route('admin.website-pages.home', ['section' => 'why_gpo']) }}" class="btn btn-sm btn-light border text-success">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 col-sm-12">
+            <div class="card border-0 shadow-sm" style="border-radius: 12px; background: #ffffff;">
+                <div class="card-body p-3.5 d-flex align-items-center gap-3">
+                    <div class="rounded-3 bg-primary-transparent text-primary d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 20px;">
                         <i class="bi bi-globe2"></i>
                     </div>
                     <div class="flex-grow-1 overflow-hidden">
                         <h6 class="fw-bold text-dark mb-0 fs-13 text-truncate">Live Website</h6>
                         <small class="text-muted fs-11 text-truncate d-block">Customer View</small>
                     </div>
-                    <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-light border text-success">
+                    <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-light border text-primary">
                         <i class="bi bi-box-arrow-up-right"></i>
                     </a>
                 </div>
