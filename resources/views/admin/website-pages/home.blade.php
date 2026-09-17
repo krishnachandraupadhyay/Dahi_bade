@@ -752,17 +752,173 @@
 
             <!-- ================= 3. WELCOME SECTION PANEL ================= -->
             <div class="home-section-panel" id="panel_welcome_section" style="display: none;">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle">
+                <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-warning text-dark px-2.5 py-1.5 fs-12">Section 3</span>
-                        <h6 class="fw-bold text-dark mb-0 fs-15">Welcome To GPO (Sant Ram Gupta Ji Story)</h6>
+                        <span class="badge bg-warning text-dark px-2.5 py-1.5 fs-12 fw-bold">Section 3</span>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 fs-16">Welcome To GPO (Sant Ram Gupta Ji Story & Legacy)</h6>
+                            <small class="text-muted fs-12">Edit storefront photo, headings, quote, founder history, philosophy, and call-to-action button.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-12"></i> View Live Website
+                        </a>
                     </div>
                 </div>
-                <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
-                    <i class="bi bi-award fs-32 text-warning mb-2 d-block"></i>
-                    <h6 class="fw-bold text-dark mb-1">Welcome & Legacy Section</h6>
-                    <p class="fs-13 text-muted mb-0">Founder info, paragraphs, image aur button ka data yahan aayega.</p>
-                </div>
+
+                @php
+                    $welcomeImage = $welcome['image'] ?? 'images/storefront.jpg';
+                    $welcomeImageSrc = str_starts_with($welcomeImage, 'http') ? $welcomeImage : asset($welcomeImage);
+                @endphp
+
+                <form action="{{ route('admin.website-pages.home.welcome.update') }}" method="POST" enctype="multipart/form-data" id="welcomeSectionForm">
+                    @csrf
+
+                    <div class="row g-4">
+                        <!-- Left Column: Photo & CTA Button -->
+                        <div class="col-lg-12 col-md-12">
+                            <!-- Tall Storefront Photo Card -->
+                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-image-fill text-warning fs-15"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Storefront / Tall Photo</h6>
+                                    </div>
+                                    <span class="badge bg-light text-muted border fs-11">Left Column Photo</span>
+                                </div>
+                                <div class="card-body p-3.5">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        Upload New Photo:
+                                    </label>
+                                    <input type="file" name="welcome[image_file]" class="form-control form-control-sm modern-input mb-1.5 welcome-image-input" accept="image/*">
+                                    <input type="hidden" name="welcome[image]" class="welcome-image-hidden" value="{{ $welcome['image'] ?? 'images/storefront.jpg' }}">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <span class="text-muted fs-11 text-truncate font-monospace welcome-image-display" style="max-width: 250px;">
+                                            <i class="bi bi-folder2-open me-1"></i> Current: {{ $welcome['image'] ?? 'images/storefront.jpg' }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Live Photo Box -->
+                                    <label class="fs-11 fw-bold text-muted text-uppercase mb-1.5 d-block">Photo Preview:</label>
+                                    <div class="position-relative overflow-hidden rounded-3 shadow-sm border border-light-subtle" style="height: 320px; background: #0d1636;">
+                                        <img src="{{ $welcomeImageSrc }}" alt="Welcome Photo Preview" class="w-100 h-100 welcome-preview-photo-img" style="object-fit: cover; object-position: center;">
+                                    </div>
+                                    <small class="text-muted fs-11 mt-2 d-block">
+                                        <i class="bi bi-info-circle me-1"></i> Tall / vertical orientation photo recommended (e.g. storefront or Hazratganj outlet).
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Button Setting Card -->
+                            <div class="card border border-light-subtle shadow-sm" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-cursor-fill text-primary fs-15"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Call to Action Button</h6>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3.5">
+                                    <div class="mb-3">
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">Button Text:</label>
+                                        <input type="text" name="welcome[button_text]" class="form-control form-control-sm modern-input welcome-input-btntext" value="{{ $welcome['button_text'] ?? 'KNOW OUR STORY ➔' }}" placeholder="e.g. KNOW OUR STORY ➔">
+                                    </div>
+                                    <div>
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">Button Link URL:</label>
+                                        <input type="text" name="welcome[button_url]" class="form-control form-control-sm modern-input welcome-input-btnurl" value="{{ $welcome['button_url'] ?? '/story' }}" placeholder="e.g. /story or /about">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Text & Story Inputs -->
+                        <div class="col-lg-12 col-md-12">
+                            <div class="card border border-light-subtle shadow-sm h-100" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-card-text text-success fs-16"></i>
+                                        <h6 class="fs-14 fw-bold text-dark mb-0">Story & Content Details</h6>
+                                    </div>
+                                    <span class="badge bg-light text-muted border fs-11">Right Column Content</span>
+                                </div>
+                                <div class="card-body p-4 d-flex flex-column gap-3.5">
+                                    <div class="row g-3">
+                                        <!-- Badge / Pre-heading -->
+                                        <div class="col-md-5 col-sm-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-tag-fill text-warning me-1"></i> Pre-Heading / Badge:
+                                            </label>
+                                            <input type="text" name="welcome[badge]" class="form-control form-control-sm modern-input welcome-input-badge" value="{{ $welcome['badge'] ?? 'Welcome To' }}" placeholder="e.g. Welcome To">
+                                        </div>
+
+                                        <!-- Tagline / Year -->
+                                        <div class="col-md-7 col-sm-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-calendar-check text-info me-1"></i> Tagline Subtitle:
+                                            </label>
+                                            <input type="text" name="welcome[tagline]" class="form-control form-control-sm modern-input welcome-input-tagline" value="{{ $welcome['tagline'] ?? 'A Taste of Lucknow Since 1976' }}" placeholder="e.g. A Taste of Lucknow Since 1976">
+                                        </div>
+                                    </div>
+
+                                    <!-- Main Heading -->
+                                    <div>
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                            <i class="bi bi-type-h1 text-primary me-1"></i> Main Heading (Line breaks allowed):
+                                        </label>
+                                        <textarea name="welcome[heading]" rows="2" class="form-control form-control-sm modern-input welcome-input-heading" placeholder="e.g. ORIGINAL GPO KE&#10;THANDEY DAHI BADE">{{ $welcome['heading'] ?? "ORIGINAL GPO KE\nTHANDEY DAHI BADE" }}</textarea>
+                                    </div>
+
+                                    <!-- Poetic Quote / Highlight -->
+                                    <div>
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                            <i class="bi bi-quote text-danger me-1"></i> Poetic Highlight / Quote (Terracotta Italic):
+                                        </label>
+                                        <textarea name="welcome[quote]" rows="3" class="form-control form-control-sm modern-input welcome-input-quote" placeholder="Enter poetic quote or highlight text...">{{ $welcome['quote'] ?? '' }}</textarea>
+                                        <small class="text-muted fs-11">Website par stylish italic font me orange/terracotta color me dikhta hai.</small>
+                                    </div>
+
+                                    <!-- Paragraph 1: Founder & Origin Story -->
+                                    <div>
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                            <i class="bi bi-award-fill text-warning me-1"></i> Founder Story (Sant Ram Gupta Ji & 1976 Origin):
+                                        </label>
+                                        <textarea name="welcome[founder_story]" rows="3" class="form-control form-control-sm modern-input welcome-input-founder" placeholder="Enter founder origin story...">{{ $welcome['founder_story'] ?? '' }}</textarea>
+                                    </div>
+
+                                    <!-- Paragraph 2: Philosophy -->
+                                    <div>
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                            <i class="bi bi-gem text-success me-1"></i> Brand Philosophy / Core Values:
+                                        </label>
+                                        <textarea name="welcome[philosophy]" rows="2" class="form-control form-control-sm modern-input welcome-input-philosophy" placeholder="e.g. Our philosophy has always remained simple: Authentic taste...">{{ $welcome['philosophy'] ?? '' }}</textarea>
+                                    </div>
+
+                                    <!-- Paragraph 3: Current Journey -->
+                                    <div>
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                            <i class="bi bi-compass text-info me-1"></i> Current Journey / Modern Experience:
+                                        </label>
+                                        <textarea name="welcome[current_journey]" rows="2" class="form-control form-control-sm modern-input welcome-input-journey" placeholder="e.g. Today, we continue that journey by preserving the flavours...">{{ $welcome['current_journey'] ?? '' }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Buttons -->
+                    <div class="d-flex flex-wrap align-items-center gap-2 pt-3 mt-4 border-top">
+                        <button type="submit" class="btn btn-warning px-4 py-2 fw-bold text-dark d-flex align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-cloud-check-fill fs-16"></i>
+                            <span>Save Welcome Section Changes</span>
+                        </button>
+                        <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                        </button>
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
+                        </a>
+                    </div>
+                </form>
             </div>
 
             <!-- ================= 4. WHY GPO PANEL ================= -->
@@ -1575,6 +1731,28 @@
                 });
             }
         });
+
+        // ================= WELCOME SECTION LIVE PREVIEW LOGIC =================
+        const welcomeImgInput = document.querySelector('.welcome-image-input');
+        const welcomePreviewImg = document.querySelector('.welcome-preview-photo-img');
+        const welcomePathDisplay = document.querySelector('.welcome-image-display');
+
+        if (welcomeImgInput && welcomePreviewImg) {
+            welcomeImgInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        welcomePreviewImg.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                    if (welcomePathDisplay) {
+                        welcomePathDisplay.textContent = 'Selected: ' + file.name;
+                        welcomePathDisplay.classList.add('text-success', 'fw-semibold');
+                    }
+                }
+            });
+        }
     });
 </script>
 @endpush

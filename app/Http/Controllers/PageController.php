@@ -11,7 +11,8 @@ class PageController extends Controller
         $webpageController = new \App\Http\Controllers\WebpageController;
         $slides = $webpageController->getHeroData();
         $highlights = $webpageController->getHighlightsData();
-        return view('pages.home', compact('slides', 'highlights'));
+        $welcome = $webpageController->getWelcomeData();
+        return view('pages.home', compact('slides', 'highlights', 'welcome'));
     }
 
     public function story()

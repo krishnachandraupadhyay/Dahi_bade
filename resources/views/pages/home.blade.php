@@ -170,32 +170,57 @@
 
       <!-- SECTION 01 — WELCOME (Document Page 2) -->
       <section class="home-welcome-grid">
+        @php
+          $welcomeImg = $welcome['image'] ?? 'images/storefront.jpg';
+          $welcomeImgSrc = str_starts_with($welcomeImg, 'http') ? $welcomeImg : asset($welcomeImg);
+        @endphp
         <div class="welcome-tall-photo">
-          <img src="{{ asset('images/storefront.jpg') }}" alt="Original GPO Ke Thandey Dahi Bade Storefront Hazratganj">
+          <img src="{{ $welcomeImgSrc }}" alt="{{ $welcome['heading'] ?? 'Original GPO Ke Thandey Dahi Bade' }}">
         </div>
         <div class="welcome-content">
-          <h4>Welcome To</h4>
-          <h2>ORIGINAL GPO KE<br>THANDEY DAHI BADE</h2>
-          <p style="font-weight: 700; color: var(--c-teal-deep); margin-bottom: 12px; font-size: 1.05rem;">A Taste of Lucknow Since 1976</p>
-          <p style="margin-bottom: 10px; font-style: italic; color: var(--c-terracotta-coral);">
-            Some food is enjoyed.<br>
-            Some food is remembered.<br>
-            And some food becomes a part of a city’s identity.<br>
-            GPO Ke Thandey Dahi Bade is one such name.
-          </p>
-          <p style="margin-bottom: 12px;">
-            Founded by <strong>Sant Ram Gupta ji</strong> in 1976, GPO Ke Thandey Dahi Bade began its journey near the General Post Office in Hazratganj, Lucknow. What started as a humble food destination gradually became a beloved name among generations of food lovers.
-          </p>
-          <p style="margin-bottom: 14px;">
-            Our philosophy has always remained simple:<br>
-            <strong>Authentic taste. Fresh ingredients. Traditional preparation. Consistent quality.</strong>
-          </p>
-          <p style="margin-bottom: 22px;">
-            Today, we continue that journey by preserving the flavours and food traditions that made GPO special while creating a convenient and welcoming experience for today’s customers.
-          </p>
-          <div>
-            <a href="{{ route('story') }}" class="btn-terracotta-pill">KNOW OUR STORY ➔</a>
-          </div>
+          @if(!empty($welcome['badge']))
+            <h4>{{ $welcome['badge'] }}</h4>
+          @endif
+
+          @if(!empty($welcome['heading']))
+            <h2>{!! nl2br(e($welcome['heading'])) !!}</h2>
+          @endif
+
+          @if(!empty($welcome['tagline']))
+            <p style="font-weight: 700; color: var(--c-teal-deep); margin-bottom: 12px; font-size: 1.05rem;">
+              {{ $welcome['tagline'] }}
+            </p>
+          @endif
+
+          @if(!empty($welcome['quote']))
+            <p style="margin-bottom: 10px; font-style: italic; color: var(--c-terracotta-coral);">
+              {!! nl2br(e($welcome['quote'])) !!}
+            </p>
+          @endif
+
+          @if(!empty($welcome['founder_story']))
+            <p style="margin-bottom: 12px;">
+              {!! nl2br(e($welcome['founder_story'])) !!}
+            </p>
+          @endif
+
+          @if(!empty($welcome['philosophy']))
+            <p style="margin-bottom: 14px;">
+              {!! nl2br(e($welcome['philosophy'])) !!}
+            </p>
+          @endif
+
+          @if(!empty($welcome['current_journey']))
+            <p style="margin-bottom: 22px;">
+              {!! nl2br(e($welcome['current_journey'])) !!}
+            </p>
+          @endif
+
+          @if(!empty($welcome['button_text']))
+            <div>
+              <a href="{{ $welcome['button_url'] ?? route('story') }}" class="btn-terracotta-pill">{{ $welcome['button_text'] }}</a>
+            </div>
+          @endif
         </div>
       </section>
 

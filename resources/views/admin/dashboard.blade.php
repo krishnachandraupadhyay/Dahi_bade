@@ -123,32 +123,32 @@
 
     <!-- Quick Stats / Site Directory Grid -->
     <div class="row g-3">
-        <div class="col-md-4 col-sm-12">
+        <div class="col-xl-3 col-md-6 col-sm-12">
             <div class="card border-0 shadow-sm" style="border-radius: 12px; background: #ffffff;">
                 <div class="card-body p-3.5 d-flex align-items-center gap-3">
-                    <div class="rounded-3 bg-primary-transparent text-primary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 22px;">
+                    <div class="rounded-3 bg-primary-transparent text-primary d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 20px;">
                         <i class="bi bi-house-door-fill"></i>
                     </div>
-                    <div class="flex-grow-1">
-                        <h6 class="fw-bold text-dark mb-0 fs-14">Home Page Editor</h6>
-                        <small class="text-muted fs-12">Hero, Highlights, Welcome & Menu</small>
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h6 class="fw-bold text-dark mb-0 fs-13 text-truncate">Hero Banner Slider</h6>
+                        <small class="text-muted fs-11 text-truncate d-block">Slides & Buttons</small>
                     </div>
-                    <a href="{{ route('admin.website-pages.home') }}" class="btn btn-sm btn-light border text-primary">
-                        <i class="bi bi-arrow-right"></i>
+                    <a href="{{ route('admin.website-pages.home', ['section' => 'hero_section']) }}" class="btn btn-sm btn-light border text-primary">
+                        <i class="bi bi-pencil"></i>
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 col-sm-12">
+        <div class="col-xl-3 col-md-6 col-sm-12">
             <div class="card border-0 shadow-sm" style="border-radius: 12px; background: #ffffff;">
                 <div class="card-body p-3.5 d-flex align-items-center gap-3">
-                    <div class="rounded-3 bg-info-transparent text-info d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 22px;">
-                        <i class="bi bi-card-heading"></i>
+                    <div class="rounded-3 bg-info-transparent text-info d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 20px;">
+                        <i class="bi bi-collection-play-fill"></i>
                     </div>
-                    <div class="flex-grow-1">
-                        <h6 class="fw-bold text-dark mb-0 fs-14">Highlights Strip</h6>
-                        <small class="text-muted fs-12">Edit 3 Feature Cards (Card 1, 2, 3)</small>
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h6 class="fw-bold text-dark mb-0 fs-13 text-truncate">Highlights Strip</h6>
+                        <small class="text-muted fs-11 text-truncate d-block">Card 1, 2, 3 Items</small>
                     </div>
                     <a href="{{ route('admin.website-pages.home', ['section' => 'highlights_strip']) }}" class="btn btn-sm btn-light border text-info">
                         <i class="bi bi-pencil"></i>
@@ -157,15 +157,32 @@
             </div>
         </div>
 
-        <div class="col-md-4 col-sm-12">
+        <div class="col-xl-3 col-md-6 col-sm-12">
             <div class="card border-0 shadow-sm" style="border-radius: 12px; background: #ffffff;">
                 <div class="card-body p-3.5 d-flex align-items-center gap-3">
-                    <div class="rounded-3 bg-success-transparent text-success d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 22px;">
+                    <div class="rounded-3 bg-warning-transparent text-warning d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 20px;">
+                        <i class="bi bi-award-fill"></i>
+                    </div>
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h6 class="fw-bold text-dark mb-0 fs-13 text-truncate">Welcome To GPO</h6>
+                        <small class="text-muted fs-11 text-truncate d-block">Sant Ram Gupta Story</small>
+                    </div>
+                    <a href="{{ route('admin.website-pages.home', ['section' => 'welcome_section']) }}" class="btn btn-sm btn-light border text-warning">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 col-sm-12">
+            <div class="card border-0 shadow-sm" style="border-radius: 12px; background: #ffffff;">
+                <div class="card-body p-3.5 d-flex align-items-center gap-3">
+                    <div class="rounded-3 bg-success-transparent text-success d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 20px;">
                         <i class="bi bi-globe2"></i>
                     </div>
-                    <div class="flex-grow-1">
-                        <h6 class="fw-bold text-dark mb-0 fs-14">Live Website</h6>
-                        <small class="text-muted fs-12">Original GPO Ke Thandey Dahi Bade</small>
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h6 class="fw-bold text-dark mb-0 fs-13 text-truncate">Live Website</h6>
+                        <small class="text-muted fs-11 text-truncate d-block">Customer View</small>
                     </div>
                     <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-light border text-success">
                         <i class="bi bi-box-arrow-up-right"></i>

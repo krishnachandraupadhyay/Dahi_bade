@@ -17,6 +17,11 @@ class WebpageController extends Controller
         return storage_path('app/website_content/home_highlights.json');
     }
 
+    private function getWelcomeFilePath()
+    {
+        return storage_path('app/website_content/home_welcome.json');
+    }
+
     private function normalizeSlide($slide)
     {
         if (!isset($slide['media'])) {
@@ -154,6 +159,30 @@ class WebpageController extends Controller
         ];
     }
 
+    public function getWelcomeData()
+    {
+        $path = $this->getWelcomeFilePath();
+        if (File::exists($path)) {
+            $content = json_decode(File::get($path), true);
+            if (is_array($content) && !empty($content)) {
+                return $content;
+            }
+        }
+
+        return [
+            'badge' => 'Welcome To',
+            'heading' => "ORIGINAL GPO KE\nTHANDEY DAHI BADE",
+            'tagline' => 'A Taste of Lucknow Since 1976',
+            'quote' => "Some food is enjoyed.\nSome food is remembered.\nAnd some food becomes a part of a city’s identity.\nGPO Ke Thandey Dahi Bade is one such name.",
+            'founder_story' => "Founded by Sant Ram Gupta ji in 1976, GPO Ke Thandey Dahi Bade began its journey near the General Post Office in Hazratganj, Lucknow. What started as a humble food destination gradually became a beloved name among generations of food lovers.",
+            'philosophy' => "Our philosophy has always remained simple:\nAuthentic taste. Fresh ingredients. Traditional preparation. Consistent quality.",
+            'current_journey' => "Today, we continue that journey by preserving the flavours and food traditions that made GPO special while creating a convenient and welcoming experience for today’s customers.",
+            'button_text' => 'KNOW OUR STORY ➔',
+            'button_url' => '/story',
+            'image' => 'images/storefront.jpg',
+        ];
+    }
+
     public function index()
     {
         return view('admin.website-pages.index');
@@ -163,7 +192,8 @@ class WebpageController extends Controller
     {
         $slides = $this->getHeroData();
         $highlights = $this->getHighlightsData();
-        return view('admin.website-pages.home', compact('slides', 'highlights'));
+        $welcome = $this->getWelcomeData();
+        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome'));
     }
 
     public function updateHero(Request $request)
@@ -295,5 +325,49 @@ class WebpageController extends Controller
 
         return redirect()->route('admin.website-pages.home', ['section' => 'highlights_strip'])
             ->with('success', 'Highlights strip (3 cards) successfully updated!');
+    }
+
+    public function updateWelcome(Request $request)
+    {
+        $welcome = $request->input('welcome', []);
+        $imagePath = $welcome['image'] ?? 'images/storefront.jpg';
+
+        $uploadDir = public_path('uploads/welcome');
+        if (!File::isDirectory($uploadDir)) {
+            File::makeDirectory($uploadDir, 0755, true, true);
+        }
+
+        if ($request->hasFile('welcome.image_file')) {
+            $file = $request->file('welcome.image_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_welcome_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $imagePath = 'uploads/welcome/' . $filename;
+            }
+        }
+
+        $savedWelcome = [
+            'badge' => trim($welcome['badge'] ?? 'Welcome To'),
+            'heading' => trim($welcome['heading'] ?? "ORIGINAL GPO KE\nTHANDEY DAHI BADE"),
+            'tagline' => trim($welcome['tagline'] ?? 'A Taste of Lucknow Since 1976'),
+            'quote' => trim($welcome['quote'] ?? ''),
+            'founder_story' => trim($welcome['founder_story'] ?? ''),
+            'philosophy' => trim($welcome['philosophy'] ?? ''),
+            'current_journey' => trim($welcome['current_journey'] ?? ''),
+            'button_text' => trim($welcome['button_text'] ?? 'KNOW OUR STORY ➔'),
+            'button_url' => trim($welcome['button_url'] ?? '/story'),
+            'image' => $imagePath,
+        ];
+
+        $dir = dirname($this->getWelcomeFilePath());
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true, true);
+        }
+
+        File::put($this->getWelcomeFilePath(), json_encode($savedWelcome, JSON_PRETTY_PRINT));
+
+        return redirect()->route('admin.website-pages.home', ['section' => 'welcome_section'])
+            ->with('success', 'Welcome Section (GPO Story & Legacy) successfully updated!');
     }
 }

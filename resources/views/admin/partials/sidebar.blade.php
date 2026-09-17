@@ -42,6 +42,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link px-3 py-2 d-flex align-items-center gap-2.5 text-white {{ request()->fullUrlIs('*section=welcome_section*') ? 'active text-white' : '' }}" href="{{ route('admin.website-pages.home', ['section' => 'welcome_section']) }}" style="{{ request()->fullUrlIs('*section=welcome_section*') ? 'background: rgba(1, 98, 232, 0.2); color: #ffffff !important; border-left: 3px solid #0162e8;' : '' }}">
+                        <i class="bi bi-award fs-15 text-warning"></i>
+                        <span class="fs-13">Welcome To GPO</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link px-3 py-2 d-flex align-items-center gap-2.5 text-white {{ request()->fullUrlIs('*section=hero_section*') ? 'active text-white' : '' }}" href="{{ route('admin.website-pages.home', ['section' => 'hero_section']) }}" style="{{ request()->fullUrlIs('*section=hero_section*') ? 'background: rgba(1, 98, 232, 0.2); color: #ffffff !important; border-left: 3px solid #0162e8;' : '' }}">
                         <i class="bi bi-images fs-15 text-info"></i>
                         <span class="fs-13">Hero Banner Slider</span>
