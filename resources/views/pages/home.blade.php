@@ -280,16 +280,18 @@
           @if(!empty($starDish['heading']))
             <h3>{{ $starDish['heading'] }}</h3>
           @endif
-          @if(!empty($starDish['lead_paragraph']))
-            <p style="font-size: 1rem; line-height: 1.6; margin-bottom: 14px;">
-              {{ $starDish['lead_paragraph'] }}
+          @php
+            $starParagraphs = $starDish['paragraphs'] ?? [];
+            if (empty($starParagraphs)) {
+              if (!empty($starDish['lead_paragraph'])) $starParagraphs[] = $starDish['lead_paragraph'];
+              if (!empty($starDish['description_paragraph'])) $starParagraphs[] = $starDish['description_paragraph'];
+            }
+          @endphp
+          @foreach($starParagraphs as $paraIdx => $paraText)
+            <p style="font-size: {{ $paraIdx === 0 ? '1rem' : '0.95rem' }}; line-height: 1.6; color: {{ $paraIdx === 0 ? 'inherit' : 'var(--c-text-muted)' }}; margin-bottom: {{ $paraIdx === count($starParagraphs) - 1 ? '16px' : '14px' }};">
+              {{ $paraText }}
             </p>
-          @endif
-          @if(!empty($starDish['description_paragraph']))
-            <p style="font-size: 0.95rem; color: var(--c-text-muted); margin-bottom: 16px;">
-              {{ $starDish['description_paragraph'] }}
-            </p>
-          @endif
+          @endforeach
           @if(!empty($starDish['highlight_quote']))
             <div style="font-family: var(--font-serif); font-weight: 700; color: var(--c-terracotta-coral); font-size: 1.1rem; letter-spacing: 1px; margin-bottom: 22px;">
               {{ $starDish['highlight_quote'] }}

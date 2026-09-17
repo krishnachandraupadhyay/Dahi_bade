@@ -1286,41 +1286,56 @@
                             </div>
                         </div>
 
-                        <!-- Bottom Row: 2 Description Paragraphs (Side by Side in col-lg-6) -->
+                        <!-- Bottom Row: Dynamic Description Paragraphs (Add / Remove) -->
                         <div class="col-12">
                             <div class="card border border-light-subtle shadow-sm" style="border-radius: 12px; background: #ffffff;">
-                                <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+                                <div class="card-header bg-white py-3 px-4 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <span class="badge bg-dark text-white rounded-pill px-2.5 py-1 fs-11">Story</span>
-                                        <h6 class="fs-14 fw-bold text-dark mb-0">Dish Flavour & Experience Paragraphs</h6>
+                                        <span class="badge bg-danger text-white rounded-pill px-2.5 py-1 fs-11">Story</span>
+                                        <div>
+                                            <h6 class="fs-14 fw-bold text-dark mb-0">Dish Flavour & Experience Paragraphs (Add / Remove)</h6>
+                                            <small class="text-muted fs-11">Website par heading ke niche render hote hain</small>
+                                        </div>
                                     </div>
-                                    <small class="text-muted fs-12">Website par heading ke niche dono paragraphs aate hain</small>
+                                    <button type="button" class="btn btn-sm btn-danger px-3 py-1.5 fs-12 fw-bold d-flex align-items-center gap-1.5 shadow-sm" id="btn_add_star_paragraph">
+                                        <i class="bi bi-plus-circle-fill fs-13"></i>
+                                        <span>Add Paragraph</span>
+                                    </button>
                                 </div>
                                 <div class="card-body p-4">
-                                    <div class="row g-3">
-                                        <!-- Paragraph 1 -->
-                                        <div class="col-lg-6 col-md-12">
-                                            <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                                <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
-                                                    <span><i class="bi bi-paragraph text-primary me-1"></i> Paragraph 1: Ingredients & Speciality</span>
-                                                    <span class="badge bg-primary-subtle text-primary fs-10">Lead Paragraph</span>
-                                                </label>
-                                                <textarea name="star_dish[lead_paragraph]" rows="5" class="form-control modern-input" style="font-size: 12px; line-height: 1.5; border-radius: 8px; min-height: 120px; background: #ffffff;" placeholder="Enter first paragraph...">{{ old('star_dish.lead_paragraph', $starDish['lead_paragraph'] ?? '') }}</textarea>
-                                                <small class="text-muted fs-11 mt-2 d-block">Mentions soft lentil dumplings, chilled creamy dahi and spices.</small>
+                                    @php
+                                        $starParas = $starDish['paragraphs'] ?? [];
+                                        if (empty($starParas)) {
+                                            if (!empty($starDish['lead_paragraph'])) $starParas[] = $starDish['lead_paragraph'];
+                                            if (!empty($starDish['description_paragraph'])) $starParas[] = $starDish['description_paragraph'];
+                                        }
+                                        $colorBadges = ['primary', 'success', 'warning', 'info', 'secondary', 'dark'];
+                                    @endphp
+                                    <div class="row g-3" id="star_paragraphs_container">
+                                        @foreach($starParas as $pIdx => $pText)
+                                            @php
+                                                $badgeColor = $colorBadges[$pIdx % count($colorBadges)];
+                                            @endphp
+                                            <div class="col-lg-6 col-md-6 col-12 star-paragraph-item" data-index="{{ $pIdx }}">
+                                                <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between position-relative" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                                    <div>
+                                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                                            <span class="badge bg-{{ $badgeColor }}-subtle text-{{ $badgeColor }} border border-{{ $badgeColor }}-subtle fs-11 fw-semibold star-para-badge">
+                                                                <i class="bi bi-paragraph me-1"></i> Paragraph <span class="star-para-num">{{ $pIdx + 1 }}</span>
+                                                            </span>
+                                                            <button type="button" class="btn btn-outline-danger btn-sm p-0 d-flex align-items-center justify-content-center btn-remove-star-para" style="width: 26px; height: 26px; border-radius: 6px;" title="Remove this paragraph">
+                                                                <i class="bi bi-trash fs-12"></i>
+                                                            </button>
+                                                        </div>
+                                                        <textarea name="star_dish[paragraphs][{{ $pIdx }}]" rows="5" class="form-control form-control-sm modern-input star-para-textarea" style="font-size: 12px; line-height: 1.5; border-radius: 8px; min-height: 120px; background: #ffffff;" placeholder="Enter paragraph content...">{{ $pText }}</textarea>
+                                                    </div>
+                                                    <small class="text-muted fs-10 mt-2 d-flex align-items-center justify-content-between">
+                                                        <span><i class="bi bi-card-text me-1"></i> Slot <span class="star-slot-num">{{ $pIdx + 1 }}</span> on website</span>
+                                                        <span class="text-muted fst-italic">{{ $pIdx === 0 ? 'Lead highlight text' : 'Supporting note' }}</span>
+                                                    </small>
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        <!-- Paragraph 2 -->
-                                        <div class="col-lg-6 col-md-12">
-                                            <div class="p-3 rounded-3 h-100" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                                <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
-                                                    <span><i class="bi bi-paragraph text-success me-1"></i> Paragraph 2: Taste Experience & Legacy</span>
-                                                    <span class="badge bg-success-subtle text-success fs-10">Supporting Paragraph</span>
-                                                </label>
-                                                <textarea name="star_dish[description_paragraph]" rows="5" class="form-control modern-input" style="font-size: 12px; line-height: 1.5; border-radius: 8px; min-height: 120px; background: #ffffff;" placeholder="Enter second paragraph...">{{ old('star_dish.description_paragraph', $starDish['description_paragraph'] ?? '') }}</textarea>
-                                                <small class="text-muted fs-11 mt-2 d-block">Mentions the refreshing, creamy, tangy taste experience.</small>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -2589,6 +2604,111 @@
                     if (starDishImageDisplay) {
                         starDishImageDisplay.innerHTML = `<i class="bi bi-file-earmark-arrow-up text-danger me-1"></i> Ready to upload: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
                     }
+                }
+            });
+        }
+
+        // ================= STAR OF GPO DYNAMIC PARAGRAPHS LOGIC =================
+        const starParaContainer = document.getElementById('star_paragraphs_container');
+        const btnAddStarPara = document.getElementById('btn_add_star_paragraph');
+        const starColorBadges = ['primary', 'success', 'warning', 'info', 'secondary', 'dark'];
+
+        function reindexStarParagraphs() {
+            if (!starParaContainer) return;
+            const items = starParaContainer.querySelectorAll('.star-paragraph-item');
+
+            items.forEach((item, idx) => {
+                item.setAttribute('data-index', idx);
+
+                const paraNum = item.querySelector('.star-para-num');
+                if (paraNum) paraNum.textContent = idx + 1;
+
+                const slotNum = item.querySelector('.star-slot-num');
+                if (slotNum) slotNum.textContent = idx + 1;
+
+                const textarea = item.querySelector('.star-para-textarea');
+                if (textarea) {
+                    textarea.setAttribute('name', `star_dish[paragraphs][${idx}]`);
+                }
+
+                const badge = item.querySelector('.star-para-badge');
+                if (badge) {
+                    const badgeColor = starColorBadges[idx % starColorBadges.length];
+                    badge.className = `badge bg-${badgeColor}-subtle text-${badgeColor} border border-${badgeColor}-subtle fs-11 fw-semibold star-para-badge`;
+                }
+            });
+        }
+
+        if (starParaContainer) {
+            // Delegate remove button
+            starParaContainer.addEventListener('click', function (e) {
+                const removeBtn = e.target.closest('.btn-remove-star-para');
+                if (removeBtn) {
+                    const totalParas = starParaContainer.querySelectorAll('.star-paragraph-item').length;
+                    if (totalParas <= 1) {
+                        alert('Kam se kam ek paragraph hona zaroori hai!');
+                        return;
+                    }
+                    const item = removeBtn.closest('.star-paragraph-item');
+                    if (item && confirm('Kya aap is paragraph ko delete karna chahte hain?')) {
+                        item.style.transition = 'all 0.25s ease';
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            item.remove();
+                            reindexStarParagraphs();
+                        }, 250);
+                    }
+                }
+            });
+        }
+
+        // Add paragraph handler
+        if (btnAddStarPara && starParaContainer) {
+            btnAddStarPara.addEventListener('click', function () {
+                const currentCount = starParaContainer.querySelectorAll('.star-paragraph-item').length;
+                const nextIndex = currentCount;
+                const nextNum = currentCount + 1;
+                const badgeColor = starColorBadges[nextIndex % starColorBadges.length];
+
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-lg-6 col-md-6 col-12 star-paragraph-item';
+                colDiv.setAttribute('data-index', nextIndex);
+                colDiv.style.opacity = '0';
+                colDiv.style.transform = 'scale(0.95)';
+                colDiv.style.transition = 'all 0.25s ease';
+
+                colDiv.innerHTML = `
+                    <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between position-relative" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="badge bg-${badgeColor}-subtle text-${badgeColor} border border-${badgeColor}-subtle fs-11 fw-semibold star-para-badge">
+                                    <i class="bi bi-paragraph me-1"></i> Paragraph <span class="star-para-num">${nextNum}</span>
+                                </span>
+                                <button type="button" class="btn btn-outline-danger btn-sm p-0 d-flex align-items-center justify-content-center btn-remove-star-para" style="width: 26px; height: 26px; border-radius: 6px;" title="Remove this paragraph">
+                                    <i class="bi bi-trash fs-12"></i>
+                                </button>
+                            </div>
+                            <textarea name="star_dish[paragraphs][${nextIndex}]" rows="5" class="form-control form-control-sm modern-input star-para-textarea" style="font-size: 12px; line-height: 1.5; border-radius: 8px; min-height: 120px; background: #ffffff;" placeholder="Enter paragraph content..."></textarea>
+                        </div>
+                        <small class="text-muted fs-10 mt-2 d-flex align-items-center justify-content-between">
+                            <span><i class="bi bi-card-text me-1"></i> Slot <span class="star-slot-num">${nextNum}</span> on website</span>
+                            <span class="text-muted fst-italic">Supporting note</span>
+                        </small>
+                    </div>
+                `;
+
+                starParaContainer.appendChild(colDiv);
+                setTimeout(() => {
+                    colDiv.style.opacity = '1';
+                    colDiv.style.transform = 'scale(1)';
+                }, 10);
+
+                reindexStarParagraphs();
+
+                const newTextarea = colDiv.querySelector('textarea');
+                if (newTextarea) {
+                    newTextarea.focus();
                 }
             });
         }

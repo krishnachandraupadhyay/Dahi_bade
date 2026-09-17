@@ -304,10 +304,21 @@ class WebpageController extends Controller
 
     public function getStarDishData()
     {
+        $defaultParagraphs = [
+            'Our signature speciality brings together soft lentil dumplings, chilled creamy dahi and a carefully balanced combination of flavours and spices.',
+            'The result? A refreshing, creamy, tangy and satisfying experience that has kept customers coming back for years.',
+        ];
+
         $path = $this->getStarDishFilePath();
         if (File::exists($path)) {
             $content = json_decode(File::get($path), true);
             if (is_array($content) && !empty($content)) {
+                if (!isset($content['paragraphs']) || !is_array($content['paragraphs'])) {
+                    $paras = [];
+                    if (!empty($content['lead_paragraph'])) $paras[] = $content['lead_paragraph'];
+                    if (!empty($content['description_paragraph'])) $paras[] = $content['description_paragraph'];
+                    $content['paragraphs'] = !empty($paras) ? $paras : $defaultParagraphs;
+                }
                 return $content;
             }
         }
@@ -315,8 +326,9 @@ class WebpageController extends Controller
         return [
             'badge' => 'The Star of GPO',
             'heading' => 'THANDEY DAHI BADE',
-            'lead_paragraph' => 'Our signature speciality brings together soft lentil dumplings, chilled creamy dahi and a carefully balanced combination of flavours and spices.',
-            'description_paragraph' => 'The result? A refreshing, creamy, tangy and satisfying experience that has kept customers coming back for years.',
+            'lead_paragraph' => $defaultParagraphs[0],
+            'description_paragraph' => $defaultParagraphs[1],
+            'paragraphs' => $defaultParagraphs,
             'highlight_quote' => 'ONE PLATE. ONE BITE. ONE UNFORGETTABLE TASTE.',
             'button_text' => 'ORDER DAHI BADE',
             'button_url' => '/menu',
@@ -635,11 +647,23 @@ class WebpageController extends Controller
             }
         }
 
+        $inputParagraphs = $request->input('star_dish.paragraphs', []);
+        $savedParagraphs = [];
+        if (is_array($inputParagraphs)) {
+            foreach ($inputParagraphs as $p) {
+                $text = is_array($p) ? trim($p['text'] ?? '') : trim($p);
+                if ($text !== '') {
+                    $savedParagraphs[] = $text;
+                }
+            }
+        }
+
         $savedData = [
             'badge' => trim($star['badge'] ?? 'The Star of GPO'),
             'heading' => trim($star['heading'] ?? 'THANDEY DAHI BADE'),
-            'lead_paragraph' => trim($star['lead_paragraph'] ?? ''),
-            'description_paragraph' => trim($star['description_paragraph'] ?? ''),
+            'lead_paragraph' => $savedParagraphs[0] ?? '',
+            'description_paragraph' => $savedParagraphs[1] ?? '',
+            'paragraphs' => $savedParagraphs,
             'highlight_quote' => trim($star['highlight_quote'] ?? 'ONE PLATE. ONE BITE. ONE UNFORGETTABLE TASTE.'),
             'button_text' => trim($star['button_text'] ?? 'ORDER DAHI BADE'),
             'button_url' => trim($star['button_url'] ?? '/menu'),
