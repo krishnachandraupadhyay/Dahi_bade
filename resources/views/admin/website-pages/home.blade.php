@@ -594,14 +594,6 @@
                     </div>
                 </div>
 
-                <!-- Info Alert about Auto-fit images -->
-                <div class="alert alert-info border-info-subtle bg-info-subtle d-flex align-items-center gap-3 py-2.5 px-3 rounded-3 mb-4">
-                    <div class="fs-22 text-info"><i class="bi bi-aspect-ratio-fill"></i></div>
-                    <div class="fs-12 text-dark">
-                        <strong>Automatic Smart Image Sizing:</strong> Chahe aap kitni bhi badi image (HD, 4K, 8K ya vertical portrait) upload karein, website par card ka dimension exact <strong>360px height</strong> me locked rahega. Image perfectly center-fit ho jayegi bina layout toote.
-                    </div>
-                </div>
-
                 <form action="{{ route('admin.website-pages.home.highlights.update') }}" method="POST" enctype="multipart/form-data" id="highlightsStripForm">
                     @csrf
 
