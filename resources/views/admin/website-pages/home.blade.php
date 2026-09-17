@@ -854,15 +854,15 @@
                                                 </div>
                                                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-10">Hero Title</span>
                                             </div>
-                                            <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                            <div class="card-body p-3.5 d-flex flex-column justify-content-between">
                                                 <div>
                                                     <!-- Main H1 Heading -->
-                                                    <div class="mb-2.5">
+                                                    <div class="mb-3">
                                                         <label class="form-label fs-11 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
-                                                            <span><i class="bi bi-type-h1 text-primary me-1"></i> Main Heading (Single Line):</span>
+                                                            <span><i class="bi bi-type-h1 text-primary me-1"></i> Main Heading:</span>
                                                             <span class="badge bg-light text-muted border fs-9">H1 Title</span>
                                                         </label>
-                                                        <input type="text" name="welcome[heading]" class="form-control form-control-sm modern-input welcome-input-heading fw-bold" value="{{ trim(preg_replace('/\s+/', ' ', $welcome['heading'] ?? 'ORIGINAL GPO KE THANDEY DAHI BADE')) }}" placeholder="e.g. ORIGINAL GPO KE THANDEY DAHI BADE" style="font-size: 13px; color: #0d1636; border: 1.5px solid #cbd5e1; border-radius: 8px;">
+                                                        <input type="text" name="welcome[heading]" class="form-control form-control-sm modern-input welcome-input-heading fw-bold" value="{{ trim(preg_replace('/\s+/', ' ', $welcome['heading'] ?? 'ORIGINAL GPO KE THANDEY DAHI BADE')) }}" placeholder="e.g. ORIGINAL GPO KE THANDEY DAHI BADE" style="font-size: 13.5px; color: #0d1636; border: 1.5px solid #cbd5e1; border-radius: 8px;">
                                                     </div>
 
                                                     <!-- Sub-row: Pre-heading & Tagline -->
@@ -881,18 +881,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <!-- Live Title Banner Ribbon -->
-                                                <div class="mt-3 p-2.5 rounded-3 border" style="background: #f8fafc; border-color: #e2e8f0;">
-                                                    <span class="fs-10 text-uppercase fw-bold text-muted d-block mb-1" style="letter-spacing: 0.5px;">
-                                                        <i class="bi bi-eye text-primary me-1"></i> Live Title Banner:
-                                                    </span>
-                                                    <div class="d-inline-block mb-1">
-                                                        <span class="badge px-2 py-0.5 fs-10 fw-bold welcome-preview-badge-display" style="background: #f59e0b; color: #fff;">{{ $welcome['badge'] ?? 'Welcome To' }}</span>
-                                                    </div>
-                                                    <div class="fw-bold text-dark fs-12 text-truncate welcome-preview-heading-display" style="font-family: serif; letter-spacing: 0.3px;">{{ trim(preg_replace('/\s+/', ' ', $welcome['heading'] ?? 'ORIGINAL GPO KE THANDEY DAHI BADE')) }}</div>
-                                                    <small class="welcome-preview-tagline-display fw-bold fs-10 d-block text-truncate" style="color: #083b3c;">{{ $welcome['tagline'] ?? 'A Taste of Lucknow Since 1976' }}</small>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -909,24 +897,11 @@
                                                     <i class="bi bi-brush me-1"></i>Terracotta Italic
                                                 </span>
                                             </div>
-                                            <div class="card-body p-3 d-flex flex-column justify-content-between">
-                                                <div>
-                                                    <label class="form-label fs-11 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
-                                                        <span>Awadhi Poetic Lines:</span>
-                                                        <span class="text-muted fs-10">Styled quote display</span>
-                                                    </label>
-                                                    <textarea name="welcome[quote]" rows="4" class="form-control form-control-sm modern-input welcome-input-quote w-100" style="font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 12.5px; line-height: 1.55; color: #9a3412; background: #ffffff; border: 1.5px solid #fed7aa; border-radius: 8px; min-height: 100px;" placeholder="Enter poetic quote...">{{ $welcome['quote'] ?? '' }}</textarea>
-                                                </div>
-
-                                                <!-- Live Quote Card -->
-                                                <div class="mt-2.5 p-2.5 rounded-3 border" style="background: rgba(255, 255, 255, 0.9); border-color: #fed7aa;">
-                                                    <span class="fs-10 text-uppercase fw-bold text-muted d-block mb-1" style="letter-spacing: 0.5px;">
-                                                        <i class="bi bi-stars text-warning me-1"></i> Live Quote Card:
-                                                    </span>
-                                                    <div class="welcome-preview-quote-display fst-italic" style="font-family: 'Playfair Display', Georgia, serif; font-size: 11.5px; color: #c2410c; line-height: 1.45; max-height: 48px; overflow: hidden;">
-                                                        “{!! nl2br(e($welcome['quote'] ?? '')) !!}”
-                                                    </div>
-                                                </div>
+                                            <div class="card-body p-3.5 d-flex flex-column">
+                                                <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                                    <i class="bi bi-quote text-danger me-1"></i> Awadhi Poetic Lines:
+                                                </label>
+                                                <textarea name="welcome[quote]" rows="5" class="form-control form-control-sm modern-input welcome-input-quote flex-grow-1" style="font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 13px; line-height: 1.6; color: #9a3412; background: #ffffff; border: 1.5px solid #fed7aa; border-radius: 8px; min-height: 112px;" placeholder="Enter poetic quote...">{{ $welcome['quote'] ?? '' }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1854,33 +1829,8 @@
         const welcomeQuoteInput = document.querySelector('.welcome-input-quote');
         const welcomeBtnTextInput = document.querySelector('.welcome-input-btntext');
 
-        const previewHeadingDisplay = document.querySelector('.welcome-preview-heading-display');
-        const previewBadgeDisplay = document.querySelector('.welcome-preview-badge-display');
-        const previewTaglineDisplay = document.querySelector('.welcome-preview-tagline-display');
-        const previewQuoteDisplay = document.querySelector('.welcome-preview-quote-display');
         const previewBtnPill = document.querySelector('.welcome-preview-btn-pill');
 
-        if (welcomeHeadingInput && previewHeadingDisplay) {
-            welcomeHeadingInput.addEventListener('input', function() {
-                previewHeadingDisplay.textContent = this.value.trim() || 'ORIGINAL GPO KE THANDEY DAHI BADE';
-            });
-        }
-        if (welcomeBadgeInput && previewBadgeDisplay) {
-            welcomeBadgeInput.addEventListener('input', function() {
-                previewBadgeDisplay.textContent = this.value.trim() || 'Welcome To';
-            });
-        }
-        if (welcomeTaglineInput && previewTaglineDisplay) {
-            welcomeTaglineInput.addEventListener('input', function() {
-                previewTaglineDisplay.textContent = this.value.trim() || 'A Taste of Lucknow Since 1976';
-            });
-        }
-        if (welcomeQuoteInput && previewQuoteDisplay) {
-            welcomeQuoteInput.addEventListener('input', function() {
-                const txt = this.value.trim();
-                previewQuoteDisplay.innerHTML = txt ? '“' + txt.replace(/\n/g, '<br>') + '”' : '“Enter poetic quote...”';
-            });
-        }
         if (welcomeBtnTextInput && previewBtnPill) {
             welcomeBtnTextInput.addEventListener('input', function() {
                 previewBtnPill.textContent = this.value.trim() || 'KNOW OUR STORY ➔';
