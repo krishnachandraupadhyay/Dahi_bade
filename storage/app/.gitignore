@@ -1,0 +1,5 @@
+*
+!public/
+!website_content/
+!website_content/**
+!.gitignore

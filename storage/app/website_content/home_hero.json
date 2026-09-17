@@ -1,0 +1,77 @@
+[
+    {
+        "badge": "Since 1976",
+        "icon": "\ud83c\udf3f",
+        "heading": "THE ORIGINAL TASTE \r\nOF LUCKNOW",
+        "lead": "Soft. Creamy. Chilled. Unforgettable.",
+        "description": "Discover the legendary taste of Original GPO Ke Thandey Dahi Bade \u2014 a Lucknow favourite served with the same love for tradition, flavour and authenticity.",
+        "buttons": [
+            {
+                "text": "ORDER NOW",
+                "url": "\/menu",
+                "style": "amber"
+            },
+            {
+                "text": "EXPLORE OUR MENU",
+                "url": "\/menu",
+                "style": "spruce"
+            }
+        ],
+        "btn1_text": "ORDER NOW",
+        "btn1_url": "\/menu",
+        "btn2_text": "EXPLORE OUR MENU",
+        "btn2_url": "\/menu",
+        "media_type": "image",
+        "media": "images\/dahi_vada.jpg"
+    },
+    {
+        "badge": "Since 1976",
+        "icon": "\ud83c\udf3f",
+        "heading": "A LEGACY THAT \r\nTASTES DIFFERENT",
+        "lead": "Generations Have Loved It. Lucknow Still Does.",
+        "description": "From a humble beginning in 1976 to becoming a familiar name for authentic Dahi Bade in Lucknow, GPO continues to serve the taste that brings people back.",
+        "buttons": [
+            {
+                "text": "DISCOVER OUR STORY",
+                "url": "\/story",
+                "style": "amber"
+            },
+            {
+                "text": "VISIT OUR OUTLET",
+                "url": "\/contact",
+                "style": "spruce"
+            }
+        ],
+        "btn1_text": "DISCOVER OUR STORY",
+        "btn1_url": "\/story",
+        "btn2_text": "VISIT OUR OUTLET",
+        "btn2_url": "\/contact",
+        "media_type": "image",
+        "media": "images\/lucknow_heritage.jpg"
+    },
+    {
+        "badge": "Awadhi Culinary Heritage",
+        "icon": "\ud83c\udf3f",
+        "heading": "NOT JUST DAHI BADE.\r\nIT\u2019S A TASTE OF LUCKNOW.",
+        "lead": "",
+        "description": "Experience our signature Thandey Dahi Bade, Moong Dal Chilla, Samosa, Samosa Chaat and more \u2014 prepared to bring together authentic flavours and the timeless charm of Lucknow.",
+        "buttons": [
+            {
+                "text": "VIEW MENU",
+                "url": "\/menu",
+                "style": "amber"
+            },
+            {
+                "text": "EXPLORE FRANCHISE",
+                "url": "\/franchise",
+                "style": "spruce"
+            }
+        ],
+        "btn1_text": "VIEW MENU",
+        "btn1_url": "\/menu",
+        "btn2_text": "EXPLORE FRANCHISE",
+        "btn2_url": "\/franchise",
+        "media_type": "image",
+        "media": "images\/chaat.jpg"
+    }
+]
