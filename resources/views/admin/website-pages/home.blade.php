@@ -776,70 +776,80 @@
                     @csrf
 
                     <div class="row g-4">
-                        <!-- Left Column: Photo & CTA Button (4 cols) -->
-                        <div class="col-lg-4 col-md-12">
-                            <!-- Tall Storefront Photo Card -->
-                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
-                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="bi bi-image-fill text-warning fs-15"></i>
-                                        <h6 class="fs-13 fw-bold text-dark mb-0">Storefront Photo</h6>
+                        <!-- 1. Storefront Photo & CTA Button (col-sm-12 col-12) -->
+                        <div class="col-sm-12 col-12">
+                            <div class="row g-4 align-items-stretch">
+                                <!-- Photo Card -->
+                                <div class="col-md-7 col-sm-12">
+                                    <div class="card border border-light-subtle shadow-sm h-100" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                                        <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="bi bi-image-fill text-warning fs-15"></i>
+                                                <h6 class="fs-13 fw-bold text-dark mb-0">Storefront Photo</h6>
+                                            </div>
+                                            <span class="badge bg-light text-muted border fs-11">Tall Format</span>
+                                        </div>
+                                        <div class="card-body p-3.5">
+                                            <div class="row g-3 align-items-center">
+                                                <div class="col-md-7 col-sm-12">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                        Upload New Photo:
+                                                    </label>
+                                                    <input type="file" name="welcome[image_file]" class="form-control form-control-sm modern-input mb-1.5 welcome-image-input" accept="image/*">
+                                                    <input type="hidden" name="welcome[image]" class="welcome-image-hidden" value="{{ $welcome['image'] ?? 'images/storefront.jpg' }}">
+                                                    <span class="text-muted fs-11 text-truncate font-monospace welcome-image-display d-block mb-2" style="max-width: 100%;">
+                                                        <i class="bi bi-folder2-open me-1"></i> Current: {{ $welcome['image'] ?? 'images/storefront.jpg' }}
+                                                    </span>
+                                                    <small class="text-muted fs-11 d-block">
+                                                        <i class="bi bi-info-circle me-1"></i> Homepage par vertical outlet photo dikhta hai.
+                                                    </small>
+                                                </div>
+                                                <div class="col-md-5 col-sm-12">
+                                                    <label class="fs-11 fw-bold text-muted text-uppercase mb-1.5 d-block">Photo Preview:</label>
+                                                    <div class="position-relative overflow-hidden rounded-3 shadow-sm border border-light-subtle" style="height: 175px; background: #0d1636;">
+                                                        <img src="{{ $welcomeImageSrc }}" alt="Welcome Photo Preview" class="w-100 h-100 welcome-preview-photo-img" style="object-fit: cover; object-position: center;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <span class="badge bg-light text-muted border fs-11">Tall Format</span>
                                 </div>
-                                <div class="card-body p-3.5">
-                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                        Upload New Photo:
-                                    </label>
-                                    <input type="file" name="welcome[image_file]" class="form-control form-control-sm modern-input mb-1.5 welcome-image-input" accept="image/*">
-                                    <input type="hidden" name="welcome[image]" class="welcome-image-hidden" value="{{ $welcome['image'] ?? 'images/storefront.jpg' }}">
-                                    <div class="d-flex align-items-center justify-content-between mb-3">
-                                        <span class="text-muted fs-11 text-truncate font-monospace welcome-image-display" style="max-width: 250px;">
-                                            <i class="bi bi-folder2-open me-1"></i> Current: {{ $welcome['image'] ?? 'images/storefront.jpg' }}
-                                        </span>
-                                    </div>
 
-                                    <!-- Live Photo Box -->
-                                    <label class="fs-11 fw-bold text-muted text-uppercase mb-1.5 d-block">Photo Preview:</label>
-                                    <div class="position-relative overflow-hidden rounded-3 shadow-sm border border-light-subtle" style="height: 310px; background: #0d1636;">
-                                        <img src="{{ $welcomeImageSrc }}" alt="Welcome Photo Preview" class="w-100 h-100 welcome-preview-photo-img" style="object-fit: cover; object-position: center;">
-                                    </div>
-                                    <small class="text-muted fs-11 mt-2 d-block">
-                                        <i class="bi bi-info-circle me-1"></i> Tall / vertical outlet photo.
-                                    </small>
-                                </div>
-                            </div>
-
-                            <!-- Button Setting Card -->
-                            <div class="card border border-light-subtle shadow-sm" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
-                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="bi bi-cursor-fill text-primary fs-15"></i>
-                                        <h6 class="fs-13 fw-bold text-dark mb-0">Action Button</h6>
-                                    </div>
-                                    <span class="badge bg-warning-subtle text-dark fs-10 border border-warning-subtle">Terracotta Pill</span>
-                                </div>
-                                <div class="card-body p-3.5">
-                                    <div class="mb-2.5">
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">Button Text:</label>
-                                        <input type="text" name="welcome[button_text]" class="form-control form-control-sm modern-input welcome-input-btntext" value="{{ $welcome['button_text'] ?? 'KNOW OUR STORY ➔' }}" placeholder="e.g. KNOW OUR STORY ➔">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">Button Link URL:</label>
-                                        <input type="text" name="welcome[button_url]" class="form-control form-control-sm modern-input welcome-input-btnurl" value="{{ $welcome['button_url'] ?? '/story' }}" placeholder="e.g. /story or /about">
-                                    </div>
-                                    <div class="p-2 rounded-3 text-center" style="background: #fafafa; border: 1px dashed #cbd5e1;">
-                                        <span class="fs-10 text-muted d-block mb-1 fw-semibold">Live Button Preview:</span>
-                                        <span class="welcome-preview-btn-pill d-inline-block shadow-sm" style="background: #e05e2b; color: #ffffff; padding: 6px 16px; border-radius: 50px; font-weight: 700; font-size: 11px; letter-spacing: 0.5px;">
-                                            {{ $welcome['button_text'] ?? 'KNOW OUR STORY ➔' }}
-                                        </span>
+                                <!-- Button Setting Card -->
+                                <div class="col-md-5 col-sm-12">
+                                    <div class="card border border-light-subtle shadow-sm h-100" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                                        <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="bi bi-cursor-fill text-primary fs-15"></i>
+                                                <h6 class="fs-13 fw-bold text-dark mb-0">Action Button</h6>
+                                            </div>
+                                            <span class="badge bg-warning-subtle text-dark fs-10 border border-warning-subtle">Terracotta Pill</span>
+                                        </div>
+                                        <div class="card-body p-3.5 d-flex flex-column justify-content-between">
+                                            <div>
+                                                <div class="mb-2.5">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">Button Text:</label>
+                                                    <input type="text" name="welcome[button_text]" class="form-control form-control-sm modern-input welcome-input-btntext" value="{{ $welcome['button_text'] ?? 'KNOW OUR STORY ➔' }}" placeholder="e.g. KNOW OUR STORY ➔">
+                                                </div>
+                                                <div class="mb-2.5">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">Button Link URL:</label>
+                                                    <input type="text" name="welcome[button_url]" class="form-control form-control-sm modern-input welcome-input-btnurl" value="{{ $welcome['button_url'] ?? '/story' }}" placeholder="e.g. /story or /about">
+                                                </div>
+                                            </div>
+                                            <div class="p-2 rounded-3 text-center mt-2" style="background: #fafafa; border: 1px dashed #cbd5e1;">
+                                                <span class="fs-10 text-muted d-block mb-1 fw-semibold">Live Button Preview:</span>
+                                                <span class="welcome-preview-btn-pill d-inline-block shadow-sm" style="background: #e05e2b; color: #ffffff; padding: 6px 16px; border-radius: 50px; font-weight: 700; font-size: 11px; letter-spacing: 0.5px;">
+                                                    {{ $welcome['button_text'] ?? 'KNOW OUR STORY ➔' }}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Right Column: Story & Content Structure (8 cols) -->
-                        <div class="col-lg-8 col-md-12">
+                        <!-- 2. Story & Content Details (col-sm-12 col-12) -->
+                        <div class="col-sm-12 col-12">
                             <div class="d-flex flex-column gap-3">
 
                                 <!-- Row 1: Two Balanced Equal-Height Cards (Title Identity + Poetic Highlight) -->
