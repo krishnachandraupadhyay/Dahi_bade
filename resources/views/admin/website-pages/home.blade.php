@@ -820,13 +820,19 @@
                                     <span class="badge bg-warning-subtle text-dark fs-10 border border-warning-subtle">Terracotta Pill</span>
                                 </div>
                                 <div class="card-body p-3.5">
-                                    <div class="mb-3">
+                                    <div class="mb-2.5">
                                         <label class="form-label fs-12 fw-bold text-dark mb-1">Button Text:</label>
                                         <input type="text" name="welcome[button_text]" class="form-control form-control-sm modern-input welcome-input-btntext" value="{{ $welcome['button_text'] ?? 'KNOW OUR STORY ➔' }}" placeholder="e.g. KNOW OUR STORY ➔">
                                     </div>
-                                    <div>
+                                    <div class="mb-3">
                                         <label class="form-label fs-12 fw-bold text-dark mb-1">Button Link URL:</label>
                                         <input type="text" name="welcome[button_url]" class="form-control form-control-sm modern-input welcome-input-btnurl" value="{{ $welcome['button_url'] ?? '/story' }}" placeholder="e.g. /story or /about">
+                                    </div>
+                                    <div class="p-2 rounded-3 text-center" style="background: #fafafa; border: 1px dashed #cbd5e1;">
+                                        <span class="fs-10 text-muted d-block mb-1 fw-semibold">Live Button Preview:</span>
+                                        <span class="welcome-preview-btn-pill d-inline-block shadow-sm" style="background: #e05e2b; color: #ffffff; padding: 6px 16px; border-radius: 50px; font-weight: 700; font-size: 11px; letter-spacing: 0.5px;">
+                                            {{ $welcome['button_text'] ?? 'KNOW OUR STORY ➔' }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -834,98 +840,160 @@
 
                         <!-- Right Column: Story & Content Structure (8 cols) -->
                         <div class="col-lg-8 col-md-12">
-                            <div class="card border border-light-subtle shadow-sm h-100" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
-                                <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="bi bi-card-text text-success fs-16"></i>
-                                        <h6 class="fs-14 fw-bold text-dark mb-0">Story & Content Details</h6>
-                                    </div>
-                                    <span class="badge bg-light text-muted border fs-11">Sections Overview</span>
-                                </div>
-                                <div class="card-body p-4 d-flex flex-column gap-3.5">
+                            <div class="d-flex flex-column gap-3">
 
-                                    <!-- Section 1: Title & Identity (Left) + Poetic Highlight (Right) -->
-                                    <div class="row g-3 align-items-stretch">
-                                        <!-- Left: Title & Identity Box -->
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="p-3.5 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                <!-- Row 1: Two Balanced Equal-Height Cards (Title Identity + Poetic Highlight) -->
+                                <div class="row g-3 align-items-stretch">
+                                    <!-- Card A: Title & Brand Identity -->
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border border-light-subtle shadow-sm h-100" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                                            <div class="card-header bg-white py-2.5 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bi bi-card-heading text-primary fs-15"></i>
+                                                    <h6 class="fs-13 fw-bold text-dark mb-0">Brand Title & Identity</h6>
+                                                </div>
+                                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-10">Hero Title</span>
+                                            </div>
+                                            <div class="card-body p-3 d-flex flex-column justify-content-between">
                                                 <div>
-                                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                                        <span class="fs-12 fw-bold text-dark"><i class="bi bi-type-h1 text-primary me-1"></i> Main Heading:</span>
-                                                        <span class="badge bg-primary-subtle text-primary fs-10 fw-semibold">Title Bar</span>
+                                                    <!-- Main H1 Heading -->
+                                                    <div class="mb-2.5">
+                                                        <label class="form-label fs-11 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
+                                                            <span><i class="bi bi-type-h1 text-primary me-1"></i> Main Heading (Single Line):</span>
+                                                            <span class="badge bg-light text-muted border fs-9">H1 Title</span>
+                                                        </label>
+                                                        <input type="text" name="welcome[heading]" class="form-control form-control-sm modern-input welcome-input-heading fw-bold" value="{{ trim(preg_replace('/\s+/', ' ', $welcome['heading'] ?? 'ORIGINAL GPO KE THANDEY DAHI BADE')) }}" placeholder="e.g. ORIGINAL GPO KE THANDEY DAHI BADE" style="font-size: 13px; color: #0d1636; border: 1.5px solid #cbd5e1; border-radius: 8px;">
                                                     </div>
-                                                    <input type="text" name="welcome[heading]" class="form-control form-control-sm modern-input welcome-input-heading fw-bold text-dark mb-2.5" value="{{ trim(preg_replace('/\s+/', ' ', $welcome['heading'] ?? 'ORIGINAL GPO KE THANDEY DAHI BADE')) }}" placeholder="e.g. ORIGINAL GPO KE THANDEY DAHI BADE" style="font-size: 13px;">
 
+                                                    <!-- Sub-row: Pre-heading & Tagline -->
                                                     <div class="row g-2">
                                                         <div class="col-6">
-                                                            <label class="form-label fs-11 fw-bold text-muted mb-1"><i class="bi bi-tag-fill text-warning me-1"></i> Pre-Heading:</label>
-                                                            <input type="text" name="welcome[badge]" class="form-control form-control-sm modern-input welcome-input-badge" value="{{ $welcome['badge'] ?? 'Welcome To' }}" placeholder="Welcome To">
+                                                            <label class="form-label fs-11 fw-bold text-muted mb-1">
+                                                                <i class="bi bi-tag-fill text-warning me-1"></i> Pre-Heading:
+                                                            </label>
+                                                            <input type="text" name="welcome[badge]" class="form-control form-control-sm modern-input welcome-input-badge" value="{{ $welcome['badge'] ?? 'Welcome To' }}" placeholder="Welcome To" style="border-radius: 8px;">
                                                         </div>
                                                         <div class="col-6">
-                                                            <label class="form-label fs-11 fw-bold text-muted mb-1"><i class="bi bi-calendar-check text-info me-1"></i> Subtitle / Year:</label>
-                                                            <input type="text" name="welcome[tagline]" class="form-control form-control-sm modern-input welcome-input-tagline" value="{{ $welcome['tagline'] ?? 'A Taste of Lucknow Since 1976' }}" placeholder="Since 1976">
+                                                            <label class="form-label fs-11 fw-bold text-muted mb-1">
+                                                                <i class="bi bi-calendar-check text-info me-1"></i> Tagline Subtitle:
+                                                            </label>
+                                                            <input type="text" name="welcome[tagline]" class="form-control form-control-sm modern-input welcome-input-tagline" value="{{ $welcome['tagline'] ?? 'A Taste of Lucknow Since 1976' }}" placeholder="Since 1976" style="border-radius: 8px;">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <small class="text-muted fs-11 mt-2 d-block"><i class="bi bi-info-circle me-1"></i> Main display title on homepage.</small>
-                                            </div>
-                                        </div>
 
-                                        <!-- Right: Poetic Awadhi Highlight Box -->
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="p-3.5 rounded-3 h-100 d-flex flex-column" style="background: #fffdf7; border: 1px solid #fde68a;">
-                                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                                    <span class="fs-12 fw-bold text-dark"><i class="bi bi-quote text-danger fs-14 me-1"></i> Poetic Highlight / Quote:</span>
-                                                    <span class="badge bg-warning-subtle text-dark fs-10 border border-warning-subtle">Terracotta Italics</span>
-                                                </div>
-                                                <textarea name="welcome[quote]" rows="5" class="form-control form-control-sm modern-input welcome-input-quote flex-grow-1" style="min-height: 95px; font-style: italic; font-family: 'Playfair Display', Georgia, serif; font-size: 12.5px; color: #b45309; line-height: 1.55; background: #ffffff; border-color: #fed7aa;" placeholder="Enter poetic quote...">{{ $welcome['quote'] ?? '' }}</textarea>
-                                                <small class="text-muted fs-11 mt-1.5 d-block"><i class="bi bi-palette text-danger me-1"></i> Title ke theek neeche terracotta italic font me dikhta hai.</small>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Section 2: Founder Story (Left) + Brand Philosophy (Right) -->
-                                    <div class="row g-3 align-items-stretch">
-                                        <!-- Left: Founder Story -->
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="p-3.5 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                                <div>
-                                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                                        <span class="fs-12 fw-bold text-dark"><i class="bi bi-award-fill text-warning me-1"></i> Founder Story (1976 Origin):</span>
-                                                        <span class="badge bg-light text-muted border fs-10">Paragraph 1</span>
+                                                <!-- Live Title Banner Ribbon -->
+                                                <div class="mt-3 p-2.5 rounded-3 border" style="background: #f8fafc; border-color: #e2e8f0;">
+                                                    <span class="fs-10 text-uppercase fw-bold text-muted d-block mb-1" style="letter-spacing: 0.5px;">
+                                                        <i class="bi bi-eye text-primary me-1"></i> Live Title Banner:
+                                                    </span>
+                                                    <div class="d-inline-block mb-1">
+                                                        <span class="badge px-2 py-0.5 fs-10 fw-bold welcome-preview-badge-display" style="background: #f59e0b; color: #fff;">{{ $welcome['badge'] ?? 'Welcome To' }}</span>
                                                     </div>
-                                                    <textarea name="welcome[founder_story]" rows="4" class="form-control form-control-sm modern-input welcome-input-founder" style="min-height: 105px; font-size: 12.5px; line-height: 1.5;" placeholder="Enter founder origin story...">{{ $welcome['founder_story'] ?? '' }}</textarea>
+                                                    <div class="fw-bold text-dark fs-12 text-truncate welcome-preview-heading-display" style="font-family: serif; letter-spacing: 0.3px;">{{ trim(preg_replace('/\s+/', ' ', $welcome['heading'] ?? 'ORIGINAL GPO KE THANDEY DAHI BADE')) }}</div>
+                                                    <small class="welcome-preview-tagline-display fw-bold fs-10 d-block text-truncate" style="color: #083b3c;">{{ $welcome['tagline'] ?? 'A Taste of Lucknow Since 1976' }}</small>
                                                 </div>
-                                                <small class="text-muted fs-11 mt-1.5 d-block">Sant Ram Gupta Ji & Hazratganj history.</small>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <!-- Right: Brand Philosophy -->
-                                        <div class="col-md-6 col-sm-12">
-                                            <div class="p-3.5 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                    <!-- Card B: Awadhi Poetic Quote Highlight -->
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="card border shadow-sm h-100" style="border-radius: 12px; overflow: hidden; background: linear-gradient(180deg, #fffdfa 0%, #fff9f2 100%); border-color: #fed7aa;">
+                                            <div class="card-header py-2.5 px-3.5 border-bottom d-flex align-items-center justify-content-between" style="background: #fffcf8; border-color: #fed7aa;">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bi bi-chat-quote-fill text-danger fs-15"></i>
+                                                    <h6 class="fs-13 fw-bold text-dark mb-0">Poetic Highlight / Quote</h6>
+                                                </div>
+                                                <span class="badge" style="background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; font-size: 10px;">
+                                                    <i class="bi bi-brush me-1"></i>Terracotta Italic
+                                                </span>
+                                            </div>
+                                            <div class="card-body p-3 d-flex flex-column justify-content-between">
                                                 <div>
-                                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                                        <span class="fs-12 fw-bold text-dark"><i class="bi bi-gem text-success me-1"></i> Brand Philosophy & Quality:</span>
-                                                        <span class="badge bg-light text-muted border fs-10">Paragraph 2</span>
-                                                    </div>
-                                                    <textarea name="welcome[philosophy]" rows="4" class="form-control form-control-sm modern-input welcome-input-philosophy" style="min-height: 105px; font-size: 12.5px; line-height: 1.5;" placeholder="e.g. Our philosophy has always remained simple: Authentic taste...">{{ $welcome['philosophy'] ?? '' }}</textarea>
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
+                                                        <span>Awadhi Poetic Lines:</span>
+                                                        <span class="text-muted fs-10">Styled quote display</span>
+                                                    </label>
+                                                    <textarea name="welcome[quote]" rows="4" class="form-control form-control-sm modern-input welcome-input-quote w-100" style="font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 12.5px; line-height: 1.55; color: #9a3412; background: #ffffff; border: 1.5px solid #fed7aa; border-radius: 8px; min-height: 100px;" placeholder="Enter poetic quote...">{{ $welcome['quote'] ?? '' }}</textarea>
                                                 </div>
-                                                <small class="text-muted fs-11 mt-1.5 d-block">Authentic taste, Fresh ingredients, Quality.</small>
+
+                                                <!-- Live Quote Card -->
+                                                <div class="mt-2.5 p-2.5 rounded-3 border" style="background: rgba(255, 255, 255, 0.9); border-color: #fed7aa;">
+                                                    <span class="fs-10 text-uppercase fw-bold text-muted d-block mb-1" style="letter-spacing: 0.5px;">
+                                                        <i class="bi bi-stars text-warning me-1"></i> Live Quote Card:
+                                                    </span>
+                                                    <div class="welcome-preview-quote-display fst-italic" style="font-family: 'Playfair Display', Georgia, serif; font-size: 11.5px; color: #c2410c; line-height: 1.45; max-height: 48px; overflow: hidden;">
+                                                        “{!! nl2br(e($welcome['quote'] ?? '')) !!}”
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Section 3: Modern Journey (Full Width) -->
-                                    <div class="p-3.5 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                        <div class="d-flex align-items-center justify-content-between mb-2">
-                                            <span class="fs-12 fw-bold text-dark"><i class="bi bi-compass-fill text-info me-1"></i> Modern Journey & Tradition Today:</span>
-                                            <span class="badge bg-light text-muted border fs-10">Paragraph 3</span>
-                                        </div>
-                                        <textarea name="welcome[current_journey]" rows="2" class="form-control form-control-sm modern-input welcome-input-journey" style="font-size: 12.5px; line-height: 1.5;" placeholder="e.g. Today, we continue that journey by preserving the flavours...">{{ $welcome['current_journey'] ?? '' }}</textarea>
-                                        <small class="text-muted fs-11 mt-1.5 d-block">Preserving flavours while creating modern welcoming customer experience.</small>
-                                    </div>
-
                                 </div>
+
+                                <!-- Row 2: Heritage Storytelling (3 Clean Symmetrical Chapter Cards) -->
+                                <div class="card border border-light-subtle shadow-sm" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                                    <div class="card-header bg-white py-2.5 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-book-half text-success fs-15"></i>
+                                            <h6 class="fs-13 fw-bold text-dark mb-0">Heritage Storytelling (3 Chapters)</h6>
+                                        </div>
+                                        <span class="badge bg-light text-muted border fs-11">Story Narrative</span>
+                                    </div>
+                                    <div class="card-body p-3.5">
+                                        <div class="row g-3 align-items-stretch">
+                                            <!-- Chapter 1: Origin & Founder -->
+                                            <div class="col-lg-4 col-md-12">
+                                                <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                                    <div>
+                                                        <div class="d-flex align-items-center justify-content-between mb-1.5">
+                                                            <span class="badge bg-warning-subtle text-dark border border-warning-subtle fs-10 fw-bold">1. Origin (1976)</span>
+                                                            <i class="bi bi-award-fill text-warning fs-13"></i>
+                                                        </div>
+                                                        <h6 class="fs-12 fw-bold text-dark mb-0.5">Founder Story</h6>
+                                                        <p class="text-muted fs-11 mb-2">Sant Ram Gupta Ji & GPO history.</p>
+                                                        <textarea name="welcome[founder_story]" rows="5" class="form-control form-control-sm modern-input welcome-input-founder" style="font-size: 11.5px; line-height: 1.5; border-radius: 8px; min-height: 130px;" placeholder="Origin story...">{{ $welcome['founder_story'] ?? '' }}</textarea>
+                                                    </div>
+                                                    <small class="text-muted fs-10 mt-2 d-block"><i class="bi bi-clock-history me-1"></i> Paragraph 1 on homepage</small>
+                                                </div>
+                                            </div>
+
+                                            <!-- Chapter 2: Philosophy & Quality -->
+                                            <div class="col-lg-4 col-md-12">
+                                                <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                                    <div>
+                                                        <div class="d-flex align-items-center justify-content-between mb-1.5">
+                                                            <span class="badge bg-success-subtle text-success border border-success-subtle fs-10 fw-bold">2. Philosophy</span>
+                                                            <i class="bi bi-gem text-success fs-13"></i>
+                                                        </div>
+                                                        <h6 class="fs-12 fw-bold text-dark mb-0.5">Brand Philosophy</h6>
+                                                        <p class="text-muted fs-11 mb-2">Authentic taste & quality standards.</p>
+                                                        <textarea name="welcome[philosophy]" rows="5" class="form-control form-control-sm modern-input welcome-input-philosophy" style="font-size: 11.5px; line-height: 1.5; border-radius: 8px; min-height: 130px;" placeholder="Brand philosophy...">{{ $welcome['philosophy'] ?? '' }}</textarea>
+                                                    </div>
+                                                    <small class="text-muted fs-10 mt-2 d-block"><i class="bi bi-check2-circle me-1"></i> Paragraph 2 on homepage</small>
+                                                </div>
+                                            </div>
+
+                                            <!-- Chapter 3: Modern Journey -->
+                                            <div class="col-lg-4 col-md-12">
+                                                <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                                    <div>
+                                                        <div class="d-flex align-items-center justify-content-between mb-1.5">
+                                                            <span class="badge bg-info-subtle text-info border border-info-subtle fs-10 fw-bold">3. Present Era</span>
+                                                            <i class="bi bi-compass-fill text-info fs-13"></i>
+                                                        </div>
+                                                        <h6 class="fs-12 fw-bold text-dark mb-0.5">Modern Journey</h6>
+                                                        <p class="text-muted fs-11 mb-2">Preserving flavours for today's visitors.</p>
+                                                        <textarea name="welcome[current_journey]" rows="5" class="form-control form-control-sm modern-input welcome-input-journey" style="font-size: 11.5px; line-height: 1.5; border-radius: 8px; min-height: 130px;" placeholder="Current journey...">{{ $welcome['current_journey'] ?? '' }}</textarea>
+                                                    </div>
+                                                    <small class="text-muted fs-10 mt-2 d-block"><i class="bi bi-geo-alt me-1"></i> Paragraph 3 on homepage</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -1776,6 +1844,46 @@
                         welcomePathDisplay.classList.add('text-success', 'fw-semibold');
                     }
                 }
+            });
+        }
+
+        // Live text preview bindings
+        const welcomeHeadingInput = document.querySelector('.welcome-input-heading');
+        const welcomeBadgeInput = document.querySelector('.welcome-input-badge');
+        const welcomeTaglineInput = document.querySelector('.welcome-input-tagline');
+        const welcomeQuoteInput = document.querySelector('.welcome-input-quote');
+        const welcomeBtnTextInput = document.querySelector('.welcome-input-btntext');
+
+        const previewHeadingDisplay = document.querySelector('.welcome-preview-heading-display');
+        const previewBadgeDisplay = document.querySelector('.welcome-preview-badge-display');
+        const previewTaglineDisplay = document.querySelector('.welcome-preview-tagline-display');
+        const previewQuoteDisplay = document.querySelector('.welcome-preview-quote-display');
+        const previewBtnPill = document.querySelector('.welcome-preview-btn-pill');
+
+        if (welcomeHeadingInput && previewHeadingDisplay) {
+            welcomeHeadingInput.addEventListener('input', function() {
+                previewHeadingDisplay.textContent = this.value.trim() || 'ORIGINAL GPO KE THANDEY DAHI BADE';
+            });
+        }
+        if (welcomeBadgeInput && previewBadgeDisplay) {
+            welcomeBadgeInput.addEventListener('input', function() {
+                previewBadgeDisplay.textContent = this.value.trim() || 'Welcome To';
+            });
+        }
+        if (welcomeTaglineInput && previewTaglineDisplay) {
+            welcomeTaglineInput.addEventListener('input', function() {
+                previewTaglineDisplay.textContent = this.value.trim() || 'A Taste of Lucknow Since 1976';
+            });
+        }
+        if (welcomeQuoteInput && previewQuoteDisplay) {
+            welcomeQuoteInput.addEventListener('input', function() {
+                const txt = this.value.trim();
+                previewQuoteDisplay.innerHTML = txt ? '“' + txt.replace(/\n/g, '<br>') + '”' : '“Enter poetic quote...”';
+            });
+        }
+        if (welcomeBtnTextInput && previewBtnPill) {
+            welcomeBtnTextInput.addEventListener('input', function() {
+                previewBtnPill.textContent = this.value.trim() || 'KNOW OUR STORY ➔';
             });
         }
     });
