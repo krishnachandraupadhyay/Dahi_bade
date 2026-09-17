@@ -14,7 +14,8 @@ class PageController extends Controller
         $welcome = $webpageController->getWelcomeData();
         $whyGpo = $webpageController->getWhyGpoData();
         $starDish = $webpageController->getStarDishData();
-        return view('pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish'));
+        $experience = $webpageController->getExperienceData();
+        return view('pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish', 'experience'));
     }
 
     public function story()

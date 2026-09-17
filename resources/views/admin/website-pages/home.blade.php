@@ -1360,17 +1360,151 @@
 
             <!-- ================= 7. GPO EXPERIENCE PANEL ================= -->
             <div class="home-section-panel" id="panel_gpo_experience" style="display: none;">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle">
+                <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-primary px-2.5 py-1.5 fs-12">Section 7</span>
-                        <h6 class="fw-bold text-dark mb-0 fs-15">The GPO Experience (Culture & Features)</h6>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 fs-16">The GPO Experience (Culture, Taste & Features)</h6>
+                            <small class="text-muted fs-12">Manage Section Title, Subheading & 4 Experience Feature Items.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1.5 fs-12 rounded-pill fw-semibold" id="experience_active_badge">
+                            <i class="bi bi-stars me-1"></i> <span id="experience_count_text">{{ count($experience['items'] ?? []) }}</span> Items Active
+                        </span>
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-12"></i> View Live
+                        </a>
                     </div>
                 </div>
-                <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
-                    <i class="bi bi-stars fs-32 text-primary mb-2 d-block"></i>
-                    <h6 class="fw-bold text-dark mb-1">The GPO Experience Section</h6>
-                    <p class="fs-13 text-muted mb-0">Traditional taste, familiar comfort, freshly prepared info yahan manage hoga.</p>
-                </div>
+
+                <form action="{{ route('admin.website-pages.home.experience.update') }}" method="POST" id="experienceForm">
+                    @csrf
+
+                    <!-- 1. Section Headings Card -->
+                    <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                        <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-primary text-white rounded-pill px-2.5 py-1 fs-11">Headings</span>
+                                <h6 class="fs-14 fw-bold text-dark mb-0">Section Titles & Heading</h6>
+                            </div>
+                            <small class="text-muted fs-12">Website par feature strip ke theek upar show hota hai</small>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-3">
+                                <!-- Main Heading -->
+                                <div class="col-md-6 col-sm-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        <i class="bi bi-type-h1 text-primary me-1"></i> Main Heading
+                                    </label>
+                                    <input type="text" name="experience[heading]" value="{{ old('experience.heading', $experience['heading'] ?? 'THE GPO EXPERIENCE') }}" class="form-control modern-input fw-bold" placeholder="e.g. THE GPO EXPERIENCE">
+                                    <small class="text-muted fs-11 mt-1 d-block">Large bold serif title</small>
+                                </div>
+
+                                <!-- Subheading -->
+                                <div class="col-md-6 col-sm-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        <i class="bi bi-card-text text-warning me-1"></i> Subheading / Tagline
+                                    </label>
+                                    <input type="text" name="experience[subheading]" value="{{ old('experience.subheading', $experience['subheading'] ?? 'WHY A VISIT TO GPO FEELS DIFFERENT') }}" class="form-control modern-input" placeholder="e.g. WHY A VISIT TO GPO FEELS DIFFERENT">
+                                    <small class="text-muted fs-11 mt-1 d-block">Uppercase light subtitle</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Dynamic Feature Cards List -->
+                    <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                        <div class="card-header bg-white py-3 px-4 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-success text-white rounded-pill px-2.5 py-1 fs-11">Strip Items</span>
+                                <div>
+                                    <h6 class="fs-14 fw-bold text-dark mb-0">Experience Feature Items (Add / Remove / Edit)</h6>
+                                    <small class="text-muted fs-11">Front website experience strip me 4-column layout me render honge</small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-success px-3 py-1.5 fs-12 fw-bold d-flex align-items-center gap-1.5 shadow-sm" id="btn_add_experience_item">
+                                <i class="bi bi-plus-circle-fill fs-13"></i>
+                                <span>Add Experience Item</span>
+                            </button>
+                        </div>
+
+                        <div class="card-body p-4">
+                            <div class="row g-3" id="experience_items_container">
+                                @php
+                                    $expItems = $experience['items'] ?? [];
+                                @endphp
+                                @foreach($expItems as $idx => $item)
+                                    <div class="col-lg-6 col-md-6 col-12 experience-item-col" data-index="{{ $idx }}">
+                                        <div class="card border h-100 shadow-sm exp-item-box" style="border-radius: 10px; background: #fbfcfe; border-color: #e2e8f0 !important; transition: all 0.2s ease;">
+                                            <div class="card-header bg-white py-2 px-3 border-bottom d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="badge bg-primary rounded-circle exp-item-num-badge" style="width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px;">{{ $idx + 1 }}</span>
+                                                    <span class="fw-bold fs-12 text-dark exp-item-header-title">{{ !empty($item['title']) ? $item['title'] : 'Item ' . ($idx + 1) }}</span>
+                                                </div>
+                                                <button type="button" class="btn btn-outline-danger btn-sm p-0 d-flex align-items-center justify-content-center btn-remove-exp-item" style="width: 26px; height: 26px; border-radius: 6px;" title="Remove this item">
+                                                    <i class="bi bi-trash fs-12"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                                <div>
+                                                    <div class="row g-2 mb-2">
+                                                        <!-- Icon / Emoji -->
+                                                        <div class="col-3">
+                                                            <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                                                Icon / Emoji
+                                                            </label>
+                                                            <input type="text" name="experience[items][{{ $idx }}][icon]" value="{{ $item['icon'] ?? '🌿' }}" class="form-control form-control-sm modern-input text-center fw-bold fs-15 exp-icon-input" placeholder="🌿" style="border-radius: 6px; background: #ffffff;">
+                                                        </div>
+                                                        <!-- Title -->
+                                                        <div class="col-9">
+                                                            <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                                                Item Title
+                                                            </label>
+                                                            <input type="text" name="experience[items][{{ $idx }}][title]" value="{{ $item['title'] ?? '' }}" class="form-control form-control-sm modern-input fw-bold exp-title-input" placeholder="e.g. Traditional Taste" style="border-radius: 6px; background: #ffffff;">
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Description -->
+                                                    <div class="mb-0">
+                                                        <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                                            Description Note
+                                                        </label>
+                                                        <textarea name="experience[items][{{ $idx }}][description]" rows="3" class="form-control form-control-sm modern-input exp-desc-input" style="font-size: 12px; line-height: 1.5; border-radius: 6px; min-height: 75px; background: #ffffff;" placeholder="Enter short note...">{{ $item['description'] ?? '' }}</textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="pt-2 mt-2 border-top border-light-subtle d-flex align-items-center justify-content-between">
+                                                    <small class="text-muted fs-10">
+                                                        <i class="bi bi-grid me-1"></i> Column <span class="exp-slot-num">{{ $idx + 1 }}</span> on website
+                                                    </small>
+                                                    <span class="badge bg-light text-muted border px-2 py-0.5 fs-10">
+                                                        Feature {{ $idx + 1 }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Buttons -->
+                    <div class="d-flex flex-wrap align-items-center gap-2 pt-3 mt-4 border-top">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-cloud-check-fill fs-16"></i>
+                            <span>Save Experience Section Changes</span>
+                        </button>
+                        <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                        </button>
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
+                        </a>
+                    </div>
+                </form>
             </div>
 
             <!-- ================= 8. TESTIMONIALS PANEL ================= -->
@@ -2455,6 +2589,157 @@
                     if (starDishImageDisplay) {
                         starDishImageDisplay.innerHTML = `<i class="bi bi-file-earmark-arrow-up text-danger me-1"></i> Ready to upload: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
                     }
+                }
+            });
+        }
+
+        // ================= THE GPO EXPERIENCE DYNAMIC ITEMS LOGIC =================
+        const experienceContainer = document.getElementById('experience_items_container');
+        const btnAddExperienceItem = document.getElementById('btn_add_experience_item');
+        const experienceCountText = document.getElementById('experience_count_text');
+
+        function reindexExperienceItems() {
+            if (!experienceContainer) return;
+            const items = experienceContainer.querySelectorAll('.experience-item-col');
+
+            items.forEach((item, idx) => {
+                item.setAttribute('data-index', idx);
+
+                const numBadge = item.querySelector('.exp-item-num-badge');
+                if (numBadge) numBadge.textContent = idx + 1;
+
+                const slotNum = item.querySelector('.exp-slot-num');
+                if (slotNum) slotNum.textContent = idx + 1;
+
+                const iconInput = item.querySelector('.exp-icon-input');
+                if (iconInput) iconInput.setAttribute('name', `experience[items][${idx}][icon]`);
+
+                const titleInput = item.querySelector('.exp-title-input');
+                if (titleInput) titleInput.setAttribute('name', `experience[items][${idx}][title]`);
+
+                const descInput = item.querySelector('.exp-desc-input');
+                if (descInput) descInput.setAttribute('name', `experience[items][${idx}][description]`);
+            });
+
+            if (experienceCountText) {
+                experienceCountText.textContent = items.length;
+            }
+        }
+
+        function bindExperienceItemLiveEvents(col) {
+            const titleInput = col.querySelector('.exp-title-input');
+            const headerTitle = col.querySelector('.exp-item-header-title');
+
+            if (titleInput && headerTitle) {
+                titleInput.addEventListener('input', function () {
+                    const idx = col.getAttribute('data-index') || '0';
+                    headerTitle.textContent = this.value.trim() !== '' ? this.value.trim() : `Item ${parseInt(idx) + 1}`;
+                });
+            }
+        }
+
+        if (experienceContainer) {
+            experienceContainer.querySelectorAll('.experience-item-col').forEach(col => {
+                bindExperienceItemLiveEvents(col);
+            });
+
+            // Delegate remove experience item
+            experienceContainer.addEventListener('click', function (e) {
+                const removeBtn = e.target.closest('.btn-remove-exp-item');
+                if (removeBtn) {
+                    const totalItems = experienceContainer.querySelectorAll('.experience-item-col').length;
+                    if (totalItems <= 1) {
+                        alert('Kam se kam ek feature item hona zaroori hai!');
+                        return;
+                    }
+                    const col = removeBtn.closest('.experience-item-col');
+                    if (col && confirm('Kya aap is experience item ko delete karna chahte hain?')) {
+                        col.style.transition = 'all 0.25s ease';
+                        col.style.opacity = '0';
+                        col.style.transform = 'scale(0.9)';
+                        setTimeout(() => {
+                            col.remove();
+                            reindexExperienceItems();
+                        }, 250);
+                    }
+                }
+            });
+        }
+
+        // Add Experience Item Handler
+        if (btnAddExperienceItem && experienceContainer) {
+            btnAddExperienceItem.addEventListener('click', function () {
+                const currentCount = experienceContainer.querySelectorAll('.experience-item-col').length;
+                const nextIndex = currentCount;
+                const nextNum = currentCount + 1;
+                const defaultIcons = ['🌿', '✨', '🥣', '🎉', '🍛', '❤️', '🌟', '🏆'];
+                const assignedIcon = defaultIcons[nextIndex % defaultIcons.length];
+
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-lg-6 col-md-6 col-12 experience-item-col';
+                colDiv.setAttribute('data-index', nextIndex);
+                colDiv.style.opacity = '0';
+                colDiv.style.transform = 'scale(0.9)';
+                colDiv.style.transition = 'all 0.25s ease';
+
+                colDiv.innerHTML = `
+                    <div class="card border h-100 shadow-sm exp-item-box" style="border-radius: 10px; background: #fbfcfe; border-color: #e2e8f0 !important; transition: all 0.2s ease;">
+                        <div class="card-header bg-white py-2 px-3 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-primary rounded-circle exp-item-num-badge" style="width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px;">${nextNum}</span>
+                                <span class="fw-bold fs-12 text-dark exp-item-header-title">Item ${nextNum}</span>
+                            </div>
+                            <button type="button" class="btn btn-outline-danger btn-sm p-0 d-flex align-items-center justify-content-center btn-remove-exp-item" style="width: 26px; height: 26px; border-radius: 6px;" title="Remove this item">
+                                <i class="bi bi-trash fs-12"></i>
+                            </button>
+                        </div>
+                        <div class="card-body p-3 d-flex flex-column justify-content-between">
+                            <div>
+                                <div class="row g-2 mb-2">
+                                    <div class="col-3">
+                                        <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                            Icon / Emoji
+                                        </label>
+                                        <input type="text" name="experience[items][${nextIndex}][icon]" value="${assignedIcon}" class="form-control form-control-sm modern-input text-center fw-bold fs-15 exp-icon-input" placeholder="🌿" style="border-radius: 6px; background: #ffffff;">
+                                    </div>
+                                    <div class="col-9">
+                                        <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                            Item Title
+                                        </label>
+                                        <input type="text" name="experience[items][${nextIndex}][title]" value="" class="form-control form-control-sm modern-input fw-bold exp-title-input" placeholder="e.g. Special Atmosphere" style="border-radius: 6px; background: #ffffff;">
+                                    </div>
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label fs-11 fw-bold text-dark mb-1">
+                                        Description Note
+                                    </label>
+                                    <textarea name="experience[items][${nextIndex}][description]" rows="3" class="form-control form-control-sm modern-input exp-desc-input" style="font-size: 12px; line-height: 1.5; border-radius: 6px; min-height: 75px; background: #ffffff;" placeholder="Enter short note..."></textarea>
+                                </div>
+                            </div>
+                            <div class="pt-2 mt-2 border-top border-light-subtle d-flex align-items-center justify-content-between">
+                                <small class="text-muted fs-10">
+                                    <i class="bi bi-grid me-1"></i> Column <span class="exp-slot-num">${nextNum}</span> on website
+                                </small>
+                                <span class="badge bg-light text-muted border px-2 py-0.5 fs-10">
+                                    Feature ${nextNum}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                experienceContainer.appendChild(colDiv);
+                setTimeout(() => {
+                    colDiv.style.opacity = '1';
+                    colDiv.style.transform = 'scale(1)';
+                }, 10);
+
+                bindExperienceItemLiveEvents(colDiv);
+                reindexExperienceItems();
+
+                const titleInput = colDiv.querySelector('.exp-title-input');
+                if (titleInput) {
+                    titleInput.focus();
                 }
             });
         }

@@ -391,35 +391,19 @@
             </svg>
           </div>
           <div class="gpo-exp-titles">
-            <h3>THE GPO EXPERIENCE</h3>
-            <p>WHY A VISIT TO GPO FEELS DIFFERENT</p>
+            <h3>{{ $experience['heading'] ?? 'THE GPO EXPERIENCE' }}</h3>
+            <p>{{ $experience['subheading'] ?? 'WHY A VISIT TO GPO FEELS DIFFERENT' }}</p>
           </div>
         </div>
 
         <div class="gpo-exp-strip">
-          <div class="gpo-exp-col">
-            <div class="gpo-exp-icon">🌿</div>
-            <h5>Traditional Taste</h5>
-            <p>Flavours rooted in the food culture and traditions of Lucknow.</p>
-          </div>
-
-          <div class="gpo-exp-col">
-            <div class="gpo-exp-icon">✨</div>
-            <h5>Familiar Comfort</h5>
-            <p>Food that feels familiar, satisfying and easy to love.</p>
-          </div>
-
-          <div class="gpo-exp-col">
-            <div class="gpo-exp-icon">🥣</div>
-            <h5>Freshly Prepared</h5>
-            <p>Our dishes are prepared with attention to freshness and quality.</p>
-          </div>
-
-          <div class="gpo-exp-col">
-            <div class="gpo-exp-icon">🎉</div>
-            <h5>Made for Every Occasion</h5>
-            <p>Whether it’s a quick snack, family outing, casual meet-up or craving — GPO has something for you.</p>
-          </div>
+          @foreach($experience['items'] ?? [] as $item)
+            <div class="gpo-exp-col">
+              <div class="gpo-exp-icon">{{ $item['icon'] ?? '🌿' }}</div>
+              <h5>{{ $item['title'] ?? '' }}</h5>
+              <p>{{ $item['description'] ?? '' }}</p>
+            </div>
+          @endforeach
         </div>
 
         <!-- SECTION 06 — TESTIMONIALS (Document Page 5: 4 Exact Reviews) -->

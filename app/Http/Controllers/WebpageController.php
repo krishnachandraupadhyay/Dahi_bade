@@ -32,6 +32,11 @@ class WebpageController extends Controller
         return storage_path('app/website_content/home_star_dish.json');
     }
 
+    private function getExperienceFilePath()
+    {
+        return storage_path('app/website_content/home_experience.json');
+    }
+
     private function normalizeSlide($slide)
     {
         if (!isset($slide['media'])) {
@@ -319,6 +324,49 @@ class WebpageController extends Controller
         ];
     }
 
+    public function getExperienceData()
+    {
+        $defaultCards = [
+            [
+                'icon' => '🌿',
+                'title' => 'Traditional Taste',
+                'description' => 'Flavours rooted in the food culture and traditions of Lucknow.',
+            ],
+            [
+                'icon' => '✨',
+                'title' => 'Familiar Comfort',
+                'description' => 'Food that feels familiar, satisfying and easy to love.',
+            ],
+            [
+                'icon' => '🥣',
+                'title' => 'Freshly Prepared',
+                'description' => 'Our dishes are prepared with attention to freshness and quality.',
+            ],
+            [
+                'icon' => '🎉',
+                'title' => 'Made for Every Occasion',
+                'description' => 'Whether it’s a quick snack, family outing, casual meet-up or craving — GPO has something for you.',
+            ],
+        ];
+
+        $path = $this->getExperienceFilePath();
+        if (File::exists($path)) {
+            $content = json_decode(File::get($path), true);
+            if (is_array($content) && !empty($content)) {
+                if (!isset($content['items']) || !is_array($content['items'])) {
+                    $content['items'] = $defaultCards;
+                }
+                return $content;
+            }
+        }
+
+        return [
+            'heading' => 'THE GPO EXPERIENCE',
+            'subheading' => 'WHY A VISIT TO GPO FEELS DIFFERENT',
+            'items' => $defaultCards,
+        ];
+    }
+
     public function index()
     {
         return view('admin.website-pages.index');
@@ -331,7 +379,8 @@ class WebpageController extends Controller
         $welcome = $this->getWelcomeData();
         $whyGpo = $this->getWhyGpoData();
         $starDish = $this->getStarDishData();
-        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish'));
+        $experience = $this->getExperienceData();
+        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish', 'experience'));
     }
 
     public function updateHero(Request $request)
@@ -606,5 +655,44 @@ class WebpageController extends Controller
 
         return redirect()->route('admin.website-pages.home', ['section' => 'signature_dish'])
             ->with('success', 'Star of GPO (Thandey Dahi Bade) successfully updated!');
+    }
+
+    public function updateExperience(Request $request)
+    {
+        $input = $request->input('experience', []);
+        $items = $request->input('experience.items', []);
+        $savedItems = [];
+
+        if (is_array($items)) {
+            foreach ($items as $item) {
+                $icon = trim($item['icon'] ?? '🌿');
+                $title = trim($item['title'] ?? '');
+                $desc = trim($item['description'] ?? '');
+
+                if ($title !== '' || $desc !== '') {
+                    $savedItems[] = [
+                        'icon' => $icon !== '' ? $icon : '🌿',
+                        'title' => $title,
+                        'description' => $desc,
+                    ];
+                }
+            }
+        }
+
+        $savedData = [
+            'heading' => trim($input['heading'] ?? 'THE GPO EXPERIENCE'),
+            'subheading' => trim($input['subheading'] ?? 'WHY A VISIT TO GPO FEELS DIFFERENT'),
+            'items' => $savedItems,
+        ];
+
+        $dir = dirname($this->getExperienceFilePath());
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true, true);
+        }
+
+        File::put($this->getExperienceFilePath(), json_encode($savedData, JSON_PRETTY_PRINT));
+
+        return redirect()->route('admin.website-pages.home', ['section' => 'gpo_experience'])
+            ->with('success', 'The GPO Experience (Culture & Features) successfully updated!');
     }
 }
