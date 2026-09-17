@@ -917,64 +917,50 @@
                                     </div>
                                 </div>
 
-                                <!-- Row 2: Heritage Storytelling (3 Clean Symmetrical Chapter Cards) -->
+                                <!-- Row 2: Heritage Storytelling (Dynamic Add/Remove Paragraphs) -->
                                 <div class="card border border-light-subtle shadow-sm" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
                                     <div class="card-header bg-white py-2.5 px-3.5 border-bottom d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center gap-2">
                                             <i class="bi bi-book-half text-success fs-15"></i>
-                                            <h6 class="fs-13 fw-bold text-dark mb-0">Heritage Storytelling (3 Chapters)</h6>
+                                            <h6 class="fs-13 fw-bold text-dark mb-0">
+                                                Heritage Storytelling (<span id="welcome_para_count">{{ count($welcome['paragraphs'] ?? []) }}</span> Paragraphs)
+                                            </h6>
                                         </div>
-                                        <span class="badge bg-light text-muted border fs-11">Story Narrative</span>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button type="button" class="btn btn-sm btn-success px-2.5 py-1 fs-12 fw-bold d-flex align-items-center gap-1 shadow-sm" id="btn_add_welcome_paragraph">
+                                                <i class="bi bi-plus-circle-fill fs-13"></i> Add Paragraph
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="card-body p-3.5">
-                                        <div class="row g-3 align-items-stretch">
-                                            <!-- Chapter 1: Origin & Founder -->
-                                            <div class="col-lg-4 col-md-12">
-                                                <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                                    <div>
-                                                        <div class="d-flex align-items-center justify-content-between mb-1.5">
-                                                            <span class="badge bg-warning-subtle text-dark border border-warning-subtle fs-10 fw-bold">1. Origin (1976)</span>
-                                                            <i class="bi bi-award-fill text-warning fs-13"></i>
+                                        <div class="row g-3 align-items-stretch" id="welcome_paragraphs_container">
+                                            @php
+                                                $paragraphs = $welcome['paragraphs'] ?? [];
+                                                $colorBadges = ['warning', 'success', 'info', 'primary', 'secondary', 'dark'];
+                                            @endphp
+                                            @foreach($paragraphs as $idx => $p)
+                                                @php
+                                                    $badgeColor = $colorBadges[$idx % count($colorBadges)];
+                                                @endphp
+                                                <div class="col-lg-4 col-md-6 col-12 welcome-paragraph-item" data-index="{{ $idx }}">
+                                                    <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between position-relative" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                                        <div>
+                                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                <input type="text" name="welcome[paragraphs][{{ $idx }}][tag]" value="{{ $p['tag'] ?? (($idx + 1) . '. Chapter') }}" class="form-control form-control-sm modern-input py-0.5 px-2 fs-10 fw-bold border-{{ $badgeColor }}-subtle welcome-para-tag-input" style="max-width: 140px; height: 26px; border-radius: 6px; background: #ffffff;" placeholder="Badge / Tag">
+                                                                <button type="button" class="btn btn-outline-danger btn-sm p-0 d-flex align-items-center justify-content-center remove-welcome-para-btn" style="width: 26px; height: 26px; border-radius: 6px;" title="Remove this paragraph">
+                                                                    <i class="bi bi-trash fs-12"></i>
+                                                                </button>
+                                                            </div>
+                                                            <input type="text" name="welcome[paragraphs][{{ $idx }}][title]" value="{{ $p['title'] ?? 'Story Chapter' }}" class="form-control form-control-sm modern-input fw-bold fs-12 mb-1.5" placeholder="Paragraph Title" style="border-radius: 6px; background: #ffffff;">
+                                                            <input type="text" name="welcome[paragraphs][{{ $idx }}][subtitle]" value="{{ $p['subtitle'] ?? '' }}" class="form-control form-control-sm modern-input text-muted fs-11 mb-2" placeholder="Subtitle / Short note" style="border-radius: 6px; background: #ffffff;">
+                                                            <textarea name="welcome[paragraphs][{{ $idx }}][text]" rows="5" class="form-control form-control-sm modern-input welcome-para-text" style="font-size: 11.5px; line-height: 1.5; border-radius: 8px; min-height: 125px; background: #ffffff;" placeholder="Enter paragraph content...">{{ $p['text'] ?? '' }}</textarea>
                                                         </div>
-                                                        <h6 class="fs-12 fw-bold text-dark mb-0.5">Founder Story</h6>
-                                                        <p class="text-muted fs-11 mb-2">Sant Ram Gupta Ji & GPO history.</p>
-                                                        <textarea name="welcome[founder_story]" rows="5" class="form-control form-control-sm modern-input welcome-input-founder" style="font-size: 11.5px; line-height: 1.5; border-radius: 8px; min-height: 130px;" placeholder="Origin story...">{{ $welcome['founder_story'] ?? '' }}</textarea>
+                                                        <small class="text-muted fs-10 mt-2 d-flex align-items-center justify-content-between">
+                                                            <span class="para-order-label"><i class="bi bi-paragraph me-1"></i> Paragraph <span class="para-num">{{ $idx + 1 }}</span> on website</span>
+                                                        </small>
                                                     </div>
-                                                    <small class="text-muted fs-10 mt-2 d-block"><i class="bi bi-clock-history me-1"></i> Paragraph 1 on homepage</small>
                                                 </div>
-                                            </div>
-
-                                            <!-- Chapter 2: Philosophy & Quality -->
-                                            <div class="col-lg-4 col-md-12">
-                                                <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                                    <div>
-                                                        <div class="d-flex align-items-center justify-content-between mb-1.5">
-                                                            <span class="badge bg-success-subtle text-success border border-success-subtle fs-10 fw-bold">2. Philosophy</span>
-                                                            <i class="bi bi-gem text-success fs-13"></i>
-                                                        </div>
-                                                        <h6 class="fs-12 fw-bold text-dark mb-0.5">Brand Philosophy</h6>
-                                                        <p class="text-muted fs-11 mb-2">Authentic taste & quality standards.</p>
-                                                        <textarea name="welcome[philosophy]" rows="5" class="form-control form-control-sm modern-input welcome-input-philosophy" style="font-size: 11.5px; line-height: 1.5; border-radius: 8px; min-height: 130px;" placeholder="Brand philosophy...">{{ $welcome['philosophy'] ?? '' }}</textarea>
-                                                    </div>
-                                                    <small class="text-muted fs-10 mt-2 d-block"><i class="bi bi-check2-circle me-1"></i> Paragraph 2 on homepage</small>
-                                                </div>
-                                            </div>
-
-                                            <!-- Chapter 3: Modern Journey -->
-                                            <div class="col-lg-4 col-md-12">
-                                                <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                                    <div>
-                                                        <div class="d-flex align-items-center justify-content-between mb-1.5">
-                                                            <span class="badge bg-info-subtle text-info border border-info-subtle fs-10 fw-bold">3. Present Era</span>
-                                                            <i class="bi bi-compass-fill text-info fs-13"></i>
-                                                        </div>
-                                                        <h6 class="fs-12 fw-bold text-dark mb-0.5">Modern Journey</h6>
-                                                        <p class="text-muted fs-11 mb-2">Preserving flavours for today's visitors.</p>
-                                                        <textarea name="welcome[current_journey]" rows="5" class="form-control form-control-sm modern-input welcome-input-journey" style="font-size: 11.5px; line-height: 1.5; border-radius: 8px; min-height: 130px;" placeholder="Current journey...">{{ $welcome['current_journey'] ?? '' }}</textarea>
-                                                    </div>
-                                                    <small class="text-muted fs-10 mt-2 d-block"><i class="bi bi-geo-alt me-1"></i> Paragraph 3 on homepage</small>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -1844,6 +1830,109 @@
         if (welcomeBtnTextInput && previewBtnPill) {
             welcomeBtnTextInput.addEventListener('input', function() {
                 previewBtnPill.textContent = this.value.trim() || 'KNOW OUR STORY ➔';
+            });
+        }
+
+        // ================= DYNAMIC WELCOME STORY PARAGRAPHS =================
+        const welcomeParaContainer = document.getElementById('welcome_paragraphs_container');
+        const btnAddWelcomePara = document.getElementById('btn_add_welcome_paragraph');
+        const welcomeParaCountBadge = document.getElementById('welcome_para_count');
+        const colorBadgesList = ['warning', 'success', 'info', 'primary', 'secondary', 'dark'];
+
+        function reindexWelcomeParagraphs() {
+            if (!welcomeParaContainer) return;
+            const items = welcomeParaContainer.querySelectorAll('.welcome-paragraph-item');
+            if (welcomeParaCountBadge) {
+                welcomeParaCountBadge.textContent = items.length;
+            }
+
+            items.forEach((item, index) => {
+                item.setAttribute('data-index', index);
+
+                const tagInput = item.querySelector('input[name*="[tag]"]');
+                const titleInput = item.querySelector('input[name*="[title]"]');
+                const subtitleInput = item.querySelector('input[name*="[subtitle]"]');
+                const textInput = item.querySelector('textarea[name*="[text]"]');
+                const numSpan = item.querySelector('.para-num');
+
+                if (tagInput) tagInput.name = `welcome[paragraphs][${index}][tag]`;
+                if (titleInput) titleInput.name = `welcome[paragraphs][${index}][title]`;
+                if (subtitleInput) subtitleInput.name = `welcome[paragraphs][${index}][subtitle]`;
+                if (textInput) textInput.name = `welcome[paragraphs][${index}][text]`;
+                if (numSpan) numSpan.textContent = index + 1;
+            });
+        }
+
+        // Event delegation for removing paragraph
+        if (welcomeParaContainer) {
+            welcomeParaContainer.addEventListener('click', function (e) {
+                const removeBtn = e.target.closest('.remove-welcome-para-btn');
+                if (removeBtn) {
+                    const item = removeBtn.closest('.welcome-paragraph-item');
+                    const totalItems = welcomeParaContainer.querySelectorAll('.welcome-paragraph-item').length;
+                    if (totalItems <= 1) {
+                        alert('Kam se kam ek story paragraph hona zaroori hai.');
+                        return;
+                    }
+                    if (confirm('Kya aap is paragraph ko remove karna chahte hain?')) {
+                        item.style.transition = 'all 0.25s ease';
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            item.remove();
+                            reindexWelcomeParagraphs();
+                        }, 250);
+                    }
+                }
+            });
+        }
+
+        // Add paragraph handler
+        if (btnAddWelcomePara && welcomeParaContainer) {
+            btnAddWelcomePara.addEventListener('click', function () {
+                const currentCount = welcomeParaContainer.querySelectorAll('.welcome-paragraph-item').length;
+                const nextIndex = currentCount;
+                const nextNum = currentCount + 1;
+                const badgeColor = colorBadgesList[nextIndex % colorBadgesList.length];
+
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-lg-4 col-md-6 col-12 welcome-paragraph-item';
+                colDiv.setAttribute('data-index', nextIndex);
+                colDiv.style.opacity = '0';
+                colDiv.style.transform = 'scale(0.95)';
+                colDiv.style.transition = 'all 0.25s ease';
+
+                colDiv.innerHTML = `
+                    <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between position-relative" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <input type="text" name="welcome[paragraphs][${nextIndex}][tag]" value="${nextNum}. Chapter" class="form-control form-control-sm modern-input py-0.5 px-2 fs-10 fw-bold border-${badgeColor}-subtle welcome-para-tag-input" style="max-width: 140px; height: 26px; border-radius: 6px; background: #ffffff;" placeholder="Badge / Tag">
+                                <button type="button" class="btn btn-outline-danger btn-sm p-0 d-flex align-items-center justify-content-center remove-welcome-para-btn" style="width: 26px; height: 26px; border-radius: 6px;" title="Remove this paragraph">
+                                    <i class="bi bi-trash fs-12"></i>
+                                </button>
+                            </div>
+                            <input type="text" name="welcome[paragraphs][${nextIndex}][title]" value="Chapter Title" class="form-control form-control-sm modern-input fw-bold fs-12 mb-1.5" placeholder="Paragraph Title" style="border-radius: 6px; background: #ffffff;">
+                            <input type="text" name="welcome[paragraphs][${nextIndex}][subtitle]" value="" class="form-control form-control-sm modern-input text-muted fs-11 mb-2" placeholder="Subtitle / Short note" style="border-radius: 6px; background: #ffffff;">
+                            <textarea name="welcome[paragraphs][${nextIndex}][text]" rows="5" class="form-control form-control-sm modern-input welcome-para-text" style="font-size: 11.5px; line-height: 1.5; border-radius: 8px; min-height: 125px; background: #ffffff;" placeholder="Enter paragraph content..."></textarea>
+                        </div>
+                        <small class="text-muted fs-10 mt-2 d-flex align-items-center justify-content-between">
+                            <span class="para-order-label"><i class="bi bi-paragraph me-1"></i> Paragraph <span class="para-num">${nextNum}</span> on website</span>
+                        </small>
+                    </div>
+                `;
+
+                welcomeParaContainer.appendChild(colDiv);
+                setTimeout(() => {
+                    colDiv.style.opacity = '1';
+                    colDiv.style.transform = 'scale(1)';
+                }, 10);
+
+                reindexWelcomeParagraphs();
+
+                const newTextarea = colDiv.querySelector('textarea');
+                if (newTextarea) {
+                    newTextarea.focus();
+                }
             });
         }
     });

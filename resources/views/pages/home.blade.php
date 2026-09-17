@@ -198,22 +198,32 @@
             </p>
           @endif
 
-          @if(!empty($welcome['founder_story']))
-            <p style="margin-bottom: 12px;">
-              {!! nl2br(e($welcome['founder_story'])) !!}
-            </p>
-          @endif
+          @if(!empty($welcome['paragraphs']) && is_array($welcome['paragraphs']))
+            @foreach($welcome['paragraphs'] as $p)
+              @if(!empty($p['text']))
+                <p style="margin-bottom: 14px;">
+                  {!! nl2br(e($p['text'])) !!}
+                </p>
+              @endif
+            @endforeach
+          @else
+            @if(!empty($welcome['founder_story']))
+              <p style="margin-bottom: 12px;">
+                {!! nl2br(e($welcome['founder_story'])) !!}
+              </p>
+            @endif
 
-          @if(!empty($welcome['philosophy']))
-            <p style="margin-bottom: 14px;">
-              {!! nl2br(e($welcome['philosophy'])) !!}
-            </p>
-          @endif
+            @if(!empty($welcome['philosophy']))
+              <p style="margin-bottom: 14px;">
+                {!! nl2br(e($welcome['philosophy'])) !!}
+              </p>
+            @endif
 
-          @if(!empty($welcome['current_journey']))
-            <p style="margin-bottom: 22px;">
-              {!! nl2br(e($welcome['current_journey'])) !!}
-            </p>
+            @if(!empty($welcome['current_journey']))
+              <p style="margin-bottom: 22px;">
+                {!! nl2br(e($welcome['current_journey'])) !!}
+              </p>
+            @endif
           @endif
 
           @if(!empty($welcome['button_text']))

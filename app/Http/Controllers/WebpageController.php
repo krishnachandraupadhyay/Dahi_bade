@@ -161,10 +161,59 @@ class WebpageController extends Controller
 
     public function getWelcomeData()
     {
+        $defaultParagraphs = [
+            [
+                'tag' => '1. Origin (1976)',
+                'title' => 'Founder Story',
+                'subtitle' => 'Sant Ram Gupta Ji & GPO history.',
+                'text' => "Founded by Sant Ram Gupta ji in 1976, GPO Ke Thandey Dahi Bade began its journey near the General Post Office in Hazratganj, Lucknow. What started as a humble food destination gradually became a beloved name among generations of food lovers.",
+            ],
+            [
+                'tag' => '2. Philosophy',
+                'title' => 'Brand Philosophy',
+                'subtitle' => 'Authentic taste & quality standards.',
+                'text' => "Our philosophy has always remained simple:\nAuthentic taste. Fresh ingredients. Traditional preparation. Consistent quality.",
+            ],
+            [
+                'tag' => '3. Present Era',
+                'title' => 'Modern Journey',
+                'subtitle' => "Preserving flavours for today's visitors.",
+                'text' => "Today, we continue that journey by preserving the flavours and food traditions that made GPO special while creating a convenient and welcoming experience for today’s customers.",
+            ],
+        ];
+
         $path = $this->getWelcomeFilePath();
         if (File::exists($path)) {
             $content = json_decode(File::get($path), true);
             if (is_array($content) && !empty($content)) {
+                if (empty($content['paragraphs']) || !is_array($content['paragraphs'])) {
+                    $paragraphs = [];
+                    if (!empty($content['founder_story'])) {
+                        $paragraphs[] = [
+                            'tag' => '1. Origin (1976)',
+                            'title' => 'Founder Story',
+                            'subtitle' => 'Sant Ram Gupta Ji & GPO history.',
+                            'text' => $content['founder_story'],
+                        ];
+                    }
+                    if (!empty($content['philosophy'])) {
+                        $paragraphs[] = [
+                            'tag' => '2. Philosophy',
+                            'title' => 'Brand Philosophy',
+                            'subtitle' => 'Authentic taste & quality standards.',
+                            'text' => $content['philosophy'],
+                        ];
+                    }
+                    if (!empty($content['current_journey'])) {
+                        $paragraphs[] = [
+                            'tag' => '3. Present Era',
+                            'title' => 'Modern Journey',
+                            'subtitle' => "Preserving flavours for today's visitors.",
+                            'text' => $content['current_journey'],
+                        ];
+                    }
+                    $content['paragraphs'] = !empty($paragraphs) ? $paragraphs : $defaultParagraphs;
+                }
                 return $content;
             }
         }
@@ -174,9 +223,10 @@ class WebpageController extends Controller
             'heading' => 'ORIGINAL GPO KE THANDEY DAHI BADE',
             'tagline' => 'A Taste of Lucknow Since 1976',
             'quote' => "Some food is enjoyed.\nSome food is remembered.\nAnd some food becomes a part of a city’s identity.\nGPO Ke Thandey Dahi Bade is one such name.",
-            'founder_story' => "Founded by Sant Ram Gupta ji in 1976, GPO Ke Thandey Dahi Bade began its journey near the General Post Office in Hazratganj, Lucknow. What started as a humble food destination gradually became a beloved name among generations of food lovers.",
-            'philosophy' => "Our philosophy has always remained simple:\nAuthentic taste. Fresh ingredients. Traditional preparation. Consistent quality.",
-            'current_journey' => "Today, we continue that journey by preserving the flavours and food traditions that made GPO special while creating a convenient and welcoming experience for today’s customers.",
+            'founder_story' => $defaultParagraphs[0]['text'],
+            'philosophy' => $defaultParagraphs[1]['text'],
+            'current_journey' => $defaultParagraphs[2]['text'],
+            'paragraphs' => $defaultParagraphs,
             'button_text' => 'KNOW OUR STORY ➔',
             'button_url' => '/story',
             'image' => 'images/storefront.jpg',
@@ -347,14 +397,31 @@ class WebpageController extends Controller
             }
         }
 
+        $inputParagraphs = $request->input('welcome.paragraphs', []);
+        $savedParagraphs = [];
+        if (is_array($inputParagraphs)) {
+            foreach ($inputParagraphs as $p) {
+                $text = trim($p['text'] ?? '');
+                if ($text !== '') {
+                    $savedParagraphs[] = [
+                        'tag' => trim($p['tag'] ?? ''),
+                        'title' => trim($p['title'] ?? ''),
+                        'subtitle' => trim($p['subtitle'] ?? ''),
+                        'text' => $text,
+                    ];
+                }
+            }
+        }
+
         $savedWelcome = [
             'badge' => trim($welcome['badge'] ?? 'Welcome To'),
-            'heading' => trim($welcome['heading'] ?? "ORIGINAL GPO KE\nTHANDEY DAHI BADE"),
+            'heading' => trim($welcome['heading'] ?? "ORIGINAL GPO KE THANDEY DAHI BADE"),
             'tagline' => trim($welcome['tagline'] ?? 'A Taste of Lucknow Since 1976'),
             'quote' => trim($welcome['quote'] ?? ''),
-            'founder_story' => trim($welcome['founder_story'] ?? ''),
-            'philosophy' => trim($welcome['philosophy'] ?? ''),
-            'current_journey' => trim($welcome['current_journey'] ?? ''),
+            'founder_story' => $savedParagraphs[0]['text'] ?? '',
+            'philosophy' => $savedParagraphs[1]['text'] ?? '',
+            'current_journey' => $savedParagraphs[2]['text'] ?? '',
+            'paragraphs' => $savedParagraphs,
             'button_text' => trim($welcome['button_text'] ?? 'KNOW OUR STORY ➔'),
             'button_url' => trim($welcome['button_url'] ?? '/story'),
             'image' => $imagePath,
