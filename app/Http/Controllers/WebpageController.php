@@ -171,7 +171,7 @@ class WebpageController extends Controller
 
         return [
             'badge' => 'Welcome To',
-            'heading' => "ORIGINAL GPO KE\nTHANDEY DAHI BADE",
+            'heading' => 'ORIGINAL GPO KE THANDEY DAHI BADE',
             'tagline' => 'A Taste of Lucknow Since 1976',
             'quote' => "Some food is enjoyed.\nSome food is remembered.\nAnd some food becomes a part of a city’s identity.\nGPO Ke Thandey Dahi Bade is one such name.",
             'founder_story' => "Founded by Sant Ram Gupta ji in 1976, GPO Ke Thandey Dahi Bade began its journey near the General Post Office in Hazratganj, Lucknow. What started as a humble food destination gradually became a beloved name among generations of food lovers.",

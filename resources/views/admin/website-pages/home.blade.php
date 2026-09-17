@@ -863,9 +863,9 @@
                                     <!-- Main Heading -->
                                     <div>
                                         <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                            <i class="bi bi-type-h1 text-primary me-1"></i> Main Heading (Line breaks allowed):
+                                            <i class="bi bi-type-h1 text-primary me-1"></i> Main Heading:
                                         </label>
-                                        <textarea name="welcome[heading]" rows="2" class="form-control form-control-sm modern-input welcome-input-heading" placeholder="e.g. ORIGINAL GPO KE&#10;THANDEY DAHI BADE">{{ $welcome['heading'] ?? "ORIGINAL GPO KE\nTHANDEY DAHI BADE" }}</textarea>
+                                        <input type="text" name="welcome[heading]" class="form-control form-control-sm modern-input welcome-input-heading" value="{{ trim(preg_replace('/\s+/', ' ', $welcome['heading'] ?? 'ORIGINAL GPO KE THANDEY DAHI BADE')) }}" placeholder="e.g. ORIGINAL GPO KE THANDEY DAHI BADE">
                                     </div>
 
                                     <!-- Poetic Quote / Highlight -->
