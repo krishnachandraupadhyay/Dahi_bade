@@ -12,6 +12,11 @@ class WebpageController extends Controller
         return storage_path('app/website_content/home_hero.json');
     }
 
+    private function getHighlightsFilePath()
+    {
+        return storage_path('app/website_content/home_highlights.json');
+    }
+
     private function normalizeSlide($slide)
     {
         if (!isset($slide['media'])) {
@@ -117,6 +122,38 @@ class WebpageController extends Controller
         ];
     }
 
+    public function getHighlightsData()
+    {
+        $path = $this->getHighlightsFilePath();
+        if (File::exists($path)) {
+            $content = json_decode(File::get($path), true);
+            if (is_array($content) && !empty($content)) {
+                return $content;
+            }
+        }
+
+        return [
+            [
+                'image' => 'images/dahi_vada.jpg',
+                'heading' => 'THE ORIGINAL TASTE OF LUCKNOW',
+                'subheading' => 'Since 1976',
+                'description' => 'A traditional Lucknow recipe perfected over generations with pure curd and aromatic spices.',
+            ],
+            [
+                'image' => 'images/lucknow_heritage.jpg',
+                'heading' => 'A STORY TO TELL',
+                'subheading' => 'ABOUT OUR HERITAGE',
+                'description' => 'Over four decades of pure hospitality, tradition, and taste.',
+            ],
+            [
+                'image' => 'images/chaat.jpg',
+                'heading' => 'AUTHENTIC FLAVOURS',
+                'subheading' => 'TRADITIONAL RECIPES',
+                'description' => 'Crafted with pure curd, slow aeration, and generational spices.',
+            ],
+        ];
+    }
+
     public function index()
     {
         return view('admin.website-pages.index');
@@ -125,7 +162,8 @@ class WebpageController extends Controller
     public function home()
     {
         $slides = $this->getHeroData();
-        return view('admin.website-pages.home', compact('slides'));
+        $highlights = $this->getHighlightsData();
+        return view('admin.website-pages.home', compact('slides', 'highlights'));
     }
 
     public function updateHero(Request $request)
@@ -208,5 +246,54 @@ class WebpageController extends Controller
         File::put($this->getHeroFilePath(), json_encode($savedSlides, JSON_PRETTY_PRINT));
 
         return redirect()->route('admin.website-pages.home')->with('success', 'Hero slides and buttons successfully updated!');
+    }
+
+    public function updateHighlights(Request $request)
+    {
+        $inputCards = $request->input('cards', []);
+        $savedCards = [];
+
+        $uploadDir = public_path('uploads/highlights');
+        if (!File::isDirectory($uploadDir)) {
+            File::makeDirectory($uploadDir, 0755, true, true);
+        }
+
+        $defaultImages = [
+            'images/dahi_vada.jpg',
+            'images/lucknow_heritage.jpg',
+            'images/chaat.jpg',
+        ];
+
+        for ($i = 0; $i < 3; $i++) {
+            $card = $inputCards[$i] ?? [];
+            $imagePath = $card['image'] ?? ($defaultImages[$i] ?? 'images/dahi_vada.jpg');
+
+            if ($request->hasFile("cards.{$i}.image_file")) {
+                $file = $request->file("cards.{$i}.image_file");
+                if ($file->isValid()) {
+                    $ext = strtolower($file->getClientOriginalExtension());
+                    $filename = time() . '_card_' . ($i + 1) . '_' . uniqid() . '.' . $ext;
+                    $file->move($uploadDir, $filename);
+                    $imagePath = 'uploads/highlights/' . $filename;
+                }
+            }
+
+            $savedCards[] = [
+                'heading' => trim($card['heading'] ?? ''),
+                'subheading' => trim($card['subheading'] ?? ''),
+                'description' => trim($card['description'] ?? ''),
+                'image' => $imagePath,
+            ];
+        }
+
+        $dir = dirname($this->getHighlightsFilePath());
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true, true);
+        }
+
+        File::put($this->getHighlightsFilePath(), json_encode($savedCards, JSON_PRETTY_PRINT));
+
+        return redirect()->route('admin.website-pages.home', ['section' => 'highlights_strip'])
+            ->with('success', 'Highlights strip (3 cards) successfully updated!');
     }
 }

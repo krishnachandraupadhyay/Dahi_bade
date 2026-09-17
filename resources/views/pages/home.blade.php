@@ -145,34 +145,27 @@
 
       <!-- THREE CARDS OVERLAPPING STRIP -->
       <section class="three-cards-strip">
+        @foreach($highlights ?? [] as $card)
         <div class="strip-item-box">
-          <img src="{{ asset('images/dahi_vada.jpg') }}" alt="The Original Taste of Lucknow" class="strip-item-bg">
+          @php
+            $cardImg = $card['image'] ?? 'images/dahi_vada.jpg';
+            $imgSrc = str_starts_with($cardImg, 'http') ? $cardImg : asset($cardImg);
+          @endphp
+          <img src="{{ $imgSrc }}" alt="{{ $card['heading'] ?? 'GPO Dahi Bade' }}" class="strip-item-bg">
           <div class="strip-item-gradient"></div>
           <div class="strip-item-caption">
-            <h4>THE ORIGINAL TASTE OF LUCKNOW</h4>
-            <span class="gold-sub">Since 1976</span>
+            @if(!empty($card['heading']))
+              <h4>{{ $card['heading'] }}</h4>
+            @endif
+            @if(!empty($card['subheading']))
+              <span class="gold-sub">{{ $card['subheading'] }}</span>
+            @endif
+            @if(!empty($card['description']))
+              <p class="desc-sub">{{ $card['description'] }}</p>
+            @endif
           </div>
         </div>
-
-        <div class="strip-item-box">
-          <img src="{{ asset('images/lucknow_heritage.jpg') }}" alt="A Story to Tell - About Our Heritage" class="strip-item-bg">
-          <div class="strip-item-gradient"></div>
-          <div class="strip-item-caption">
-            <h4>A STORY TO TELL</h4>
-            <span class="gold-sub">ABOUT OUR HERITAGE</span>
-            <p class="desc-sub">Over four decades of pure hospitality, tradition, and taste.</p>
-          </div>
-        </div>
-
-        <div class="strip-item-box">
-          <img src="{{ asset('images/chaat.jpg') }}" alt="Authentic Flavours - Traditional Recipes" class="strip-item-bg">
-          <div class="strip-item-gradient"></div>
-          <div class="strip-item-caption">
-            <h4>AUTHENTIC FLAVOURS</h4>
-            <span class="gold-sub">TRADITIONAL RECIPES</span>
-            <p class="desc-sub">Crafted with pure curd, slow aeration, and generational spices.</p>
-          </div>
-        </div>
+        @endforeach
       </section>
 
       <!-- SECTION 01 — WELCOME (Document Page 2) -->

@@ -576,17 +576,164 @@
 
             <!-- ================= 2. HIGHLIGHTS STRIP PANEL ================= -->
             <div class="home-section-panel" id="panel_highlights_strip" style="display: none;">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle">
+                <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-info px-2.5 py-1.5 fs-12">Section 2</span>
-                        <h6 class="fw-bold text-dark mb-0 fs-15">Highlights Strip (3 Feature Cards)</h6>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 fs-16">Highlights Strip (3 Feature Cards Below Hero)</h6>
+                            <small class="text-muted fs-12">Edit background images, headings, subheadings & short paragraphs for the 3 feature cards.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 fs-12 rounded-pill fw-semibold">
+                            <i class="bi bi-shield-check me-1"></i> Card Height Locked (360px)
+                        </span>
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-12"></i> View Live
+                        </a>
                     </div>
                 </div>
-                <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
-                    <i class="bi bi-collection fs-32 text-info mb-2 d-block"></i>
-                    <h6 class="fw-bold text-dark mb-1">Highlights Strip Section</h6>
-                    <p class="fs-13 text-muted mb-0">Is 3-cards strip ke titles, subtitles aur descriptions ka data yahan add hoga.</p>
+
+                <!-- Info Alert about Auto-fit images -->
+                <div class="alert alert-info border-info-subtle bg-info-subtle d-flex align-items-center gap-3 py-2.5 px-3 rounded-3 mb-4">
+                    <div class="fs-22 text-info"><i class="bi bi-aspect-ratio-fill"></i></div>
+                    <div class="fs-12 text-dark">
+                        <strong>Automatic Smart Image Sizing:</strong> Chahe aap kitni bhi badi image (HD, 4K, 8K ya vertical portrait) upload karein, website par card ka dimension exact <strong>360px height</strong> me locked rahega. Image perfectly center-fit ho jayegi bina layout toote.
+                    </div>
                 </div>
+
+                <form action="{{ route('admin.website-pages.home.highlights.update') }}" method="POST" enctype="multipart/form-data" id="highlightsStripForm">
+                    @csrf
+
+                    <div class="row g-4">
+                        @foreach($highlights ?? [] as $index => $card)
+                            @php
+                                $cardImage = $card['image'] ?? ('images/' . ($index === 0 ? 'dahi_vada.jpg' : ($index === 1 ? 'lucknow_heritage.jpg' : 'chaat.jpg')));
+                                $cardImageSrc = str_starts_with($cardImage, 'http') ? $cardImage : asset($cardImage);
+                            @endphp
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="card border border-light-subtle shadow-sm h-100 highlight-editor-card" data-card-index="{{ $index }}" style="border-radius: 12px; overflow: hidden; background: #fafbfc;">
+                                    <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-primary px-2 py-1 fs-11 fw-bold">Card #{{ $index + 1 }}</span>
+                                            <span class="fs-13 fw-bold text-dark text-truncate card-header-title" style="max-width: 170px;">
+                                                {{ !empty($card['heading']) ? $card['heading'] : 'Feature Card ' . ($index + 1) }}
+                                            </span>
+                                        </div>
+                                        <span class="badge bg-light text-muted border fs-11">Slot {{ $index + 1 }} of 3</span>
+                                    </div>
+
+                                    <div class="card-body p-3.5 d-flex flex-column gap-3">
+                                        <!-- Subheading (Gold Accent) -->
+                                        <div>
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-stars text-warning me-1"></i> Subheading / Gold Accent:
+                                            </label>
+                                            <input type="text"
+                                                   name="cards[{{ $index }}][subheading]"
+                                                   class="form-control form-control-sm modern-input highlight-subheading-input"
+                                                   value="{{ $card['subheading'] ?? '' }}"
+                                                   placeholder="e.g. Since 1976 / ABOUT OUR HERITAGE">
+                                            <small class="text-muted fs-11">Card par golden italic font me dikhta hai.</small>
+                                        </div>
+
+                                        <!-- Main Heading -->
+                                        <div>
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-type-h1 text-primary me-1"></i> Main Heading / Title:
+                                            </label>
+                                            <input type="text"
+                                                   name="cards[{{ $index }}][heading]"
+                                                   class="form-control form-control-sm modern-input highlight-heading-input"
+                                                   value="{{ $card['heading'] ?? '' }}"
+                                                   placeholder="e.g. THE ORIGINAL TASTE OF LUCKNOW">
+                                            <small class="text-muted fs-11">Card ka bold main title.</small>
+                                        </div>
+
+                                        <!-- Short Paragraph -->
+                                        <div>
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-text-paragraph text-success me-1"></i> Short Paragraph (Chota Paragraph):
+                                            </label>
+                                            <textarea name="cards[{{ $index }}][description]"
+                                                      rows="2"
+                                                      class="form-control form-control-sm modern-input highlight-desc-input"
+                                                      placeholder="Enter brief description...">{{ $card['description'] ?? '' }}</textarea>
+                                            <small class="text-muted fs-11">Card ke bottom me clean 1-2 lines description.</small>
+                                        </div>
+
+                                        <!-- Card Image Upload -->
+                                        <div class="pt-2 border-top">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center justify-content-between">
+                                                <span><i class="bi bi-image-fill text-info me-1"></i> Card Background Image:</span>
+                                                <span class="fs-10 text-muted">Badi image bhi exact fit hogi</span>
+                                            </label>
+                                            <input type="file"
+                                                   name="cards[{{ $index }}][image_file]"
+                                                   class="form-control form-control-sm highlight-image-file-input mb-1"
+                                                   accept="image/*">
+                                            <input type="hidden"
+                                                   name="cards[{{ $index }}][image]"
+                                                   class="highlight-image-path-hidden"
+                                                   value="{{ $card['image'] ?? '' }}">
+                                            <div class="d-flex align-items-center justify-content-between mt-1">
+                                                <span class="text-muted fs-11 text-truncate highlight-image-path-display font-monospace" style="max-width: 220px;">
+                                                    {{ $card['image'] ?? 'Default Image' }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Live Card Replica Mockup -->
+                                        <div class="mt-1">
+                                            <label class="fs-11 fw-bold text-muted text-uppercase mb-1 d-block letter-spacing-1">
+                                                <i class="bi bi-eye-fill me-1 text-primary"></i> Live Card Preview:
+                                            </label>
+                                            <!-- Mini replica of the frontend card -->
+                                            <div class="highlight-mini-card position-relative overflow-hidden rounded-3 shadow-sm"
+                                                 style="height: 220px; background: #083b3c; border: 1px solid rgba(255,255,255,0.15);">
+                                                <img src="{{ $cardImageSrc }}"
+                                                     alt="Preview"
+                                                     class="highlight-mini-img position-absolute w-100 h-100"
+                                                     style="top:0; left:0; object-fit: cover; object-position: center; transition: transform 0.3s ease;">
+                                                <div class="position-absolute w-100 h-100"
+                                                     style="top:0; left:0; pointer-events: none; background: linear-gradient(to top, rgba(8,59,60,0.98) 0%, rgba(8,59,60,0.85) 30%, rgba(8,59,60,0.4) 60%, rgba(8,59,60,0.05) 100%);"></div>
+                                                <div class="position-absolute w-100 p-3 text-center d-flex flex-column align-items-center justify-content-end"
+                                                     style="bottom: 0; left: 0; z-index: 3;">
+                                                    <h6 class="highlight-preview-heading text-white fw-bold mb-1 fs-12 text-uppercase"
+                                                        style="font-family: serif; letter-spacing: 0.5px; line-height: 1.25; text-shadow: 0 2px 6px rgba(0,0,0,0.6);">
+                                                        {{ $card['heading'] ?? 'THE ORIGINAL TASTE OF LUCKNOW' }}
+                                                    </h6>
+                                                    <span class="highlight-preview-subheading fs-11 fst-italic fw-semibold mb-1"
+                                                          style="color: #f1b347; font-family: serif; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+                                                        {{ $card['subheading'] ?? 'Since 1976' }}
+                                                    </span>
+                                                    <p class="highlight-preview-desc fs-10 text-white-50 mb-0 text-truncate-2"
+                                                       style="line-height: 1.25; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+                                                        {{ $card['description'] ?? 'A traditional Lucknow recipe perfected over generations.' }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Bottom Action Buttons -->
+                    <div class="d-flex flex-wrap align-items-center gap-2 pt-3 mt-4 border-top">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
+                            <i class="bi bi-cloud-check-fill fs-16"></i>
+                            <span>Save Highlights Strip Changes</span>
+                        </button>
+                        <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                        </button>
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
+                        </a>
+                    </div>
+                </form>
             </div>
 
             <!-- ================= 3. WELCOME SECTION PANEL ================= -->
@@ -715,7 +862,7 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Section Selector Dropdown
+        // Section Selector Dropdown with URL Param Support
         const selector = document.getElementById('homeSectionSelector');
         const panels = document.querySelectorAll('.home-section-panel');
 
@@ -731,7 +878,18 @@
         }
 
         if (selector) {
-            selector.addEventListener('change', switchSection);
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlSection = urlParams.get('section');
+            if (urlSection && selector.querySelector(`option[value="${urlSection}"]`)) {
+                selector.value = urlSection;
+            }
+
+            selector.addEventListener('change', function () {
+                switchSection();
+                const newUrl = new URL(window.location);
+                newUrl.searchParams.set('section', selector.value);
+                window.history.replaceState({}, '', newUrl);
+            });
             switchSection();
         }
 
@@ -1350,6 +1508,59 @@
                 }
             });
         }
+
+        // ================= HIGHLIGHTS STRIP LIVE PREVIEW LOGIC =================
+        const highlightCards = document.querySelectorAll('.highlight-editor-card');
+        highlightCards.forEach(cardEl => {
+            const headingInput = cardEl.querySelector('.highlight-heading-input');
+            const subheadingInput = cardEl.querySelector('.highlight-subheading-input');
+            const descInput = cardEl.querySelector('.highlight-desc-input');
+            const fileInput = cardEl.querySelector('.highlight-image-file-input');
+
+            const cardHeaderTitle = cardEl.querySelector('.card-header-title');
+            const previewHeading = cardEl.querySelector('.highlight-preview-heading');
+            const previewSubheading = cardEl.querySelector('.highlight-preview-subheading');
+            const previewDesc = cardEl.querySelector('.highlight-preview-desc');
+            const previewImg = cardEl.querySelector('.highlight-mini-img');
+            const pathDisplay = cardEl.querySelector('.highlight-image-path-display');
+
+            if (headingInput && previewHeading) {
+                headingInput.addEventListener('input', function () {
+                    const val = this.value.trim();
+                    previewHeading.textContent = val || 'FEATURE TITLE';
+                    if (cardHeaderTitle) cardHeaderTitle.textContent = val || 'Feature Card';
+                });
+            }
+
+            if (subheadingInput && previewSubheading) {
+                subheadingInput.addEventListener('input', function () {
+                    previewSubheading.textContent = this.value.trim() || 'Subheading';
+                });
+            }
+
+            if (descInput && previewDesc) {
+                descInput.addEventListener('input', function () {
+                    previewDesc.textContent = this.value.trim() || 'Short description text...';
+                });
+            }
+
+            if (fileInput && previewImg) {
+                fileInput.addEventListener('change', function () {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            previewImg.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                        if (pathDisplay) {
+                            pathDisplay.textContent = 'Selected: ' + file.name;
+                            pathDisplay.classList.add('text-success', 'fw-semibold');
+                        }
+                    }
+                });
+            }
+        });
     });
 </script>
 @endpush

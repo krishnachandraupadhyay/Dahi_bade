@@ -8,8 +8,10 @@ class PageController extends Controller
 {
     public function index()
     {
-        $slides = (new \App\Http\Controllers\WebpageController)->getHeroData();
-        return view('pages.home', compact('slides'));
+        $webpageController = new \App\Http\Controllers\WebpageController;
+        $slides = $webpageController->getHeroData();
+        $highlights = $webpageController->getHighlightsData();
+        return view('pages.home', compact('slides', 'highlights'));
     }
 
     public function story()

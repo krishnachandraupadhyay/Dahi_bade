@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/website-pages', [WebpageController::class, 'index'])->name('website-pages.index');
     Route::get('/website-pages/home', [WebpageController::class, 'home'])->name('website-pages.home');
     Route::post('/website-pages/home/hero', [WebpageController::class, 'updateHero'])->name('website-pages.home.hero.update');
+    Route::post('/website-pages/home/highlights', [WebpageController::class, 'updateHighlights'])->name('website-pages.home.highlights.update');
 
     Route::get('/menu', function () {
         return view('admin.menu.index');
