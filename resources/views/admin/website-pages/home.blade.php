@@ -942,7 +942,7 @@
                                                 @php
                                                     $badgeColor = $colorBadges[$idx % count($colorBadges)];
                                                 @endphp
-                                                <div class="col-lg-4 col-md-6 col-12 welcome-paragraph-item" data-index="{{ $idx }}">
+                                                <div class="col-lg-6 col-md-6 col-12 welcome-paragraph-item" data-index="{{ $idx }}">
                                                     <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-between position-relative" style="background: #f8fafc; border: 1px solid #e2e8f0;">
                                                         <div>
                                                             <div class="d-flex align-items-center justify-content-between mb-2">
@@ -1896,7 +1896,7 @@
                 const badgeColor = colorBadgesList[nextIndex % colorBadgesList.length];
 
                 const colDiv = document.createElement('div');
-                colDiv.className = 'col-lg-4 col-md-6 col-12 welcome-paragraph-item';
+                colDiv.className = 'col-lg-6 col-md-6 col-12 welcome-paragraph-item';
                 colDiv.setAttribute('data-index', nextIndex);
                 colDiv.style.opacity = '0';
                 colDiv.style.transform = 'scale(0.95)';
