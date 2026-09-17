@@ -860,21 +860,27 @@
                                         </div>
                                     </div>
 
-                                    <!-- Main Heading -->
-                                    <div>
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                            <i class="bi bi-type-h1 text-primary me-1"></i> Main Heading:
-                                        </label>
-                                        <input type="text" name="welcome[heading]" class="form-control form-control-sm modern-input welcome-input-heading" value="{{ trim(preg_replace('/\s+/', ' ', $welcome['heading'] ?? 'ORIGINAL GPO KE THANDEY DAHI BADE')) }}" placeholder="e.g. ORIGINAL GPO KE THANDEY DAHI BADE">
-                                    </div>
+                                    <!-- Row: Left = Main Heading, Right = Poetic Highlight -->
+                                    <div class="row g-3">
+                                        <!-- Left Column: Main Heading -->
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="d-flex flex-column h-100">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                    <i class="bi bi-type-h1 text-primary me-1"></i> Main Heading:
+                                                </label>
+                                                <input type="text" name="welcome[heading]" class="form-control form-control-sm modern-input welcome-input-heading mb-1.5" value="{{ trim(preg_replace('/\s+/', ' ', $welcome['heading'] ?? 'ORIGINAL GPO KE THANDEY DAHI BADE')) }}" placeholder="e.g. ORIGINAL GPO KE THANDEY DAHI BADE">
+                                                <small class="text-muted fs-11">Homepage par bold title ek line me display hoga.</small>
+                                            </div>
+                                        </div>
 
-                                    <!-- Poetic Quote / Highlight -->
-                                    <div>
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                            <i class="bi bi-quote text-danger me-1"></i> Poetic Highlight / Quote (Terracotta Italic):
-                                        </label>
-                                        <textarea name="welcome[quote]" rows="3" class="form-control form-control-sm modern-input welcome-input-quote" placeholder="Enter poetic quote or highlight text...">{{ $welcome['quote'] ?? '' }}</textarea>
-                                        <small class="text-muted fs-11">Website par stylish italic font me orange/terracotta color me dikhta hai.</small>
+                                        <!-- Right Column: Poetic Highlight (Increased Height) -->
+                                        <div class="col-md-6 col-sm-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                <i class="bi bi-quote text-danger me-1"></i> Poetic Highlight / Quote (Terracotta Italic):
+                                            </label>
+                                            <textarea name="welcome[quote]" rows="5" class="form-control form-control-sm modern-input welcome-input-quote" style="min-height: 130px; font-size: 12.5px; line-height: 1.5;" placeholder="Enter poetic quote or highlight text...">{{ $welcome['quote'] ?? '' }}</textarea>
+                                            <small class="text-muted fs-11 mt-1 d-block">Website par stylish italic font me orange/terracotta color me dikhta hai.</small>
+                                        </div>
                                     </div>
 
                                     <!-- Paragraph 1: Founder & Origin Story -->
