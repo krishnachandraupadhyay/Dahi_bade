@@ -85,24 +85,106 @@
         border-radius: 0 8px 8px 0 !important;
     }
 
-    /* Action Buttons Container */
+    /* Modern Action Buttons Repeater */
     .button-manager-box {
         background: #f8fafc;
         border: 1px solid #e2e8f0;
-        border-radius: 10px;
-        padding: 14px;
+        border-radius: 12px;
+        padding: 16px;
+    }
+    .button-manager-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e2e8f0;
     }
     .slide-button-row {
         background: #ffffff;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 9px;
-        padding: 8px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 12px 14px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         transition: all 0.2s ease;
     }
     .slide-button-row:hover {
-        border-color: #94a3b8;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        border-color: #cbd5e1;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.05);
     }
+    .slide-btn-header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px dashed #f1f5f9;
+    }
+    .slide-btn-badge {
+        font-size: 11px;
+        font-weight: 700;
+        background: #f1f5f9;
+        color: #334155;
+        border: 1px solid #e2e8f0;
+        padding: 2px 8px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .slide-btn-preview-tag {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 12px;
+        border-radius: 9999px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        transition: all 0.2s ease;
+    }
+    .btn-remove-slide-button {
+        background: #fff;
+        border: 1px solid #fecaca;
+        color: #dc2626;
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-size: 11.5px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.15s ease;
+    }
+    .btn-remove-slide-button:hover {
+        background: #fee2e2;
+        border-color: #fca5a5;
+        color: #b91c1c;
+    }
+    .slide-btn-field-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: #64748b;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    /* Button Mini Preview Palette */
+    .btn-preview-amber { background-color: #ecc67d; color: #1f2723; border: none; box-shadow: 0 2px 6px rgba(236, 198, 125, 0.35); }
+    .btn-preview-spruce { background-color: #0d4b4c; color: #ffffff; border: none; }
+    .btn-preview-terracotta { background-color: #c96c4b; color: #ffffff; border: none; box-shadow: 0 2px 6px rgba(201, 108, 75, 0.35); }
+    .btn-preview-crimson { background-color: #b91c1c; color: #ffffff; border: none; }
+    .btn-preview-emerald { background-color: #059669; color: #ffffff; border: none; }
+    .btn-preview-sapphire { background-color: #1d4ed8; color: #ffffff; border: none; }
+    .btn-preview-purple { background-color: #7e22ce; color: #ffffff; border: none; }
+    .btn-preview-sunset { background-color: #ea580c; color: #ffffff; border: none; }
+    .btn-preview-midnight { background-color: #111827; color: #ffffff; border: 1px solid rgba(255,255,255,0.2); }
+    .btn-preview-white { background-color: #ffffff; color: #083b3c; border: 1px solid #e2e8f0; }
+    .btn-preview-outline-light { background-color: #334155; color: #ffffff; border: 1.5px solid #ffffff; }
+    .btn-preview-outline-amber { background-color: #1f2723; color: #ecc67d; border: 1.5px solid #ecc67d; }
 
     /* Media Box */
     .media-card-box {
@@ -340,17 +422,22 @@
                                         </div>
                                         <div class="hero-input-col">
                                             <div class="button-manager-box">
-                                                <div class="d-flex justify-content-between align-items-center mb-2.5 flex-wrap gap-2">
+                                                <div class="button-manager-header">
                                                     <div class="d-flex align-items-center gap-2">
-                                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 fs-11 fw-bold text-uppercase">Buttons List</span>
-                                                        <small class="text-muted fs-12">Configure button text, destination link, and color theme</small>
+                                                        <div class="rounded-2 bg-primary text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
+                                                            <i class="bi bi-cursor-fill fs-12"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="fw-bold text-dark fs-13 lh-sm">Action Buttons (CTA)</div>
+                                                            <small class="text-muted fs-11">Configure call-to-action buttons, links, and color styles</small>
+                                                        </div>
                                                     </div>
-                                                    <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 py-1 fs-12 fw-semibold btn-add-slide-button d-flex align-items-center gap-1.5 shadow-sm">
-                                                        <i class="bi bi-plus-circle-fill"></i> Add Button
+                                                    <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 py-1.5 fs-12 fw-semibold btn-add-slide-button d-flex align-items-center gap-1.5 shadow-sm">
+                                                        <i class="bi bi-plus-circle-fill"></i> Add Another Button
                                                     </button>
                                                 </div>
 
-                                                <div class="slide-buttons-list d-flex flex-column gap-2" data-slide-index="{{ $index }}">
+                                                <div class="slide-buttons-list d-flex flex-column gap-2.5" data-slide-index="{{ $index }}">
                                                     @php
                                                         $slideButtons = $slide['buttons'] ?? [];
                                                         if (empty($slideButtons)) {
@@ -365,42 +452,56 @@
                                                         }
                                                     @endphp
                                                     @foreach($slideButtons as $bIndex => $btn)
-                                                        <div class="slide-button-row row g-2 align-items-center" data-btn-index="{{ $bIndex }}">
-                                                            <div class="col-auto">
-                                                                <span class="badge bg-light text-dark border fs-11 slide-btn-label fw-bold px-2 py-1">Btn {{ $bIndex + 1 }}</span>
-                                                            </div>
-                                                            <div class="col-md-3 col-sm-12">
-                                                                <div class="input-group input-group-sm">
-                                                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-cursor-text"></i></span>
-                                                                    <input type="text" name="slides[{{ $index }}][buttons][{{ $bIndex }}][text]" class="form-control field-btn-text" value="{{ $btn['text'] ?? '' }}" placeholder="Button Text (e.g. ORDER NOW)">
+                                                        <div class="slide-button-row" data-btn-index="{{ $bIndex }}">
+                                                            <!-- Header bar: Badge + Live Mini Preview + Remove Button -->
+                                                            <div class="slide-btn-header-bar">
+                                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                                    <span class="slide-btn-badge slide-btn-label">
+                                                                        <i class="bi bi-grip-vertical text-muted"></i> Button {{ $bIndex + 1 }}
+                                                                    </span>
+                                                                    <span class="text-muted fs-11">Live Preview:</span>
+                                                                    <span class="slide-btn-preview-tag btn-preview-{{ $btn['style'] ?? 'amber' }}">
+                                                                        {{ !empty($btn['text']) ? $btn['text'] : 'BUTTON TEXT' }}
+                                                                    </span>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-3 col-sm-12">
-                                                                <div class="input-group input-group-sm">
-                                                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-link-45deg"></i></span>
-                                                                    <input type="text" name="slides[{{ $index }}][buttons][{{ $bIndex }}][url]" class="form-control field-btn-url" value="{{ $btn['url'] ?? '/menu' }}" placeholder="Link / URL (e.g. /menu)">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 col-sm-10">
-                                                                <select name="slides[{{ $index }}][buttons][{{ $bIndex }}][style]" class="form-select form-select-sm field-btn-style fw-medium">
-                                                                    <option value="amber" {{ ($btn['style'] ?? '') === 'amber' ? 'selected' : '' }}>🟡 Amber Gold (Primary)</option>
-                                                                    <option value="spruce" {{ ($btn['style'] ?? '') === 'spruce' ? 'selected' : '' }}>🟢 Spruce (Deep Teal)</option>
-                                                                    <option value="terracotta" {{ ($btn['style'] ?? '') === 'terracotta' ? 'selected' : '' }}>🔴 Terracotta (Coral)</option>
-                                                                    <option value="crimson" {{ ($btn['style'] ?? '') === 'crimson' ? 'selected' : '' }}>🍷 Crimson (Ruby Red)</option>
-                                                                    <option value="emerald" {{ ($btn['style'] ?? '') === 'emerald' ? 'selected' : '' }}>🌲 Emerald (Forest Green)</option>
-                                                                    <option value="sapphire" {{ ($btn['style'] ?? '') === 'sapphire' ? 'selected' : '' }}>🔵 Sapphire (Royal Blue)</option>
-                                                                    <option value="purple" {{ ($btn['style'] ?? '') === 'purple' ? 'selected' : '' }}>🟣 Purple (Majestic Plum)</option>
-                                                                    <option value="sunset" {{ ($btn['style'] ?? '') === 'sunset' ? 'selected' : '' }}>🟠 Sunset (Warm Orange)</option>
-                                                                    <option value="midnight" {{ ($btn['style'] ?? '') === 'midnight' ? 'selected' : '' }}>⚫ Midnight (Jet Black)</option>
-                                                                    <option value="white" {{ ($btn['style'] ?? '') === 'white' ? 'selected' : '' }}>⚪ White (Clean Pearl)</option>
-                                                                    <option value="outline-light" {{ ($btn['style'] ?? '') === 'outline-light' ? 'selected' : '' }}>🔲 Outline (Ghost White)</option>
-                                                                    <option value="outline-amber" {{ ($btn['style'] ?? '') === 'outline-amber' ? 'selected' : '' }}>🟨 Outline (Gold)</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-auto ms-auto">
-                                                                <button type="button" class="btn btn-outline-danger btn-sm p-1 px-2 btn-remove-slide-button" title="Remove this button">
-                                                                    <i class="bi bi-trash3 fs-12"></i>
+                                                                <button type="button" class="btn-remove-slide-button" title="Remove this button">
+                                                                    <i class="bi bi-trash3"></i> <span>Remove</span>
                                                                 </button>
+                                                            </div>
+
+                                                            <!-- Inputs: 3 Wide Columns with Clear Labels -->
+                                                            <div class="row g-2.5">
+                                                                <div class="col-md-4 col-sm-12">
+                                                                    <label class="slide-btn-field-label">Button Text</label>
+                                                                    <div class="input-group input-group-sm">
+                                                                        <span class="input-group-text bg-light text-muted"><i class="bi bi-cursor-text"></i></span>
+                                                                        <input type="text" name="slides[{{ $index }}][buttons][{{ $bIndex }}][text]" class="form-control field-btn-text modern-input" value="{{ $btn['text'] ?? '' }}" placeholder="e.g. ORDER NOW">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-sm-12">
+                                                                    <label class="slide-btn-field-label">Destination Link / URL</label>
+                                                                    <div class="input-group input-group-sm">
+                                                                        <span class="input-group-text bg-light text-muted"><i class="bi bi-link-45deg"></i></span>
+                                                                        <input type="text" name="slides[{{ $index }}][buttons][{{ $bIndex }}][url]" class="form-control field-btn-url modern-input" value="{{ $btn['url'] ?? '/menu' }}" placeholder="e.g. /menu or https://...">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-sm-12">
+                                                                    <label class="slide-btn-field-label">Color Theme</label>
+                                                                    <select name="slides[{{ $index }}][buttons][{{ $bIndex }}][style]" class="form-select form-select-sm field-btn-style modern-select fw-medium">
+                                                                        <option value="amber" {{ ($btn['style'] ?? '') === 'amber' ? 'selected' : '' }}>🟡 Amber Gold (Primary)</option>
+                                                                        <option value="spruce" {{ ($btn['style'] ?? '') === 'spruce' ? 'selected' : '' }}>🟢 Spruce (Deep Teal)</option>
+                                                                        <option value="terracotta" {{ ($btn['style'] ?? '') === 'terracotta' ? 'selected' : '' }}>🔴 Terracotta (Coral)</option>
+                                                                        <option value="crimson" {{ ($btn['style'] ?? '') === 'crimson' ? 'selected' : '' }}>🍷 Crimson (Ruby Red)</option>
+                                                                        <option value="emerald" {{ ($btn['style'] ?? '') === 'emerald' ? 'selected' : '' }}>🌲 Emerald (Forest Green)</option>
+                                                                        <option value="sapphire" {{ ($btn['style'] ?? '') === 'sapphire' ? 'selected' : '' }}>🔵 Sapphire (Royal Blue)</option>
+                                                                        <option value="purple" {{ ($btn['style'] ?? '') === 'purple' ? 'selected' : '' }}>🟣 Purple (Majestic Plum)</option>
+                                                                        <option value="sunset" {{ ($btn['style'] ?? '') === 'sunset' ? 'selected' : '' }}>🟠 Sunset (Warm Orange)</option>
+                                                                        <option value="midnight" {{ ($btn['style'] ?? '') === 'midnight' ? 'selected' : '' }}>⚫ Midnight (Jet Black)</option>
+                                                                        <option value="white" {{ ($btn['style'] ?? '') === 'white' ? 'selected' : '' }}>⚪ White (Clean Pearl)</option>
+                                                                        <option value="outline-light" {{ ($btn['style'] ?? '') === 'outline-light' ? 'selected' : '' }}>🔲 Outline (Ghost White)</option>
+                                                                        <option value="outline-amber" {{ ($btn['style'] ?? '') === 'outline-amber' ? 'selected' : '' }}>🟨 Outline (Gold)</option>
+                                                                    </select>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     @endforeach
@@ -646,7 +747,7 @@
             rows.forEach((row, bIdx) => {
                 row.setAttribute('data-btn-index', bIdx);
                 const label = row.querySelector('.slide-btn-label');
-                if (label) label.textContent = `Btn ${bIdx + 1}`;
+                if (label) label.innerHTML = `<i class="bi bi-grip-vertical text-muted"></i> Button ${bIdx + 1}`;
 
                 const textInput = row.querySelector('.field-btn-text');
                 if (textInput) textInput.setAttribute('name', `slides[${slideIdx}][buttons][${bIdx}][text]`);
@@ -657,6 +758,24 @@
                 const styleSelect = row.querySelector('.field-btn-style');
                 if (styleSelect) styleSelect.setAttribute('name', `slides[${slideIdx}][buttons][${bIdx}][style]`);
             });
+        }
+
+        function bindButtonRowEvents(row) {
+            const textInput = row.querySelector('.field-btn-text');
+            const styleSelect = row.querySelector('.field-btn-style');
+            const previewTag = row.querySelector('.slide-btn-preview-tag');
+
+            if (textInput && previewTag) {
+                textInput.addEventListener('input', function () {
+                    previewTag.textContent = this.value.trim() || 'BUTTON TEXT';
+                });
+            }
+
+            if (styleSelect && previewTag) {
+                styleSelect.addEventListener('change', function () {
+                    previewTag.className = 'slide-btn-preview-tag btn-preview-' + this.value;
+                });
+            }
         }
 
         function bindRemoveButtonEvent(row, pane) {
@@ -818,55 +937,71 @@
                     const slideIdx = pane.getAttribute('data-slide-index');
 
                     const newRow = document.createElement('div');
-                    newRow.className = 'slide-button-row row g-2 align-items-center';
+                    newRow.className = 'slide-button-row';
                     newRow.setAttribute('data-btn-index', newBtnIdx);
                     newRow.innerHTML = `
-                        <div class="col-auto">
-                            <span class="badge bg-light text-dark border fs-11 slide-btn-label fw-bold px-2 py-1">Btn ${newBtnIdx + 1}</span>
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-light text-muted"><i class="bi bi-cursor-text"></i></span>
-                                <input type="text" name="slides[${slideIdx}][buttons][${newBtnIdx}][text]" class="form-control field-btn-text" placeholder="Button Text (e.g. SPECIAL OFFER)">
+                        <!-- Header bar: Badge + Live Mini Preview + Remove Button -->
+                        <div class="slide-btn-header-bar">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="slide-btn-badge slide-btn-label">
+                                    <i class="bi bi-grip-vertical text-muted"></i> Button ${newBtnIdx + 1}
+                                </span>
+                                <span class="text-muted fs-11">Live Preview:</span>
+                                <span class="slide-btn-preview-tag btn-preview-terracotta">
+                                    SPECIAL OFFER
+                                </span>
                             </div>
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-light text-muted"><i class="bi bi-link-45deg"></i></span>
-                                <input type="text" name="slides[${slideIdx}][buttons][${newBtnIdx}][url]" class="form-control field-btn-url" value="/menu" placeholder="Link / URL (e.g. /menu)">
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-10">
-                            <select name="slides[${slideIdx}][buttons][${newBtnIdx}][style]" class="form-select form-select-sm field-btn-style fw-medium">
-                                <option value="amber">🟡 Amber Gold (Primary)</option>
-                                <option value="spruce">🟢 Spruce (Deep Teal)</option>
-                                <option value="terracotta" selected>🔴 Terracotta (Coral)</option>
-                                <option value="crimson">🍷 Crimson (Ruby Red)</option>
-                                <option value="emerald">🌲 Emerald (Forest Green)</option>
-                                <option value="sapphire">🔵 Sapphire (Royal Blue)</option>
-                                <option value="purple">🟣 Purple (Majestic Plum)</option>
-                                <option value="sunset">🟠 Sunset (Warm Orange)</option>
-                                <option value="midnight">⚫ Midnight (Jet Black)</option>
-                                <option value="white">⚪ White (Clean Pearl)</option>
-                                <option value="outline-light">🔲 Outline (Ghost White)</option>
-                                <option value="outline-amber">🟨 Outline (Gold)</option>
-                            </select>
-                        </div>
-                        <div class="col-auto ms-auto">
-                            <button type="button" class="btn btn-outline-danger btn-sm p-1 px-2 btn-remove-slide-button" title="Remove this button">
-                                <i class="bi bi-trash3 fs-12"></i>
+                            <button type="button" class="btn-remove-slide-button" title="Remove this button">
+                                <i class="bi bi-trash3"></i> <span>Remove</span>
                             </button>
+                        </div>
+
+                        <!-- Inputs: 3 Wide Columns with Clear Labels -->
+                        <div class="row g-2.5">
+                            <div class="col-md-4 col-sm-12">
+                                <label class="slide-btn-field-label">Button Text</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-cursor-text"></i></span>
+                                    <input type="text" name="slides[${slideIdx}][buttons][${newBtnIdx}][text]" class="form-control field-btn-text modern-input" value="SPECIAL OFFER" placeholder="e.g. SPECIAL OFFER">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <label class="slide-btn-field-label">Destination Link / URL</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-link-45deg"></i></span>
+                                    <input type="text" name="slides[${slideIdx}][buttons][${newBtnIdx}][url]" class="form-control field-btn-url modern-input" value="/menu" placeholder="e.g. /menu or https://...">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <label class="slide-btn-field-label">Color Theme</label>
+                                <select name="slides[${slideIdx}][buttons][${newBtnIdx}][style]" class="form-select form-select-sm field-btn-style modern-select fw-medium">
+                                    <option value="amber">🟡 Amber Gold (Primary)</option>
+                                    <option value="spruce">🟢 Spruce (Deep Teal)</option>
+                                    <option value="terracotta" selected>🔴 Terracotta (Coral)</option>
+                                    <option value="crimson">🍷 Crimson (Ruby Red)</option>
+                                    <option value="emerald">🌲 Emerald (Forest Green)</option>
+                                    <option value="sapphire">🔵 Sapphire (Royal Blue)</option>
+                                    <option value="purple">🟣 Purple (Majestic Plum)</option>
+                                    <option value="sunset">🟠 Sunset (Warm Orange)</option>
+                                    <option value="midnight">⚫ Midnight (Jet Black)</option>
+                                    <option value="white">⚪ White (Clean Pearl)</option>
+                                    <option value="outline-light">🔲 Outline (Ghost White)</option>
+                                    <option value="outline-amber">🟨 Outline (Gold)</option>
+                                </select>
+                            </div>
                         </div>
                     `;
                     buttonsList.appendChild(newRow);
                     bindRemoveButtonEvent(newRow, pane);
+                    bindButtonRowEvents(newRow);
                     reindexButtons(pane);
                 });
             }
 
-            // Bind remove button to existing rows in this pane
+            // Bind remove button & live preview to existing rows in this pane
             pane.querySelectorAll('.slide-button-row').forEach(row => {
                 bindRemoveButtonEvent(row, pane);
+                bindButtonRowEvents(row);
             });
         }
 
@@ -1034,92 +1169,121 @@
                             </div>
                             <div class="hero-input-col">
                                 <div class="button-manager-box">
-                                    <div class="d-flex justify-content-between align-items-center mb-2.5 flex-wrap gap-2">
+                                    <div class="button-manager-header">
                                         <div class="d-flex align-items-center gap-2">
-                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 fs-11 fw-bold text-uppercase">Buttons List</span>
-                                            <small class="text-muted fs-12">Configure button text, destination link, and color theme</small>
+                                            <div class="rounded-2 bg-primary text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
+                                                <i class="bi bi-cursor-fill fs-12"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark fs-13 lh-sm">Action Buttons (CTA)</div>
+                                                <small class="text-muted fs-11">Configure call-to-action buttons, links, and color styles</small>
+                                            </div>
                                         </div>
-                                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 py-1 fs-12 fw-semibold btn-add-slide-button d-flex align-items-center gap-1.5 shadow-sm">
-                                            <i class="bi bi-plus-circle-fill"></i> Add Button
+                                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 py-1.5 fs-12 fw-semibold btn-add-slide-button d-flex align-items-center gap-1.5 shadow-sm">
+                                            <i class="bi bi-plus-circle-fill"></i> Add Another Button
                                         </button>
                                     </div>
 
-                                    <div class="slide-buttons-list d-flex flex-column gap-2" data-slide-index="${newIndex}">
-                                        <div class="slide-button-row row g-2 align-items-center" data-btn-index="0">
-                                            <div class="col-auto">
-                                                <span class="badge bg-light text-dark border fs-11 slide-btn-label fw-bold px-2 py-1">Btn 1</span>
-                                            </div>
-                                            <div class="col-md-3 col-sm-12">
-                                                <div class="input-group input-group-sm">
-                                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-cursor-text"></i></span>
-                                                    <input type="text" name="slides[${newIndex}][buttons][0][text]" class="form-control field-btn-text" value="ORDER NOW" placeholder="Button Text (e.g. ORDER NOW)">
+                                    <div class="slide-buttons-list d-flex flex-column gap-2.5" data-slide-index="${newIndex}">
+                                        <!-- Button 1 -->
+                                        <div class="slide-button-row" data-btn-index="0">
+                                            <div class="slide-btn-header-bar">
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    <span class="slide-btn-badge slide-btn-label">
+                                                        <i class="bi bi-grip-vertical text-muted"></i> Button 1
+                                                    </span>
+                                                    <span class="text-muted fs-11">Live Preview:</span>
+                                                    <span class="slide-btn-preview-tag btn-preview-amber">
+                                                        ORDER NOW
+                                                    </span>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-3 col-sm-12">
-                                                <div class="input-group input-group-sm">
-                                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-link-45deg"></i></span>
-                                                    <input type="text" name="slides[${newIndex}][buttons][0][url]" class="form-control field-btn-url" value="/menu" placeholder="Link / URL (e.g. /menu)">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-10">
-                                                <select name="slides[${newIndex}][buttons][0][style]" class="form-select form-select-sm field-btn-style fw-medium">
-                                                    <option value="amber" selected>🟡 Amber Gold (Primary)</option>
-                                                    <option value="spruce">🟢 Spruce (Deep Teal)</option>
-                                                    <option value="terracotta">🔴 Terracotta (Coral)</option>
-                                                    <option value="crimson">🍷 Crimson (Ruby Red)</option>
-                                                    <option value="emerald">🌲 Emerald (Forest Green)</option>
-                                                    <option value="sapphire">🔵 Sapphire (Royal Blue)</option>
-                                                    <option value="purple">🟣 Purple (Majestic Plum)</option>
-                                                    <option value="sunset">🟠 Sunset (Warm Orange)</option>
-                                                    <option value="midnight">⚫ Midnight (Jet Black)</option>
-                                                    <option value="white">⚪ White (Clean Pearl)</option>
-                                                    <option value="outline-light">🔲 Outline (Ghost White)</option>
-                                                    <option value="outline-amber">🟨 Outline (Gold)</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-auto ms-auto">
-                                                <button type="button" class="btn btn-outline-danger btn-sm p-1 px-2 btn-remove-slide-button" title="Remove this button">
-                                                    <i class="bi bi-trash3 fs-12"></i>
+                                                <button type="button" class="btn-remove-slide-button" title="Remove this button">
+                                                    <i class="bi bi-trash3"></i> <span>Remove</span>
                                                 </button>
+                                            </div>
+                                            <div class="row g-2.5">
+                                                <div class="col-md-4 col-sm-12">
+                                                    <label class="slide-btn-field-label">Button Text</label>
+                                                    <div class="input-group input-group-sm">
+                                                        <span class="input-group-text bg-light text-muted"><i class="bi bi-cursor-text"></i></span>
+                                                        <input type="text" name="slides[${newIndex}][buttons][0][text]" class="form-control field-btn-text modern-input" value="ORDER NOW" placeholder="e.g. ORDER NOW">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-12">
+                                                    <label class="slide-btn-field-label">Destination Link / URL</label>
+                                                    <div class="input-group input-group-sm">
+                                                        <span class="input-group-text bg-light text-muted"><i class="bi bi-link-45deg"></i></span>
+                                                        <input type="text" name="slides[${newIndex}][buttons][0][url]" class="form-control field-btn-url modern-input" value="/menu" placeholder="e.g. /menu or https://...">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-12">
+                                                    <label class="slide-btn-field-label">Color Theme</label>
+                                                    <select name="slides[${newIndex}][buttons][0][style]" class="form-select form-select-sm field-btn-style modern-select fw-medium">
+                                                        <option value="amber" selected>🟡 Amber Gold (Primary)</option>
+                                                        <option value="spruce">🟢 Spruce (Deep Teal)</option>
+                                                        <option value="terracotta">🔴 Terracotta (Coral)</option>
+                                                        <option value="crimson">🍷 Crimson (Ruby Red)</option>
+                                                        <option value="emerald">🌲 Emerald (Forest Green)</option>
+                                                        <option value="sapphire">🔵 Sapphire (Royal Blue)</option>
+                                                        <option value="purple">🟣 Purple (Majestic Plum)</option>
+                                                        <option value="sunset">🟠 Sunset (Warm Orange)</option>
+                                                        <option value="midnight">⚫ Midnight (Jet Black)</option>
+                                                        <option value="white">⚪ White (Clean Pearl)</option>
+                                                        <option value="outline-light">🔲 Outline (Ghost White)</option>
+                                                        <option value="outline-amber">🟨 Outline (Gold)</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="slide-button-row row g-2 align-items-center" data-btn-index="1">
-                                            <div class="col-auto">
-                                                <span class="badge bg-light text-dark border fs-11 slide-btn-label fw-bold px-2 py-1">Btn 2</span>
-                                            </div>
-                                            <div class="col-md-3 col-sm-12">
-                                                <div class="input-group input-group-sm">
-                                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-cursor-text"></i></span>
-                                                    <input type="text" name="slides[${newIndex}][buttons][1][text]" class="form-control field-btn-text" value="EXPLORE OUR MENU" placeholder="Button Text (e.g. EXPLORE OUR MENU)">
+                                        <!-- Button 2 -->
+                                        <div class="slide-button-row" data-btn-index="1">
+                                            <div class="slide-btn-header-bar">
+                                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                    <span class="slide-btn-badge slide-btn-label">
+                                                        <i class="bi bi-grip-vertical text-muted"></i> Button 2
+                                                    </span>
+                                                    <span class="text-muted fs-11">Live Preview:</span>
+                                                    <span class="slide-btn-preview-tag btn-preview-spruce">
+                                                        EXPLORE OUR MENU
+                                                    </span>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-3 col-sm-12">
-                                                <div class="input-group input-group-sm">
-                                                    <span class="input-group-text bg-light text-muted"><i class="bi bi-link-45deg"></i></span>
-                                                    <input type="text" name="slides[${newIndex}][buttons][1][url]" class="form-control field-btn-url" value="/menu" placeholder="Link / URL (e.g. /menu)">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-10">
-                                                <select name="slides[${newIndex}][buttons][1][style]" class="form-select form-select-sm field-btn-style fw-medium">
-                                                    <option value="amber">🟡 Amber Gold (Primary)</option>
-                                                    <option value="spruce" selected>🟢 Spruce (Deep Teal)</option>
-                                                    <option value="terracotta">🔴 Terracotta (Coral)</option>
-                                                    <option value="crimson">🍷 Crimson (Ruby Red)</option>
-                                                    <option value="emerald">🌲 Emerald (Forest Green)</option>
-                                                    <option value="sapphire">🔵 Sapphire (Royal Blue)</option>
-                                                    <option value="purple">🟣 Purple (Majestic Plum)</option>
-                                                    <option value="sunset">🟠 Sunset (Warm Orange)</option>
-                                                    <option value="midnight">⚫ Midnight (Jet Black)</option>
-                                                    <option value="white">⚪ White (Clean Pearl)</option>
-                                                    <option value="outline-light">🔲 Outline (Ghost White)</option>
-                                                    <option value="outline-amber">🟨 Outline (Gold)</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-auto ms-auto">
-                                                <button type="button" class="btn btn-outline-danger btn-sm p-1 px-2 btn-remove-slide-button" title="Remove this button">
-                                                    <i class="bi bi-trash3 fs-12"></i>
+                                                <button type="button" class="btn-remove-slide-button" title="Remove this button">
+                                                    <i class="bi bi-trash3"></i> <span>Remove</span>
                                                 </button>
+                                            </div>
+                                            <div class="row g-2.5">
+                                                <div class="col-md-4 col-sm-12">
+                                                    <label class="slide-btn-field-label">Button Text</label>
+                                                    <div class="input-group input-group-sm">
+                                                        <span class="input-group-text bg-light text-muted"><i class="bi bi-cursor-text"></i></span>
+                                                        <input type="text" name="slides[${newIndex}][buttons][1][text]" class="form-control field-btn-text modern-input" value="EXPLORE OUR MENU" placeholder="e.g. EXPLORE OUR MENU">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-12">
+                                                    <label class="slide-btn-field-label">Destination Link / URL</label>
+                                                    <div class="input-group input-group-sm">
+                                                        <span class="input-group-text bg-light text-muted"><i class="bi bi-link-45deg"></i></span>
+                                                        <input type="text" name="slides[${newIndex}][buttons][1][url]" class="form-control field-btn-url modern-input" value="/menu" placeholder="e.g. /menu or https://...">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-12">
+                                                    <label class="slide-btn-field-label">Color Theme</label>
+                                                    <select name="slides[${newIndex}][buttons][1][style]" class="form-select form-select-sm field-btn-style modern-select fw-medium">
+                                                        <option value="amber">🟡 Amber Gold (Primary)</option>
+                                                        <option value="spruce" selected>🟢 Spruce (Deep Teal)</option>
+                                                        <option value="terracotta">🔴 Terracotta (Coral)</option>
+                                                        <option value="crimson">🍷 Crimson (Ruby Red)</option>
+                                                        <option value="emerald">🌲 Emerald (Forest Green)</option>
+                                                        <option value="sapphire">🔵 Sapphire (Royal Blue)</option>
+                                                        <option value="purple">🟣 Purple (Majestic Plum)</option>
+                                                        <option value="sunset">🟠 Sunset (Warm Orange)</option>
+                                                        <option value="midnight">⚫ Midnight (Jet Black)</option>
+                                                        <option value="white">⚪ White (Clean Pearl)</option>
+                                                        <option value="outline-light">🔲 Outline (Ghost White)</option>
+                                                        <option value="outline-amber">🟨 Outline (Gold)</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
