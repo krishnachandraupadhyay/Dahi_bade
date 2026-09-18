@@ -902,19 +902,94 @@ class WebpageController extends Controller
     public function getStoryData()
     {
         $defaultData = [
+            // Section 1: Hero Banner
             'hero_badge' => 'OUR STORY',
             'hero_heading' => 'A LEGACY SERVED WITH LOVE',
             'hero_sub' => 'Since 1976 | Lucknow',
             'hero_description' => 'From a humble beginning near the GPO in Hazratganj to becoming a recognised name for Dahi Bade, our journey is built on tradition, taste and the love of our customers.',
             'hero_image' => 'images/lucknow_heritage.jpg',
+
+            // Section 2: Chapter 1 - Where It All Began
             'began_heading' => 'WHERE IT ALL BEGAN',
             'began_tagline' => 'A Simple Beginning. An Unforgettable Taste.',
             'began_image' => 'images/lucknow_heritage.jpg',
             'began_text_1' => 'The story of GPO Ke Thandey Dahi Bade began in 1976, when Sant Ram Gupta ji started serving Dahi Bade near the General Post Office in Hazratganj, Lucknow.',
-            'began_text_2' => 'There was no complicated formula. Just a commitment to making delicious food and serving it with care. The unique combination of soft Dahi Bade, chilled dahi and balanced flavours gradually attracted customers from across Lucknow.',
+            'began_text_2' => 'There was no complicated formula. Just a commitment to making delicious food and serving it with care.',
+            'began_text_3' => 'The unique combination of soft Dahi Bade, chilled dahi and balanced flavours gradually attracted customers from across Lucknow.',
+            'began_text_4' => 'And slowly, a small food destination became a name people remembered.',
+
+            // Section 3: Chapter 2 - The GPO Journey
             'journey_badge' => 'THE GPO JOURNEY',
             'journey_heading' => 'FROM A HUMBLE FOOD DESTINATION TO A LUCKNOW FAVOURITE',
-            'journey_desc' => 'Over the years, GPO Ke Thandey Dahi Bade became associated with a simple food experience: Fresh ingredients, traditional preparation, generous servings, and the welcoming warmth that defines Lucknow hospitality.',
+            'journey_sub' => 'Over the years, GPO Ke Thandey Dahi Bade became associated with a simple food experience:',
+            'journey_quote' => 'Come hungry. Have a plate. Leave happy.',
+            'journey_desc' => 'The brand’s identity has been shaped by generations of customers who have enjoyed our food, recommended us to others and returned with their families. That customer love is one of the most important chapters of the GPO story.',
+            'journey_image' => 'images/storefront.jpg',
+
+            // Section 4: The Secret Is Simple (4 Pillars)
+            'secret_heading' => 'THE SECRET IS SIMPLE',
+            'secret_tagline' => 'GOOD FOOD DOESN’T NEED TO BE COMPLICATED.',
+            'secret_desc' => 'At GPO, we believe that the best food comes from respecting the basics.',
+            'pillars' => [
+                [
+                    'icon' => '🌱',
+                    'title' => 'QUALITY INGREDIENTS',
+                    'desc' => 'We focus on freshness and quality in the ingredients used in our preparations.'
+                ],
+                [
+                    'icon' => '🏺',
+                    'title' => 'TRADITIONAL FLAVOURS',
+                    'desc' => 'Our food remains connected to the familiar flavours that customers have loved over the years.'
+                ],
+                [
+                    'icon' => '🥣',
+                    'title' => 'CAREFUL PREPARATION',
+                    'desc' => 'Every dish is prepared with attention to taste, presentation and consistency.'
+                ],
+                [
+                    'icon' => '❤️',
+                    'title' => 'CUSTOMER FIRST',
+                    'desc' => 'Our ultimate goal is simple — give every customer a reason to come back.'
+                ],
+            ],
+
+            // Section 5: Why "Thandey" Dahi Bade?
+            'why_thandey_heading' => 'WHY “THANDEY” DAHI BADE?',
+            'why_thandey_tagline' => 'THE EXPERIENCE IS IN THE NAME.',
+            'why_thandey_p1' => 'Our signature Dahi Bade are known for their refreshing chilled character.',
+            'why_thandey_p2' => 'Soft lentil dumplings are complemented by creamy chilled dahi and a balanced blend of flavours and spices.',
+            'why_thandey_p3' => 'It is this combination that creates the distinctive GPO experience.',
+            'why_thandey_badges' => [
+                'CREAMY.', 'CHILLED.', 'TANGY.', 'FLAVOURFUL.'
+            ],
+
+            // Section 6: Our Values (6 Values)
+            'values_heading' => 'OUR VALUES',
+            'values_desc' => 'The timeless principles that guide everything we prepare and serve.',
+            'values' => [
+                ['number' => '01', 'title' => 'AUTHENTICITY', 'desc' => 'We respect the food traditions and flavours that built our identity.'],
+                ['number' => '02', 'title' => 'QUALITY', 'desc' => 'We believe quality is essential to creating food people trust.'],
+                ['number' => '03', 'title' => 'CONSISTENCY', 'desc' => 'Customers should receive the GPO experience they expect every time.'],
+                ['number' => '04', 'title' => 'HYGIENE', 'desc' => 'We maintain attention to cleanliness and food preparation standards.'],
+                ['number' => '05', 'title' => 'INNOVATION', 'desc' => 'While respecting our roots, we continue to embrace modern ways of serving customers.'],
+                ['number' => '06', 'title' => 'LEGACY', 'desc' => 'Our past gives us our identity. Our future gives us our responsibility.'],
+            ],
+
+            // Section 7: Tradition Meets Today & Experience CTA
+            'tradition_heading' => 'TRADITION MEETS TODAY',
+            'tradition_desc' => 'GPO Ke Thandey Dahi Bade carries a heritage rooted in Lucknow while embracing the convenience expected by today’s customers. From digital ordering to modern customer service and organised operations, we are taking a much-loved food experience forward without losing sight of where it began.',
+            'tradition_punch' => 'THE TASTE MAY BE TIMELESS. THE EXPERIENCE KEEPS EVOLVING.',
+            'cta_heading' => 'EXPERIENCE THE STORY FOR YOURSELF',
+            'cta_sub' => 'Taste the Original GPO Ke Thandey Dahi Bade.',
+            'cta_btn1_text' => 'VISIT US',
+            'cta_btn1_url' => '/contact',
+            'cta_btn2_text' => 'ORDER NOW',
+            'cta_btn2_url' => '/menu',
+
+            // Section 8: Full-Width Panoramic Lucknow Banner
+            'banner_title' => 'LUCKNOW',
+            'banner_subtitle' => 'A City of Nawabs • A Taste of Tradition • Since 1976',
+            'banner_image' => 'images/lucknow_heritage.jpg',
         ];
 
         $path = $this->getStoryFilePath();
@@ -935,27 +1010,84 @@ class WebpageController extends Controller
 
     public function updateStory(Request $request)
     {
-        $story = $request->input('story', []);
+        $currentStory = $this->getStoryData();
+        $storyInput = $request->input('story', []);
+        $currentSection = $request->input('current_section', 'hero_banner');
+
+        $uploadDir = public_path('uploads/story');
+        if (!File::isDirectory($uploadDir)) {
+            File::makeDirectory($uploadDir, 0755, true, true);
+        }
+
+        // Handle Image Uploads
+        $imageFields = [
+            'hero_image_file' => 'hero_image',
+            'began_image_file' => 'began_image',
+            'journey_image_file' => 'journey_image',
+            'banner_image_file' => 'banner_image',
+        ];
+
+        foreach ($imageFields as $fileInput => $targetKey) {
+            if ($request->hasFile("story.{$fileInput}")) {
+                $file = $request->file("story.{$fileInput}");
+                if ($file->isValid()) {
+                    $filename = time() . "_{$targetKey}_" . uniqid() . '.' . strtolower($file->getClientOriginalExtension());
+                    $file->move($uploadDir, $filename);
+                    $storyInput[$targetKey] = 'uploads/story/' . $filename;
+                }
+            }
+        }
+
+        // Clean and merge arrays for pillars if submitted
+        if (isset($storyInput['pillars']) && is_array($storyInput['pillars'])) {
+            $cleanedPillars = [];
+            foreach ($storyInput['pillars'] as $pillar) {
+                $cleanedPillars[] = [
+                    'icon' => trim($pillar['icon'] ?? '🌱'),
+                    'title' => trim($pillar['title'] ?? ''),
+                    'desc' => trim($pillar['desc'] ?? ''),
+                ];
+            }
+            $storyInput['pillars'] = $cleanedPillars;
+        }
+
+        // Clean and merge arrays for why_thandey_badges if submitted
+        if (isset($storyInput['why_thandey_badges']) && is_array($storyInput['why_thandey_badges'])) {
+            $cleanedBadges = [];
+            foreach ($storyInput['why_thandey_badges'] as $b) {
+                $val = trim(is_array($b) ? ($b['text'] ?? '') : $b);
+                if ($val !== '') {
+                    $cleanedBadges[] = $val;
+                }
+            }
+            $storyInput['why_thandey_badges'] = $cleanedBadges;
+        }
+
+        // Clean and merge arrays for values if submitted
+        if (isset($storyInput['values']) && is_array($storyInput['values'])) {
+            $cleanedValues = [];
+            foreach ($storyInput['values'] as $val) {
+                $cleanedValues[] = [
+                    'number' => trim($val['number'] ?? ''),
+                    'title' => trim($val['title'] ?? ''),
+                    'desc' => trim($val['desc'] ?? ''),
+                ];
+            }
+            $storyInput['values'] = $cleanedValues;
+        }
+
+        // Merge updated section data into current full dataset
+        $mergedStory = array_merge($currentStory, $storyInput);
+
         $dir = dirname($this->getStoryFilePath());
         if (!File::isDirectory($dir)) {
             File::makeDirectory($dir, 0755, true, true);
         }
 
-        if ($request->hasFile('story.hero_image_file')) {
-            $file = $request->file('story.hero_image_file');
-            if ($file->isValid()) {
-                $uploadDir = public_path('uploads/story');
-                if (!File::isDirectory($uploadDir)) {
-                    File::makeDirectory($uploadDir, 0755, true, true);
-                }
-                $filename = time() . '_story_' . uniqid() . '.' . strtolower($file->getClientOriginalExtension());
-                $file->move($uploadDir, $filename);
-                $story['hero_image'] = 'uploads/story/' . $filename;
-            }
-        }
+        File::put($this->getStoryFilePath(), json_encode($mergedStory, JSON_PRETTY_PRINT));
 
-        File::put($this->getStoryFilePath(), json_encode($story, JSON_PRETTY_PRINT));
-        return redirect()->route('admin.website-pages.story')->with('success', 'Our Story page successfully updated!');
+        return redirect()->route('admin.website-pages.story', ['section' => $currentSection])
+            ->with('success', 'Our Story section successfully updated!');
     }
 
     public function getFranchisePageData()

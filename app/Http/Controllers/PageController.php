@@ -22,7 +22,9 @@ class PageController extends Controller
 
     public function story()
     {
-        return view('pages.story');
+        $webpageController = new \App\Http\Controllers\WebpageController;
+        $story = $webpageController->getStoryData();
+        return view('pages.story', compact('story'));
     }
 
     public function menu()
