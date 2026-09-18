@@ -242,7 +242,7 @@
         <div class="card-header bg-white py-3 px-4 d-flex flex-wrap align-items-center justify-content-between gap-3 border-bottom border-light-subtle">
             <!-- Left Side: Home Page Title -->
             <div class="d-flex align-items-center gap-3">
-                <div class="rounded-3 bg-primary-transparent text-primary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; font-size: 18px;">
+                <div class="rounded-3 bg-primary-subtle text-primary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; font-size: 18px;">
                     <i class="bi bi-house-door-fill"></i>
                 </div>
                 <div>
