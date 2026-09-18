@@ -1262,23 +1262,153 @@ class WebpageController extends Controller
     public function getFranchisePageData()
     {
         $defaultData = [
-            'hero_badge' => 'FRANCHISE PARTNERSHIP',
-            'hero_heading' => "BRING THE ORIGINAL\nTO YOUR CITY",
-            'hero_sub' => 'BECOME A GPO FRANCHISE PARTNER',
-            'hero_image' => 'images/franchise.jpg',
+            // Section 1: Hero Sliders (3 Slides)
+            'hero_sliders' => [
+                [
+                    'badge' => '🏢 FRANCHISE PARTNERSHIP',
+                    'heading' => "BRING THE ORIGINAL\nTO YOUR CITY",
+                    'sub' => 'BECOME A GPO FRANCHISE PARTNER',
+                    'bullets' => [
+                        'A trusted Lucknow food legacy.',
+                        'A focused food concept.',
+                        'A brand built around a signature product.'
+                    ],
+                    'btn1_text' => 'APPLY FOR FRANCHISE',
+                    'btn1_url' => '#enquiryForm',
+                    'btn2_text' => 'WHY PARTNER WITH US',
+                    'btn2_url' => '#whyPartner',
+                    'media_type' => 'image',
+                    'media' => 'images/franchise.jpg',
+                    'video' => '',
+                    'youtube_url' => '',
+                    'youtube_id' => '',
+                    'overlay_color' => '#083b3c',
+                    'overlay_opacity' => '0.75',
+                    'overlay_style' => 'solid',
+                ],
+                [
+                    'badge' => '📈 EXPANSION OPPORTUNITY',
+                    'heading' => "A LEGACY\nSINCE 1976",
+                    'sub' => 'NOW READY FOR ITS NEXT CHAPTER',
+                    'desc' => 'Take the Original GPO Ke Thandey Dahi Bade experience to a new market and become part of a growing food brand.',
+                    'btn1_text' => 'KNOW MORE',
+                    'btn1_url' => '#whyPartner',
+                    'btn2_text' => 'APPLY NOW',
+                    'btn2_url' => '#enquiryForm',
+                    'media_type' => 'image',
+                    'media' => 'images/lucknow_heritage.jpg',
+                    'video' => '',
+                    'youtube_url' => '',
+                    'youtube_id' => '',
+                    'overlay_color' => '#083b3c',
+                    'overlay_opacity' => '0.75',
+                    'overlay_style' => 'solid',
+                ],
+                [
+                    'badge' => '⭐ TRUSTED BRAND REPUTATION',
+                    'heading' => "BUILD WITH A\nRECOGNISED NAME",
+                    'sub' => 'SERVE A TASTE PEOPLE ALREADY LOVE',
+                    'desc' => 'From brand identity and marketing support to training and technology-enabled operations, GPO aims to support franchise partners throughout their journey.',
+                    'btn1_text' => 'ENQUIRE NOW',
+                    'btn1_url' => '#enquiryForm',
+                    'btn2_text' => 'VIEW METRICS',
+                    'btn2_url' => '#glance',
+                    'media_type' => 'image',
+                    'media' => 'images/storefront.jpg',
+                    'video' => '',
+                    'youtube_url' => '',
+                    'youtube_id' => '',
+                    'overlay_color' => '#083b3c',
+                    'overlay_opacity' => '0.75',
+                    'overlay_style' => 'solid',
+                ],
+            ],
+
+            // Section 2: Why Partner with GPO?
             'why_heading' => 'WHY PARTNER WITH GPO?',
-            'why_desc' => 'Join hands with an iconic Lucknow culinary brand with 45+ years of goodwill and high profit margins.',
+            'why_tagline' => 'MORE THAN A FRANCHISE. A LEGACY.',
+            'why_p1' => 'Starting a food business from scratch means building everything from the ground up — brand identity, customer trust, menu positioning and operating systems.',
+            'why_p2' => 'A GPO franchise gives entrepreneurs the opportunity to build around an established brand concept with a legacy dating back to 1976.',
+
+            // Section 3: USP Cards (6 Items)
+            'usp_badge' => 'USP CARDS',
+            'usp_heading' => 'WHAT YOU GET WITH GPO',
+            'usp_sub' => 'Comprehensive ecosystem designed for partner operational excellence.',
+            'usp_items' => [
+                ['num' => '01', 'title' => 'ESTABLISHED BRAND', 'desc' => 'GPO Ke Thandey Dahi Bade has been associated with Lucknow’s food culture since 1976.'],
+                ['num' => '02', 'title' => 'BRANDING SUPPORT', 'desc' => 'Marketing and branding support is included as part of the franchise offering.'],
+                ['num' => '03', 'title' => 'TRADEMARK / BRAND RIGHTS', 'desc' => 'Franchise partners receive rights to use the GPO brand as defined by the franchise agreement.'],
+                ['num' => '04', 'title' => 'STORE OPERATIONS SUPPORT', 'desc' => 'A trained store operations staff member is provided at the start to support the initial store setup and operations.'],
+                ['num' => '05', 'title' => 'TECHNOLOGY SUPPORT', 'desc' => 'Access to modern order-management tools, including WhatsApp-based ordering and live tracking capabilities.'],
+                ['num' => '06', 'title' => 'FOCUSED FOOD FORMAT', 'desc' => 'A simple and recognisable product proposition built around Dahi Bade and complementary Indian snacks.']
+            ],
+
+            // Section 4: Franchise at a Glance
+            'glance_heading' => 'FRANCHISE AT A GLANCE',
+            'glance_sub' => 'Key parameters and investment economics of the GPO franchise proposal.',
+            'glance_metrics' => [
+                ['label' => 'FRANCHISE FEE', 'value' => '₹12,50,000', 'desc' => 'One-time upfront franchise fee.'],
+                ['label' => 'MINIMUM STORE SIZE', 'value' => '250 SQ. FT.', 'desc' => 'Minimum shop size specified in the franchise proposal.'],
+                ['label' => 'LOCATION', 'value' => 'LUCKNOW & EXPANSION', 'desc' => 'Location approval and territory availability subject to brand process.'],
+                ['label' => 'BRAND SUPPORT', 'value' => 'MARKETING + BRANDING', 'desc' => 'Support included as per the franchise offering.'],
+                ['label' => 'OPERATIONS', 'value' => 'TRAINING SUPPORT', 'desc' => 'Initial trained store operations support provided.'],
+                ['label' => 'TECHNOLOGY', 'value' => 'DIGITAL ORDER MANAGEMENT', 'desc' => 'Modern tools for smoother order handling and customer service.']
+            ],
+            'roi_highlight_lead' => 'FINANCIAL INDICATORS:',
+            'roi_highlight_text' => 'The proposal also calculates an indicative break-even period of approximately 3.5 months and annual ROI of 336% based on its assumptions.',
+
+            // Section 5: Who Can Partner With Us? (5 Profiles)
+            'partner_heading' => 'WHO CAN PARTNER WITH US?',
+            'partner_sub' => 'The GPO franchise opportunity may be suitable for:',
+            'partner_profiles' => [
+                ['title' => 'ENTREPRENEURS', 'desc' => 'Looking to enter the food & beverage business.'],
+                ['title' => 'EXISTING FOOD BUSINESS OWNERS', 'desc' => 'Looking to add a recognised food concept to their portfolio.'],
+                ['title' => 'INVESTORS', 'desc' => 'Looking for an organised food-business opportunity.'],
+                ['title' => 'RESTAURANT & CAFE OPERATORS', 'desc' => 'Looking to expand into a focused Indian snack concept.'],
+                ['title' => 'BUSINESS OWNERS', 'desc' => 'Looking to bring a recognised Lucknow food identity to a new market.']
+            ],
+
+            // Section 6: The GPO Franchise Journey (6 Steps)
+            'journey_heading' => 'THE GPO FRANCHISE JOURNEY',
+            'journey_sub' => 'A structured 6-step path from first enquiry to grand opening.',
+            'journey_steps' => [
+                ['step' => 'STEP 01', 'title' => 'SUBMIT YOUR ENQUIRY', 'desc' => 'Tell us about yourself, your city and your business interest.'],
+                ['step' => 'STEP 02', 'title' => 'DISCUSSION', 'desc' => 'Our team will connect with you to understand your requirements.'],
+                ['step' => 'STEP 03', 'title' => 'LOCATION & COMMERCIAL DISCUSSION', 'desc' => 'Discuss location suitability, investment, territory and franchise terms.'],
+                ['step' => 'STEP 04', 'title' => 'AGREEMENT', 'desc' => 'Proceed as per mutually agreed franchise terms and documentation.'],
+                ['step' => 'STEP 05', 'title' => 'STORE SETUP', 'desc' => 'Work towards setting up your GPO outlet with brand and operational guidance.'],
+                ['step' => 'STEP 06', 'title' => 'LAUNCH', 'desc' => 'Open your doors and bring the Original GPO taste to your customers.']
+            ],
+
+            // Section 7: Franchise Enquiry Form
+            'form_heading' => 'YOUR CITY COULD BE NEXT',
+            'form_sub' => 'READY TO BRING A LUCKNOW FAVOURITE TO YOUR MARKET?',
+            'form_desc' => 'Fill out the franchise enquiry form and our team will get in touch with you.',
+            'form_btn_text' => 'SUBMIT FRANCHISE ENQUIRY',
             'phone' => '+91 91406 31433',
             'email' => 'franchise@gpokethandeydahibade.com',
-            'roi_period' => '12 - 18 Months',
-            'investment_range' => '₹15 Lakhs - ₹30 Lakhs',
+
+            // Section 8: Final Franchise CTA Banner
+            'cta_heading' => 'DON’T JUST START A FOOD BUSINESS.',
+            'cta_sub' => 'BUILD A BRAND PEOPLE REMEMBER.',
+            'cta_desc' => 'Partner with Original GPO Ke Thandey Dahi Bade and deliver an authentic legacy of 1976.',
+            'cta_btn_text' => 'APPLY FOR FRANCHISE',
+            'cta_btn_url' => '#enquiryForm',
+            'cta_media_type' => 'image',
+            'cta_image' => 'images/franchise.jpg',
+            'cta_video' => '',
+            'cta_youtube_url' => '',
+            'cta_youtube_id' => '',
+            'cta_overlay_color' => '#083b3c',
+            'cta_overlay_opacity' => '0.90',
+            'cta_overlay_style' => 'gradient',
         ];
 
         $path = $this->getFranchisePageFilePath();
         if (File::exists($path)) {
             $content = json_decode(File::get($path), true);
             if (is_array($content)) {
-                return array_merge($defaultData, $content);
+                return array_replace_recursive($defaultData, $content);
             }
         }
         return $defaultData;
@@ -1292,33 +1422,227 @@ class WebpageController extends Controller
 
     public function updateFranchise(Request $request)
     {
-        $franchise = $request->input('franchise', []);
+        $currentFranchise = $this->getFranchisePageData();
+        $franchiseInput = $request->input('franchise', []);
+        $currentSection = $request->input('current_section', 'hero_sliders');
+
+        $uploadDir = public_path('uploads/franchise');
+        if (!File::isDirectory($uploadDir)) {
+            File::makeDirectory($uploadDir, 0755, true, true);
+        }
+
+        // Handle Hero Slides File Uploads & YouTube
+        if (isset($franchiseInput['hero_sliders']) && is_array($franchiseInput['hero_sliders'])) {
+            foreach ($franchiseInput['hero_sliders'] as $idx => &$slide) {
+                // File upload
+                if ($request->hasFile("franchise.hero_sliders.{$idx}.media_file")) {
+                    $file = $request->file("franchise.hero_sliders.{$idx}.media_file");
+                    if ($file->isValid()) {
+                        $ext = strtolower($file->getClientOriginalExtension());
+                        $filename = time() . "_hero_slide_{$idx}_" . uniqid() . '.' . $ext;
+                        $file->move($uploadDir, $filename);
+                        $filePath = 'uploads/franchise/' . $filename;
+                        if (in_array($ext, ['mp4', 'webm', 'ogg', 'mov', 'm4v'])) {
+                            $slide['video'] = $filePath;
+                            $slide['media_type'] = 'video';
+                        } elseif ($ext === 'gif') {
+                            $slide['media'] = $filePath;
+                            $slide['media_type'] = 'gif';
+                        } else {
+                            $slide['media'] = $filePath;
+                            $slide['media_type'] = 'image';
+                        }
+                    }
+                }
+                // YouTube ID extraction
+                if (!empty($slide['youtube_url'])) {
+                    $yt = trim($slide['youtube_url']);
+                    if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $yt, $m)) {
+                        $slide['youtube_id'] = $m[1];
+                    } else {
+                        $slide['youtube_id'] = $yt;
+                    }
+                }
+                // Bullets cleaning
+                if (isset($slide['bullets']) && is_array($slide['bullets'])) {
+                    $slide['bullets'] = array_values(array_filter(array_map('trim', $slide['bullets'])));
+                }
+            }
+            unset($slide);
+        }
+
+        // Handle CTA Banner Uploads & YouTube
+        if ($request->hasFile('franchise.cta_media_file')) {
+            $file = $request->file('franchise.cta_media_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_cta_media_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $filePath = 'uploads/franchise/' . $filename;
+                if (in_array($ext, ['mp4', 'webm', 'ogg', 'mov', 'm4v'])) {
+                    $franchiseInput['cta_video'] = $filePath;
+                    $franchiseInput['cta_media_type'] = 'video';
+                } elseif ($ext === 'gif') {
+                    $franchiseInput['cta_image'] = $filePath;
+                    $franchiseInput['cta_media_type'] = 'gif';
+                } else {
+                    $franchiseInput['cta_image'] = $filePath;
+                    $franchiseInput['cta_media_type'] = 'image';
+                }
+            }
+        }
+        if (!empty($franchiseInput['cta_youtube_url'])) {
+            $yt = trim($franchiseInput['cta_youtube_url']);
+            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $yt, $m)) {
+                $franchiseInput['cta_youtube_id'] = $m[1];
+            } else {
+                $franchiseInput['cta_youtube_id'] = $yt;
+            }
+        }
+
+        // Clean USP items if provided
+        if (isset($franchiseInput['usp_items']) && is_array($franchiseInput['usp_items'])) {
+            $cleaned = [];
+            foreach ($franchiseInput['usp_items'] as $item) {
+                $cleaned[] = [
+                    'num' => trim($item['num'] ?? ''),
+                    'title' => trim($item['title'] ?? ''),
+                    'desc' => trim($item['desc'] ?? ''),
+                ];
+            }
+            $franchiseInput['usp_items'] = $cleaned;
+        }
+
+        // Clean glance metrics if provided
+        if (isset($franchiseInput['glance_metrics']) && is_array($franchiseInput['glance_metrics'])) {
+            $cleaned = [];
+            foreach ($franchiseInput['glance_metrics'] as $item) {
+                $cleaned[] = [
+                    'label' => trim($item['label'] ?? ''),
+                    'value' => trim($item['value'] ?? ''),
+                    'desc' => trim($item['desc'] ?? ''),
+                ];
+            }
+            $franchiseInput['glance_metrics'] = $cleaned;
+        }
+
+        // Clean partner profiles if provided
+        if (isset($franchiseInput['partner_profiles']) && is_array($franchiseInput['partner_profiles'])) {
+            $cleaned = [];
+            foreach ($franchiseInput['partner_profiles'] as $item) {
+                $cleaned[] = [
+                    'title' => trim($item['title'] ?? ''),
+                    'desc' => trim($item['desc'] ?? ''),
+                ];
+            }
+            $franchiseInput['partner_profiles'] = $cleaned;
+        }
+
+        // Clean journey steps if provided
+        if (isset($franchiseInput['journey_steps']) && is_array($franchiseInput['journey_steps'])) {
+            $cleaned = [];
+            foreach ($franchiseInput['journey_steps'] as $item) {
+                $cleaned[] = [
+                    'step' => trim($item['step'] ?? ''),
+                    'title' => trim($item['title'] ?? ''),
+                    'desc' => trim($item['desc'] ?? ''),
+                ];
+            }
+            $franchiseInput['journey_steps'] = $cleaned;
+        }
+
+        $merged = array_replace_recursive($currentFranchise, $franchiseInput);
+
         $dir = dirname($this->getFranchisePageFilePath());
         if (!File::isDirectory($dir)) {
             File::makeDirectory($dir, 0755, true, true);
         }
 
-        File::put($this->getFranchisePageFilePath(), json_encode($franchise, JSON_PRETTY_PRINT));
-        return redirect()->route('admin.website-pages.franchise')->with('success', 'Franchise page successfully updated!');
+        File::put($this->getFranchisePageFilePath(), json_encode($merged, JSON_PRETTY_PRINT));
+        return redirect()->route('admin.website-pages.franchise', ['section' => $currentSection])
+            ->with('success', 'Franchise page section successfully updated!');
     }
 
     public function getContactPageData()
     {
         $defaultData = [
-            'hero_heading' => 'GET IN TOUCH WITH US',
-            'hero_sub' => 'We’d Love To Hear From You',
-            'address' => 'Shop No. 1, Awadh Bazaar, Mahatma Gandhi Marg, Near K.D. Singh Babu Stadium, Hazratganj, Lucknow, Uttar Pradesh – 226001',
-            'phone' => '+91 91406 31433',
-            'email' => 'support@gpokethandeydahibade.com',
-            'timings' => 'Monday – Sunday | 1:00 PM – 9:00 PM',
-            'map_url' => 'https://maps.google.com/?q=Hazratganj+Lucknow+Awadh+Bazaar',
+            // Section 1: Hero Banner
+            'hero_heading' => 'WE’RE ALWAYS HAPPY TO HEAR FROM YOU',
+            'hero_sub' => 'VISIT. TASTE. CONNECT.',
+            'hero_desc' => 'Whether you’re craving our signature Dahi Bade, want to place an order, have feedback or are interested in becoming a franchise partner — we’re here to help.',
+            'hero_media_type' => 'image',
+            'hero_image' => 'images/lucknow_heritage.jpg',
+            'hero_video' => '',
+            'hero_youtube_url' => '',
+            'hero_youtube_id' => '',
+            'hero_overlay_color' => '#083b3c',
+            'hero_overlay_opacity' => '0.85',
+            'hero_overlay_style' => 'solid',
+
+            // Section 2: Lucknow Map Embed & Red Dot Badge
+            'map_title' => 'Original GPO Hazratganj Lucknow Map',
+            'map_iframe_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14238.643265773173!2d80.9385558!3d26.8486968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399bfd07a16f212f%3A0x6b6c0e8a7ea73d09!2sHazratganj%2C%20Lucknow%2C%20Uttar%20Pradesh%20226001!5e0!3m2!1sen!2sin!4v1710500000000!5m2!1sen!2sin',
+            'badge_text' => 'ORIGINAL GPO • HAZRATGANJ OUTLET',
+            'badge_dot_color' => '#ef4444',
+            'map_height' => '420',
+
+            // Section 3: Visit Our Outlet Card
+            'outlet_title' => 'VISIT OUR OUTLET',
+            'outlet_name' => 'ORIGINAL GPO KE THANDEY DAHI BADE',
+            'outlet_address' => "Shop No. 1, Awadh Bazaar,\nMahatma Gandhi Marg,\nNear K.D. Singh Babu Stadium,\nHazratganj, Lucknow, UP – 226001",
+            'outlet_timings' => 'Monday – Sunday | 1:00 PM – 9:00 PM',
+            'outlet_phone' => '+91 91406 31433',
+            'outlet_email' => 'support@gpokethandeydahibade.com',
+            'outlet_btn_text' => 'GET DIRECTIONS',
+            'outlet_btn_url' => 'https://maps.google.com/?q=Hazratganj+Lucknow+Awadh+Bazaar',
+
+            // Section 4: Order Your Favourites Card
+            'order_title' => 'ORDER YOUR FAVOURITES',
+            'order_sub' => 'CRAVING GPO?',
+            'order_desc' => 'Get your favourite GPO dishes delivered or place an order through our available ordering channels.',
+            'order_box_title' => 'ORDER ONLINE',
+            'order_box_desc' => 'Enjoy the Original GPO experience from wherever you are in Lucknow.',
+            'order_btn_text' => 'ORDER NOW',
+            'order_btn_url' => '/menu',
+
+            // Section 5: Franchise Enquiry Card
+            'franchise_title' => 'FRANCHISE ENQUIRY',
+            'franchise_sub' => 'WANT TO BRING GPO TO YOUR CITY?',
+            'franchise_desc' => 'Interested in becoming a franchise partner? Share your details with us and our expansion team will contact you to discuss the opportunity.',
+            'franchise_bullet1' => 'Turnkey setup & operations',
+            'franchise_bullet2' => 'Brand legacy since 1976',
+            'franchise_bullet3' => 'Comprehensive partner support',
+            'franchise_btn_text' => 'APPLY FOR FRANCHISE',
+            'franchise_btn_url' => '/franchise',
+
+            // Section 6: Send Us a Message (Contact Form Section)
+            'form_heading' => 'SEND US A MESSAGE',
+            'form_sub' => 'HAVE A QUESTION?',
+            'form_desc' => 'We’d love to hear from you.',
+            'form_btn_text' => 'SUBMIT',
+
+            // Section 7: Find Us In Lucknow (Bottom Banner)
+            'find_heading' => 'FIND US IN LUCKNOW',
+            'find_sub' => 'YOUR GPO MOMENT STARTS HERE.',
+            'find_desc' => 'Whether you’re a first-time visitor or a customer who’s been coming for years, we look forward to serving you.',
+            'find_point1' => 'VISIT GPO.',
+            'find_point2' => 'TASTE THE ORIGINAL.',
+            'find_point3' => 'MAKE A MEMORY.',
+            'find_media_type' => 'image',
+            'find_image' => 'images/lucknow_heritage.jpg',
+            'find_video' => '',
+            'find_youtube_url' => '',
+            'find_youtube_id' => '',
+            'find_overlay_color' => '#083b3c',
+            'find_overlay_opacity' => '0.80',
+            'find_overlay_style' => 'solid',
         ];
 
         $path = $this->getContactPageFilePath();
         if (File::exists($path)) {
             $content = json_decode(File::get($path), true);
             if (is_array($content)) {
-                return array_merge($defaultData, $content);
+                return array_replace_recursive($defaultData, $content);
             }
         }
         return $defaultData;
@@ -1332,13 +1656,82 @@ class WebpageController extends Controller
 
     public function updateContact(Request $request)
     {
-        $contact = $request->input('contact', []);
+        $currentContact = $this->getContactPageData();
+        $contactInput = $request->input('contact', []);
+        $currentSection = $request->input('current_section', 'hero_banner');
+
+        $uploadDir = public_path('uploads/contact');
+        if (!File::isDirectory($uploadDir)) {
+            File::makeDirectory($uploadDir, 0755, true, true);
+        }
+
+        // Hero media upload
+        if ($request->hasFile('contact.hero_media_file')) {
+            $file = $request->file('contact.hero_media_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_hero_media_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $filePath = 'uploads/contact/' . $filename;
+                if (in_array($ext, ['mp4', 'webm', 'ogg', 'mov', 'm4v'])) {
+                    $contactInput['hero_video'] = $filePath;
+                    $contactInput['hero_media_type'] = 'video';
+                } elseif ($ext === 'gif') {
+                    $contactInput['hero_image'] = $filePath;
+                    $contactInput['hero_media_type'] = 'gif';
+                } else {
+                    $contactInput['hero_image'] = $filePath;
+                    $contactInput['hero_media_type'] = 'image';
+                }
+            }
+        }
+        if (!empty($contactInput['hero_youtube_url'])) {
+            $yt = trim($contactInput['hero_youtube_url']);
+            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $yt, $m)) {
+                $contactInput['hero_youtube_id'] = $m[1];
+            } else {
+                $contactInput['hero_youtube_id'] = $yt;
+            }
+        }
+
+        // Find Us banner media upload
+        if ($request->hasFile('contact.find_media_file')) {
+            $file = $request->file('contact.find_media_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_find_media_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $filePath = 'uploads/contact/' . $filename;
+                if (in_array($ext, ['mp4', 'webm', 'ogg', 'mov', 'm4v'])) {
+                    $contactInput['find_video'] = $filePath;
+                    $contactInput['find_media_type'] = 'video';
+                } elseif ($ext === 'gif') {
+                    $contactInput['find_image'] = $filePath;
+                    $contactInput['find_media_type'] = 'gif';
+                } else {
+                    $contactInput['find_image'] = $filePath;
+                    $contactInput['find_media_type'] = 'image';
+                }
+            }
+        }
+        if (!empty($contactInput['find_youtube_url'])) {
+            $yt = trim($contactInput['find_youtube_url']);
+            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $yt, $m)) {
+                $contactInput['find_youtube_id'] = $m[1];
+            } else {
+                $contactInput['find_youtube_id'] = $yt;
+            }
+        }
+
+        $merged = array_replace_recursive($currentContact, $contactInput);
+
         $dir = dirname($this->getContactPageFilePath());
         if (!File::isDirectory($dir)) {
             File::makeDirectory($dir, 0755, true, true);
         }
 
-        File::put($this->getContactPageFilePath(), json_encode($contact, JSON_PRETTY_PRINT));
-        return redirect()->route('admin.website-pages.contact')->with('success', 'Contact Us page successfully updated!');
+        File::put($this->getContactPageFilePath(), json_encode($merged, JSON_PRETTY_PRINT));
+        return redirect()->route('admin.website-pages.contact', ['section' => $currentSection])
+            ->with('success', 'Contact Us page section successfully updated!');
     }
 }

@@ -1029,7 +1029,7 @@
                     <div class="p-3 bg-white border border-light-subtle rounded-3 shadow-sm d-flex flex-wrap align-items-center gap-2.5">
                         <button type="submit" class="btn btn-warning text-dark px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save Chapter 2</span>
+                            <span>Save</span>
                         </button>
                         <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
@@ -1128,7 +1128,7 @@
                     <div class="p-3 bg-white border border-light-subtle rounded-3 shadow-sm d-flex flex-wrap align-items-center gap-2.5">
                         <button type="submit" class="btn btn-info text-white px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save 4 Pillars</span>
+                            <span>Save</span>
                         </button>
                         <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset

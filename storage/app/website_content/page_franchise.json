@@ -1,0 +1,214 @@
+{
+    "hero_sliders": [
+        {
+            "badge": "\ud83c\udfe2 FRANCHISE PARTNERSHIP",
+            "heading": "BRING THE ORIGINAL\nTO YOUR CITY",
+            "sub": "BECOME A GPO FRANCHISE PARTNER",
+            "bullets": [
+                "A trusted Lucknow food legacy.",
+                "A focused food concept.",
+                "A brand built around a signature product."
+            ],
+            "btn1_text": "APPLY FOR FRANCHISE",
+            "btn1_url": "#enquiryForm",
+            "btn2_text": "WHY PARTNER WITH US",
+            "btn2_url": "#whyPartner",
+            "media_type": "image",
+            "media": "images\/franchise.jpg",
+            "video": "",
+            "youtube_url": "",
+            "youtube_id": "",
+            "overlay_color": "#083b3c",
+            "overlay_opacity": "0.75",
+            "overlay_style": "solid"
+        },
+        {
+            "badge": "\ud83d\udcc8 EXPANSION OPPORTUNITY",
+            "heading": "A LEGACY\nSINCE 1976",
+            "sub": "NOW READY FOR ITS NEXT CHAPTER",
+            "desc": "Take the Original GPO Ke Thandey Dahi Bade experience to a new market and become part of a growing food brand.",
+            "btn1_text": "KNOW MORE",
+            "btn1_url": "#whyPartner",
+            "btn2_text": "APPLY NOW",
+            "btn2_url": "#enquiryForm",
+            "media_type": "image",
+            "media": "images\/lucknow_heritage.jpg",
+            "video": "",
+            "youtube_url": "",
+            "youtube_id": "",
+            "overlay_color": "#083b3c",
+            "overlay_opacity": "0.75",
+            "overlay_style": "solid"
+        },
+        {
+            "badge": "\u2b50 TRUSTED BRAND REPUTATION",
+            "heading": "BUILD WITH A\nRECOGNISED NAME",
+            "sub": "SERVE A TASTE PEOPLE ALREADY LOVE",
+            "desc": "From brand identity and marketing support to training and technology-enabled operations, GPO aims to support franchise partners throughout their journey.",
+            "btn1_text": "ENQUIRE NOW",
+            "btn1_url": "#enquiryForm",
+            "btn2_text": "VIEW METRICS",
+            "btn2_url": "#glance",
+            "media_type": "image",
+            "media": "images\/storefront.jpg",
+            "video": "",
+            "youtube_url": "",
+            "youtube_id": "",
+            "overlay_color": "#083b3c",
+            "overlay_opacity": "0.75",
+            "overlay_style": "solid"
+        }
+    ],
+    "why_heading": "WHY PARTNER WITH GPO?",
+    "why_tagline": "MORE THAN A FRANCHISE. A LEGACY.",
+    "why_p1": "Starting a food business from scratch means building everything from the ground up \u2014 brand identity, customer trust, menu positioning and operating systems.",
+    "why_p2": "A GPO franchise gives entrepreneurs the opportunity to build around an established brand concept with a legacy dating back to 1976.",
+    "usp_badge": "USP CARDS",
+    "usp_heading": "WHAT YOU GET WITH GPO",
+    "usp_sub": "Comprehensive ecosystem designed for partner operational excellence.",
+    "usp_items": [
+        {
+            "num": "01",
+            "title": "ESTABLISHED BRAND",
+            "desc": "GPO Ke Thandey Dahi Bade has been associated with Lucknow\u2019s food culture since 1976."
+        },
+        {
+            "num": "02",
+            "title": "BRANDING SUPPORT",
+            "desc": "Marketing and branding support is included as part of the franchise offering."
+        },
+        {
+            "num": "03",
+            "title": "TRADEMARK \/ BRAND RIGHTS",
+            "desc": "Franchise partners receive rights to use the GPO brand as defined by the franchise agreement."
+        },
+        {
+            "num": "04",
+            "title": "STORE OPERATIONS SUPPORT",
+            "desc": "A trained store operations staff member is provided at the start to support the initial store setup and operations."
+        },
+        {
+            "num": "05",
+            "title": "TECHNOLOGY SUPPORT",
+            "desc": "Access to modern order-management tools, including WhatsApp-based ordering and live tracking capabilities."
+        },
+        {
+            "num": "06",
+            "title": "FOCUSED FOOD FORMAT",
+            "desc": "A simple and recognisable product proposition built around Dahi Bade and complementary Indian snacks."
+        }
+    ],
+    "glance_heading": "FRANCHISE AT A GLANCE",
+    "glance_sub": "Key parameters and investment economics of the GPO franchise proposal.",
+    "glance_metrics": [
+        {
+            "label": "FRANCHISE FEE",
+            "value": "\u20b912,50,000",
+            "desc": "One-time upfront franchise fee."
+        },
+        {
+            "label": "MINIMUM STORE SIZE",
+            "value": "250 SQ. FT.",
+            "desc": "Minimum shop size specified in the franchise proposal."
+        },
+        {
+            "label": "LOCATION",
+            "value": "LUCKNOW & EXPANSION",
+            "desc": "Location approval and territory availability subject to brand process."
+        },
+        {
+            "label": "BRAND SUPPORT",
+            "value": "MARKETING + BRANDING",
+            "desc": "Support included as per the franchise offering."
+        },
+        {
+            "label": "OPERATIONS",
+            "value": "TRAINING SUPPORT",
+            "desc": "Initial trained store operations support provided."
+        },
+        {
+            "label": "TECHNOLOGY",
+            "value": "DIGITAL ORDER MANAGEMENT",
+            "desc": "Modern tools for smoother order handling and customer service."
+        }
+    ],
+    "roi_highlight_lead": "FINANCIAL INDICATORS:",
+    "roi_highlight_text": "The proposal also calculates an indicative break-even period of approximately 3.5 months and annual ROI of 336% based on its assumptions.",
+    "partner_heading": "WHO CAN PARTNER WITH US?",
+    "partner_sub": "The GPO franchise opportunity may be suitable for:",
+    "partner_profiles": [
+        {
+            "title": "ENTREPRENEURS",
+            "desc": "Looking to enter the food & beverage business."
+        },
+        {
+            "title": "EXISTING FOOD BUSINESS OWNERS",
+            "desc": "Looking to add a recognised food concept to their portfolio."
+        },
+        {
+            "title": "INVESTORS",
+            "desc": "Looking for an organised food-business opportunity."
+        },
+        {
+            "title": "RESTAURANT & CAFE OPERATORS",
+            "desc": "Looking to expand into a focused Indian snack concept."
+        },
+        {
+            "title": "BUSINESS OWNERS",
+            "desc": "Looking to bring a recognised Lucknow food identity to a new market."
+        }
+    ],
+    "journey_heading": "THE GPO FRANCHISE JOURNEY",
+    "journey_sub": "A structured 6-step path from first enquiry to grand opening.",
+    "journey_steps": [
+        {
+            "step": "STEP 01",
+            "title": "SUBMIT YOUR ENQUIRY",
+            "desc": "Tell us about yourself, your city and your business interest."
+        },
+        {
+            "step": "STEP 02",
+            "title": "DISCUSSION",
+            "desc": "Our team will connect with you to understand your requirements."
+        },
+        {
+            "step": "STEP 03",
+            "title": "LOCATION & COMMERCIAL DISCUSSION",
+            "desc": "Discuss location suitability, investment, territory and franchise terms."
+        },
+        {
+            "step": "STEP 04",
+            "title": "AGREEMENT",
+            "desc": "Proceed as per mutually agreed franchise terms and documentation."
+        },
+        {
+            "step": "STEP 05",
+            "title": "STORE SETUP",
+            "desc": "Work towards setting up your GPO outlet with brand and operational guidance."
+        },
+        {
+            "step": "STEP 06",
+            "title": "LAUNCH",
+            "desc": "Open your doors and bring the Original GPO taste to your customers."
+        }
+    ],
+    "form_heading": "YOUR CITY COULD BE NEXT",
+    "form_sub": "READY TO BRING A LUCKNOW FAVOURITE TO YOUR MARKET?",
+    "form_desc": "Fill out the franchise enquiry form and our team will get in touch with you.",
+    "form_btn_text": "SUBMIT FRANCHISE ENQUIRY",
+    "phone": "+91 91406 31433",
+    "email": "franchise@gpokethandeydahibade.com",
+    "cta_heading": "DON\u2019T JUST START A FOOD BUSINESS.",
+    "cta_sub": "BUILD A BRAND PEOPLE REMEMBER.",
+    "cta_desc": "Partner with Original GPO Ke Thandey Dahi Bade and deliver an authentic legacy of 1976.",
+    "cta_btn_text": "APPLY FOR FRANCHISE",
+    "cta_btn_url": "#enquiryForm",
+    "cta_media_type": "image",
+    "cta_image": "images\/franchise.jpg",
+    "cta_video": "",
+    "cta_youtube_url": "",
+    "cta_youtube_id": "",
+    "cta_overlay_color": "#083b3c",
+    "cta_overlay_opacity": "0.90",
+    "cta_overlay_style": "gradient"
+}

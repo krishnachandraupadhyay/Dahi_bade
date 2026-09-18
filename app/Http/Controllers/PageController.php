@@ -34,12 +34,16 @@ class PageController extends Controller
 
     public function franchise()
     {
-        return view('pages.franchise');
+        $webpageController = new \App\Http\Controllers\WebpageController;
+        $franchise = $webpageController->getFranchisePageData();
+        return view('pages.franchise', compact('franchise'));
     }
 
     public function contact()
     {
-        return view('pages.contact');
+        $webpageController = new \App\Http\Controllers\WebpageController;
+        $contact = $webpageController->getContactPageData();
+        return view('pages.contact', compact('contact'));
     }
 
     public function submitOrder(Request $request)

@@ -377,11 +377,11 @@
                         <div class="d-flex align-items-center flex-wrap mb-4 nav-pills-page" id="heroPagesSelector">
                             @foreach($heroPages as $pKey => $pData)
                                 <button type="button" class="nav-link {{ $loop->first ? 'active' : '' }}" onclick="switchHeroPage('{{ $pKey }}', this)">
-                                    @if($pKey === 'home') 🏠 Home Hero
-                                    @elseif($pKey === 'story') 📖 Our Story Hero
-                                    @elseif($pKey === 'menu') 🍛 Menu Hero
-                                    @elseif($pKey === 'franchise') 🤝 Franchise Hero
-                                    @elseif($pKey === 'contact') 📞 Contact Hero
+                                    @if($pKey === 'home')  Home Hero
+                                    @elseif($pKey === 'story') Our Story Hero
+                                    @elseif($pKey === 'menu')  Menu Hero
+                                    @elseif($pKey === 'franchise')  Franchise Hero
+                                    @elseif($pKey === 'contact')  Contact Hero
                                     @else 📄 {{ ucfirst($pKey) }} Hero
                                     @endif
                                 </button>
@@ -538,7 +538,7 @@
                     <div class="d-flex align-items-center gap-2">
                         <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save Global Settings</span>
+                            <span>Save</span>
                         </button>
                         <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
