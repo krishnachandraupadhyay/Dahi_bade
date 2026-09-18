@@ -219,12 +219,21 @@
                             
                             <video id="sim_hero_video" src="{{ !empty($story['hero_video']) ? asset($story['hero_video']) : '' }}" autoplay muted loop playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; display: {{ ($story['hero_media_type'] ?? 'image') === 'video' ? 'block' : 'none' }};"></video>
                             
-                            <div id="sim_hero_yt_box" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; display: {{ ($story['hero_media_type'] ?? 'image') === 'youtube' ? 'flex' : 'none' }}; align-items: center; justify-content: center; background: #0a0a0a;">
-                                <div class="text-center p-3">
-                                    <i class="bi bi-youtube text-danger" style="font-size: 38px;"></i>
-                                    <div class="fs-12 text-light mt-1">YouTube Video Background Active</div>
-                                    <small class="text-muted fs-11 font-monospace" id="sim_hero_yt_label">{{ $story['hero_youtube_url'] ?? 'YouTube Link' }}</small>
-                                </div>
+                            @php
+                                $simYtId = $story['hero_youtube_id'] ?? '';
+                                if (empty($simYtId) && !empty($story['hero_youtube_url'])) {
+                                    if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $story['hero_youtube_url'], $m)) {
+                                        $simYtId = $m[1];
+                                    }
+                                }
+                            @endphp
+                            <div id="sim_hero_yt_box" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; display: {{ ($story['hero_media_type'] ?? 'image') === 'youtube' ? 'block' : 'none' }}; overflow: hidden; pointer-events: none; background: #000;">
+                                <iframe id="sim_hero_iframe" 
+                                        src="{{ !empty($simYtId) ? 'https://www.youtube.com/embed/' . $simYtId . '?autoplay=1&mute=1&loop=1&playlist=' . $simYtId . '&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1' : '' }}" 
+                                        frameborder="0" 
+                                        allow="autoplay; encrypted-media" 
+                                        style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100%; min-width: 177.77%; transform: translate(-50%, -50%); pointer-events: none;">
+                                </iframe>
                             </div>
 
                             <!-- Simulated Transparent Color Overlay -->
@@ -1407,8 +1416,20 @@
                 }
             });
             if (simElements.img) simElements.img.style.display = (type === 'image') ? 'block' : 'none';
-            if (simElements.video) simElements.video.style.display = (type === 'video') ? 'block' : 'none';
-            if (simElements.yt) simElements.yt.style.display = (type === 'youtube') ? 'flex' : 'none';
+            if (simElements.video) {
+                simElements.video.style.display = (type === 'video') ? 'block' : 'none';
+                if (type === 'video' && simElements.video.src) {
+                    simElements.video.play().catch(() => {});
+                } else {
+                    simElements.video.pause();
+                }
+            }
+            if (simElements.yt) {
+                simElements.yt.style.display = (type === 'youtube') ? 'block' : 'none';
+                if (type === 'youtube' && ytInput) {
+                    updateSimYouTube(ytInput.value);
+                }
+            }
         }
 
         mediaRadios.forEach(radio => {
@@ -1517,12 +1538,47 @@
         bindTextSync('input_hero_sub', 'sim_text_sub', 'Since 1976 | Lucknow');
         bindTextSync('input_hero_description', 'sim_text_desc', 'From a humble beginning near the GPO...');
 
+        // YouTube URL Input & Live Playback in Simulator
+        function extractYouTubeId(url) {
+            if (!url) return '';
+            const trimmed = url.trim();
+            const match = trimmed.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i);
+            if (match) return match[1];
+            if (trimmed.length === 11 && !trimmed.includes('/') && !trimmed.includes('.')) return trimmed;
+            return '';
+        }
+
+        function updateSimYouTube(url) {
+            const id = extractYouTubeId(url);
+            const iframe = document.getElementById('sim_hero_iframe');
+            if (iframe) {
+                if (id) {
+                    const expectedSrc = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`;
+                    if (iframe.getAttribute('src') !== expectedSrc) {
+                        iframe.src = expectedSrc;
+                    }
+                } else {
+                    iframe.src = '';
+                }
+            }
+        }
+
         const ytInput = document.getElementById('input_hero_youtube_url');
-        const ytLabel = document.getElementById('sim_hero_yt_label');
-        if (ytInput && ytLabel) {
+        if (ytInput) {
             ytInput.addEventListener('input', function () {
-                ytLabel.textContent = this.value.trim() || 'YouTube Link';
+                updateSimYouTube(this.value);
             });
+            ytInput.addEventListener('paste', function () {
+                setTimeout(() => updateSimYouTube(this.value), 50);
+            });
+            ytInput.addEventListener('change', function () {
+                updateSimYouTube(this.value);
+            });
+            // Initial call if youtube is active
+            const activeMediaRadio = document.querySelector('.hero-media-radio:checked');
+            if (activeMediaRadio && activeMediaRadio.value === 'youtube') {
+                updateSimYouTube(ytInput.value);
+            }
         }
 
         // Video File Live Preview in Simulator & Box
