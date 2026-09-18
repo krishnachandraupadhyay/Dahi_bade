@@ -47,6 +47,21 @@ class WebpageController extends Controller
         return storage_path('app/website_content/home_franchise_cta.json');
     }
 
+    private function getStoryFilePath()
+    {
+        return storage_path('app/website_content/page_story.json');
+    }
+
+    private function getFranchisePageFilePath()
+    {
+        return storage_path('app/website_content/page_franchise.json');
+    }
+
+    private function getContactPageFilePath()
+    {
+        return storage_path('app/website_content/page_contact.json');
+    }
+
     private function normalizeSlide($slide)
     {
         if (!isset($slide['media'])) {
@@ -882,5 +897,147 @@ class WebpageController extends Controller
 
         return redirect()->route('admin.website-pages.home', ['section' => 'franchise_cta'])
             ->with('success', 'Franchise Opportunity CTA successfully updated!');
+    }
+
+    public function getStoryData()
+    {
+        $defaultData = [
+            'hero_badge' => 'OUR STORY',
+            'hero_heading' => 'A LEGACY SERVED WITH LOVE',
+            'hero_sub' => 'Since 1976 | Lucknow',
+            'hero_description' => 'From a humble beginning near the GPO in Hazratganj to becoming a recognised name for Dahi Bade, our journey is built on tradition, taste and the love of our customers.',
+            'hero_image' => 'images/lucknow_heritage.jpg',
+            'began_heading' => 'WHERE IT ALL BEGAN',
+            'began_tagline' => 'A Simple Beginning. An Unforgettable Taste.',
+            'began_image' => 'images/lucknow_heritage.jpg',
+            'began_text_1' => 'The story of GPO Ke Thandey Dahi Bade began in 1976, when Sant Ram Gupta ji started serving Dahi Bade near the General Post Office in Hazratganj, Lucknow.',
+            'began_text_2' => 'There was no complicated formula. Just a commitment to making delicious food and serving it with care. The unique combination of soft Dahi Bade, chilled dahi and balanced flavours gradually attracted customers from across Lucknow.',
+            'journey_badge' => 'THE GPO JOURNEY',
+            'journey_heading' => 'FROM A HUMBLE FOOD DESTINATION TO A LUCKNOW FAVOURITE',
+            'journey_desc' => 'Over the years, GPO Ke Thandey Dahi Bade became associated with a simple food experience: Fresh ingredients, traditional preparation, generous servings, and the welcoming warmth that defines Lucknow hospitality.',
+        ];
+
+        $path = $this->getStoryFilePath();
+        if (File::exists($path)) {
+            $content = json_decode(File::get($path), true);
+            if (is_array($content)) {
+                return array_merge($defaultData, $content);
+            }
+        }
+        return $defaultData;
+    }
+
+    public function story()
+    {
+        $story = $this->getStoryData();
+        return view('admin.website-pages.story', compact('story'));
+    }
+
+    public function updateStory(Request $request)
+    {
+        $story = $request->input('story', []);
+        $dir = dirname($this->getStoryFilePath());
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true, true);
+        }
+
+        if ($request->hasFile('story.hero_image_file')) {
+            $file = $request->file('story.hero_image_file');
+            if ($file->isValid()) {
+                $uploadDir = public_path('uploads/story');
+                if (!File::isDirectory($uploadDir)) {
+                    File::makeDirectory($uploadDir, 0755, true, true);
+                }
+                $filename = time() . '_story_' . uniqid() . '.' . strtolower($file->getClientOriginalExtension());
+                $file->move($uploadDir, $filename);
+                $story['hero_image'] = 'uploads/story/' . $filename;
+            }
+        }
+
+        File::put($this->getStoryFilePath(), json_encode($story, JSON_PRETTY_PRINT));
+        return redirect()->route('admin.website-pages.story')->with('success', 'Our Story page successfully updated!');
+    }
+
+    public function getFranchisePageData()
+    {
+        $defaultData = [
+            'hero_badge' => 'FRANCHISE PARTNERSHIP',
+            'hero_heading' => "BRING THE ORIGINAL\nTO YOUR CITY",
+            'hero_sub' => 'BECOME A GPO FRANCHISE PARTNER',
+            'hero_image' => 'images/franchise.jpg',
+            'why_heading' => 'WHY PARTNER WITH GPO?',
+            'why_desc' => 'Join hands with an iconic Lucknow culinary brand with 45+ years of goodwill and high profit margins.',
+            'phone' => '+91 91406 31433',
+            'email' => 'franchise@gpokethandeydahibade.com',
+            'roi_period' => '12 - 18 Months',
+            'investment_range' => '₹15 Lakhs - ₹30 Lakhs',
+        ];
+
+        $path = $this->getFranchisePageFilePath();
+        if (File::exists($path)) {
+            $content = json_decode(File::get($path), true);
+            if (is_array($content)) {
+                return array_merge($defaultData, $content);
+            }
+        }
+        return $defaultData;
+    }
+
+    public function franchise()
+    {
+        $franchise = $this->getFranchisePageData();
+        return view('admin.website-pages.franchise', compact('franchise'));
+    }
+
+    public function updateFranchise(Request $request)
+    {
+        $franchise = $request->input('franchise', []);
+        $dir = dirname($this->getFranchisePageFilePath());
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true, true);
+        }
+
+        File::put($this->getFranchisePageFilePath(), json_encode($franchise, JSON_PRETTY_PRINT));
+        return redirect()->route('admin.website-pages.franchise')->with('success', 'Franchise page successfully updated!');
+    }
+
+    public function getContactPageData()
+    {
+        $defaultData = [
+            'hero_heading' => 'GET IN TOUCH WITH US',
+            'hero_sub' => 'We’d Love To Hear From You',
+            'address' => 'Shop No. 1, Awadh Bazaar, Mahatma Gandhi Marg, Near K.D. Singh Babu Stadium, Hazratganj, Lucknow, Uttar Pradesh – 226001',
+            'phone' => '+91 91406 31433',
+            'email' => 'support@gpokethandeydahibade.com',
+            'timings' => 'Monday – Sunday | 1:00 PM – 9:00 PM',
+            'map_url' => 'https://maps.google.com/?q=Hazratganj+Lucknow+Awadh+Bazaar',
+        ];
+
+        $path = $this->getContactPageFilePath();
+        if (File::exists($path)) {
+            $content = json_decode(File::get($path), true);
+            if (is_array($content)) {
+                return array_merge($defaultData, $content);
+            }
+        }
+        return $defaultData;
+    }
+
+    public function contact()
+    {
+        $contact = $this->getContactPageData();
+        return view('admin.website-pages.contact', compact('contact'));
+    }
+
+    public function updateContact(Request $request)
+    {
+        $contact = $request->input('contact', []);
+        $dir = dirname($this->getContactPageFilePath());
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true, true);
+        }
+
+        File::put($this->getContactPageFilePath(), json_encode($contact, JSON_PRETTY_PRINT));
+        return redirect()->route('admin.website-pages.contact')->with('success', 'Contact Us page successfully updated!');
     }
 }

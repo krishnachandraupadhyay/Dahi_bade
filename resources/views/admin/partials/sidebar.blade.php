@@ -31,7 +31,7 @@
                 </li>
 
                 @php
-                    $isWebsitePagesActive = request()->routeIs('admin.website-pages.*');
+                    $isWebsitePagesActive = request()->routeIs('admin.website-pages.*') || request()->routeIs('admin.menu.*');
                     $isHomeActive = request()->routeIs('admin.website-pages.home');
                     $currentSection = request('section', 'hero_section');
                 @endphp
@@ -132,6 +132,42 @@
                                         </a>
                                     </div>
                                 </div>
+                            </li>
+
+                            <!-- Our Story -->
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 {{ request()->routeIs('admin.website-pages.story*') ? 'active' : '' }}" 
+                                   href="{{ route('admin.website-pages.story') }}">
+                                    <i class="bi bi-journal-text fs-12 text-info"></i>
+                                    <span>Our Story</span>
+                                </a>
+                            </li>
+
+                            <!-- Menu & Specialities -->
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 {{ request()->routeIs('admin.menu.*') ? 'active' : '' }}" 
+                                   href="{{ route('admin.menu.index') }}">
+                                    <i class="bi bi-card-checklist fs-12 text-warning"></i>
+                                    <span>Menu & Specialities</span>
+                                </a>
+                            </li>
+
+                            <!-- Franchise -->
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 {{ request()->routeIs('admin.website-pages.franchise*') ? 'active' : '' }}" 
+                                   href="{{ route('admin.website-pages.franchise') }}">
+                                    <i class="bi bi-shop fs-12 text-danger"></i>
+                                    <span>Franchise</span>
+                                </a>
+                            </li>
+
+                            <!-- Contact Us -->
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2 {{ request()->routeIs('admin.website-pages.contact*') ? 'active' : '' }}" 
+                                   href="{{ route('admin.website-pages.contact') }}">
+                                    <i class="bi bi-envelope-at fs-12 text-success"></i>
+                                    <span>Contact Us</span>
+                                </a>
                             </li>
 
                         </ul>

@@ -87,7 +87,10 @@
                             <td><code>pages.story</code></td>
                             <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1">Active</span></td>
                             <td class="pe-4 text-end">
-                                <a href="{{ route('story') }}" target="_blank" class="btn btn-sm btn-light text-primary border" title="Preview Page">
+                                <a href="{{ route('admin.website-pages.story') }}" class="btn btn-sm btn-light text-primary border me-1" title="Edit Our Story">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a href="{{ route('story') }}" target="_blank" class="btn btn-sm btn-light text-secondary border" title="Preview Page">
                                     <i class="bi bi-eye"></i> View
                                 </a>
                             </td>
@@ -109,7 +112,10 @@
                             <td><code>pages.menu</code></td>
                             <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1">Active</span></td>
                             <td class="pe-4 text-end">
-                                <a href="{{ route('menu') }}" target="_blank" class="btn btn-sm btn-light text-primary border" title="Preview Page">
+                                <a href="{{ route('admin.menu.index') }}" class="btn btn-sm btn-light text-primary border me-1" title="Edit Menu & Specialities">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a href="{{ route('menu') }}" target="_blank" class="btn btn-sm btn-light text-secondary border" title="Preview Page">
                                     <i class="bi bi-eye"></i> View
                                 </a>
                             </td>
@@ -131,7 +137,10 @@
                             <td><code>pages.franchise</code></td>
                             <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1">Active</span></td>
                             <td class="pe-4 text-end">
-                                <a href="{{ route('franchise') }}" target="_blank" class="btn btn-sm btn-light text-primary border" title="Preview Page">
+                                <a href="{{ route('admin.website-pages.franchise') }}" class="btn btn-sm btn-light text-primary border me-1" title="Edit Franchise Page">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a href="{{ route('franchise') }}" target="_blank" class="btn btn-sm btn-light text-secondary border" title="Preview Page">
                                     <i class="bi bi-eye"></i> View
                                 </a>
                             </td>
@@ -153,7 +162,10 @@
                             <td><code>pages.contact</code></td>
                             <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1">Active</span></td>
                             <td class="pe-4 text-end">
-                                <a href="{{ route('contact') }}" target="_blank" class="btn btn-sm btn-light text-primary border" title="Preview Page">
+                                <a href="{{ route('admin.website-pages.contact') }}" class="btn btn-sm btn-light text-primary border me-1" title="Edit Contact Us Page">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a href="{{ route('contact') }}" target="_blank" class="btn btn-sm btn-light text-secondary border" title="Preview Page">
                                     <i class="bi bi-eye"></i> View
                                 </a>
                             </td>
