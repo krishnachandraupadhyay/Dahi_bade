@@ -462,6 +462,7 @@ class WebpageController extends Controller
             'youtube_id' => '',
             'overlay_color' => '#083b3c',
             'overlay_opacity' => '0.90',
+            'overlay_style' => 'solid',
         ];
 
         $path = $this->getFranchiseCtaFilePath();
@@ -944,6 +945,7 @@ class WebpageController extends Controller
             'youtube_id' => $youtubeId,
             'overlay_color' => trim($cta['overlay_color'] ?? '#083b3c'),
             'overlay_opacity' => trim($cta['overlay_opacity'] ?? '0.90'),
+            'overlay_style' => trim($cta['overlay_style'] ?? 'solid'),
         ];
 
         $dir = dirname($this->getFranchiseCtaFilePath());
@@ -997,6 +999,7 @@ class WebpageController extends Controller
             'journey_youtube_id' => '',
             'journey_overlay_color' => '#083b3c',
             'journey_overlay_opacity' => '0.85',
+            'journey_overlay_style' => 'solid',
 
             // Section 4: The Secret Is Simple (4 Pillars)
             'secret_heading' => 'THE SECRET IS SIMPLE',
@@ -1068,6 +1071,7 @@ class WebpageController extends Controller
             'banner_youtube_id' => '',
             'banner_overlay_color' => '#000000',
             'banner_overlay_opacity' => '0.65',
+            'banner_overlay_style' => 'solid',
         ];
 
         $path = $this->getStoryFilePath();

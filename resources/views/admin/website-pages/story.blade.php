@@ -876,28 +876,124 @@
                                                 <small class="text-muted fs-11 mt-1 d-block">Plays in the background automatically.</small>
                                             </div>
 
-                                            <!-- Overlay Color & Opacity -->
-                                            <div class="row g-2 pt-2 border-top">
-                                                <div class="col-6">
-                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Tint:</label>
-                                                    <div class="d-flex align-items-center gap-1.5">
-                                                        <input type="color" id="journey_color_picker" class="form-control form-control-color p-0.5" value="{{ $jOverlayColor }}" style="width: 36px; height: 30px;">
-                                                        <input type="text" name="story[journey_overlay_color]" id="input_journey_overlay_color" value="{{ $jOverlayColor }}" class="form-control form-control-sm modern-input font-monospace" placeholder="#083b3c">
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Opacity:</label>
-                                                    <select name="story[journey_overlay_opacity]" id="select_journey_overlay_opacity" class="form-select form-select-sm modern-select">
-                                                        <option value="0.95" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.95' ? 'selected' : '' }}>95% Dark</option>
-                                                        <option value="0.90" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.90' ? 'selected' : '' }}>90% Deep</option>
-                                                        <option value="0.85" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.85' ? 'selected' : '' }}>85% Balanced</option>
-                                                        <option value="0.75" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.75' ? 'selected' : '' }}>75% Medium</option>
-                                                        <option value="0.60" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.60' ? 'selected' : '' }}>60% Light</option>
-                                                        <option value="0.40" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.40' ? 'selected' : '' }}>40% Subtle</option>
-                                                    </select>
-                                                </div>
-                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TRANSPARENT COLOR OVERLAY CONTROLS (Exact User Requested Layout) -->
+                    <div class="story-config-card mb-4">
+                        <div class="story-config-header">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-paint-bucket text-warning fs-15"></i>
+                                <span class="fw-bold text-dark fs-14">Transparent Color & Darkness Overlay</span>
+                            </div>
+                            <span class="badge bg-warning-subtle text-dark border border-warning-subtle fs-11">Contrast & Atmosphere</span>
+                        </div>
+
+                        <!-- Row 1: Overlay Tint Color & Presets -->
+                        <div class="story-row">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-palette-fill text-warning"></i> Overlay Tint Color</div>
+                                <div class="story-label-desc">Choose a transparent tint color to place over the background photo/video.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="d-flex flex-wrap align-items-center gap-2 mb-2.5">
+                                    <button type="button" class="btn btn-sm btn-outline-dark journey-overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#000000" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #000; display: inline-block;"></span>
+                                        <span>Midnight Black</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary journey-overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#083b3c" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #083b3c; display: inline-block;"></span>
+                                        <span>Brand Spruce Teal</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary journey-overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#3a1313" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #3a1313; display: inline-block;"></span>
+                                        <span>Vintage Burgundy</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary journey-overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#231714" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #231714; display: inline-block;"></span>
+                                        <span>Warm Cocoa</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary journey-overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#0c1929" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #0c1929; display: inline-block;"></span>
+                                        <span>Navy Midnight</span>
+                                    </button>
+                                </div>
+                                <div class="row g-2 align-items-center">
+                                    <div class="col-md-5 col-12">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text bg-light text-muted">Custom Hex:</span>
+                                            <input type="color" id="journey_color_picker" class="form-control form-control-color p-1" value="{{ $story['journey_overlay_color'] ?? '#083b3c' }}" style="width: 44px; height: 33px;">
+                                            <input type="text" name="story[journey_overlay_color]" id="journey_overlay_color_input" value="{{ old('story.journey_overlay_color', $story['journey_overlay_color'] ?? '#083b3c') }}" class="form-control modern-input font-monospace fw-semibold" placeholder="#083b3c">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-12">
+                                        <small class="text-muted fs-11"><i class="bi bi-info-circle me-1"></i> Pick a preset or enter any custom HEX color code.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Overlay Transparency -->
+                        <div class="story-row">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-transparency text-warning"></i> Overlay Transparency</div>
+                                <div class="story-label-desc">Control darkness & transparency level. Recommended: 65% - 75% for readable text.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-6 col-12">
+                                        @php
+                                            $jCurOp = strval($story['journey_overlay_opacity'] ?? '0.85');
+                                        @endphp
+                                        <select name="story[journey_overlay_opacity]" id="journey_opacity_select" class="form-select form-select-sm modern-select fw-semibold">
+                                            <option value="0.00" {{ $jCurOp === '0.00' ? 'selected' : '' }}>0% (No Overlay / 100% Transparent)</option>
+                                            <option value="0.25" {{ $jCurOp === '0.25' ? 'selected' : '' }}>25% (Light Transparent Tint)</option>
+                                            <option value="0.40" {{ $jCurOp === '0.40' ? 'selected' : '' }}>40% (Soft Tint)</option>
+                                            <option value="0.55" {{ $jCurOp === '0.55' ? 'selected' : '' }}>55% (Medium Tint)</option>
+                                            <option value="0.70" {{ $jCurOp === '0.70' ? 'selected' : '' }}>70% (Standard / High Readability)</option>
+                                            <option value="0.80" {{ $jCurOp === '0.80' ? 'selected' : '' }}>80% (Dark Contrast)</option>
+                                            <option value="0.85" {{ $jCurOp === '0.85' ? 'selected' : '' }}>85% (Balanced Dark Contrast)</option>
+                                            <option value="0.90" {{ $jCurOp === '0.90' ? 'selected' : '' }}>90% (Extra Dark Contrast)</option>
+                                            <option value="0.95" {{ $jCurOp === '0.95' ? 'selected' : '' }}>95% (Near Opaque Blackout)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="range" class="form-range" id="journey_opacity_slider" min="0" max="1" step="0.05" value="{{ $jCurOp }}">
+                                            <span class="badge bg-dark px-2 py-1 fs-11 fw-bold" id="journey_opacity_badge">{{ round(floatval($jCurOp) * 100) }}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 3: Overlay Style & Height -->
+                        <div class="story-row">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-sliders text-warning"></i> Overlay Style & Height</div>
+                                <div class="story-label-desc">Choose solid tint or soft gradient, and overall banner vertical height.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="row g-3">
+                                    <div class="col-md-6 col-12">
+                                        <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Style:</label>
+                                        @php
+                                            $jCurStyle = $story['journey_overlay_style'] ?? 'solid';
+                                        @endphp
+                                        <select name="story[journey_overlay_style]" id="journey_overlay_style_select" class="form-select form-select-sm modern-select">
+                                            <option value="solid" {{ $jCurStyle === 'solid' ? 'selected' : '' }}>Solid Transparent Tint</option>
+                                            <option value="gradient" {{ $jCurStyle === 'gradient' ? 'selected' : '' }}>Soft Vertical Gradient (Vignette)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <label class="form-label fs-11 fw-bold text-dark mb-1">Banner Height:</label>
+                                        <select class="form-select form-select-sm modern-select bg-light" disabled>
+                                            <option selected>Fluid Responsive Height</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -1477,28 +1573,124 @@
                                                 <small class="text-muted fs-11 mt-1 d-block">Plays in the panoramic background automatically.</small>
                                             </div>
 
-                                            <!-- Overlay Color & Opacity -->
-                                            <div class="row g-2 pt-2 border-top">
-                                                <div class="col-6">
-                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Tint:</label>
-                                                    <div class="d-flex align-items-center gap-1.5">
-                                                        <input type="color" id="banner_color_picker" class="form-control form-control-color p-0.5" value="{{ $bOverlayColor }}" style="width: 36px; height: 30px;">
-                                                        <input type="text" name="story[banner_overlay_color]" id="input_banner_overlay_color" value="{{ $bOverlayColor }}" class="form-control form-control-sm modern-input font-monospace" placeholder="#000000">
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Opacity:</label>
-                                                    <select name="story[banner_overlay_opacity]" id="select_banner_overlay_opacity" class="form-select form-select-sm modern-select">
-                                                        <option value="0.95" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.95' ? 'selected' : '' }}>95% Dark</option>
-                                                        <option value="0.80" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.80' ? 'selected' : '' }}>80% Deep</option>
-                                                        <option value="0.65" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.65' ? 'selected' : '' }}>65% Standard</option>
-                                                        <option value="0.50" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.50' ? 'selected' : '' }}>50% Medium</option>
-                                                        <option value="0.35" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.35' ? 'selected' : '' }}>35% Light</option>
-                                                        <option value="0.20" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.20' ? 'selected' : '' }}>20% Subtle</option>
-                                                    </select>
-                                                </div>
-                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TRANSPARENT COLOR OVERLAY CONTROLS (Exact User Requested Layout) -->
+                    <div class="story-config-card mb-4">
+                        <div class="story-config-header">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-paint-bucket text-dark fs-15"></i>
+                                <span class="fw-bold text-dark fs-14">Transparent Color & Darkness Overlay</span>
+                            </div>
+                            <span class="badge bg-secondary-subtle text-dark border border-secondary-subtle fs-11">Contrast & Atmosphere</span>
+                        </div>
+
+                        <!-- Row 1: Overlay Tint Color & Presets -->
+                        <div class="story-row">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-palette-fill text-dark"></i> Overlay Tint Color</div>
+                                <div class="story-label-desc">Choose a transparent tint color to place over the background photo/video.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="d-flex flex-wrap align-items-center gap-2 mb-2.5">
+                                    <button type="button" class="btn btn-sm btn-outline-dark banner-overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#000000" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #000; display: inline-block;"></span>
+                                        <span>Midnight Black</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary banner-overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#083b3c" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #083b3c; display: inline-block;"></span>
+                                        <span>Brand Spruce Teal</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary banner-overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#3a1313" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #3a1313; display: inline-block;"></span>
+                                        <span>Vintage Burgundy</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary banner-overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#231714" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #231714; display: inline-block;"></span>
+                                        <span>Warm Cocoa</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary banner-overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#0c1929" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #0c1929; display: inline-block;"></span>
+                                        <span>Navy Midnight</span>
+                                    </button>
+                                </div>
+                                <div class="row g-2 align-items-center">
+                                    <div class="col-md-5 col-12">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text bg-light text-muted">Custom Hex:</span>
+                                            <input type="color" id="banner_color_picker" class="form-control form-control-color p-1" value="{{ $story['banner_overlay_color'] ?? '#000000' }}" style="width: 44px; height: 33px;">
+                                            <input type="text" name="story[banner_overlay_color]" id="banner_overlay_color_input" value="{{ old('story.banner_overlay_color', $story['banner_overlay_color'] ?? '#000000') }}" class="form-control modern-input font-monospace fw-semibold" placeholder="#000000">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-12">
+                                        <small class="text-muted fs-11"><i class="bi bi-info-circle me-1"></i> Pick a preset or enter any custom HEX color code.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Overlay Transparency -->
+                        <div class="story-row">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-transparency text-dark"></i> Overlay Transparency</div>
+                                <div class="story-label-desc">Control darkness & transparency level. Recommended: 65% - 75% for readable text.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-6 col-12">
+                                        @php
+                                            $bCurOp = strval($story['banner_overlay_opacity'] ?? '0.65');
+                                        @endphp
+                                        <select name="story[banner_overlay_opacity]" id="banner_opacity_select" class="form-select form-select-sm modern-select fw-semibold">
+                                            <option value="0.00" {{ $bCurOp === '0.00' ? 'selected' : '' }}>0% (No Overlay / 100% Transparent)</option>
+                                            <option value="0.25" {{ $bCurOp === '0.25' ? 'selected' : '' }}>25% (Light Transparent Tint)</option>
+                                            <option value="0.40" {{ $bCurOp === '0.40' ? 'selected' : '' }}>40% (Soft Tint)</option>
+                                            <option value="0.55" {{ $bCurOp === '0.55' ? 'selected' : '' }}>55% (Medium Tint)</option>
+                                            <option value="0.65" {{ $bCurOp === '0.65' ? 'selected' : '' }}>65% (Standard Panoramic Contrast)</option>
+                                            <option value="0.75" {{ $bCurOp === '0.75' ? 'selected' : '' }}>75% (Medium Dark Contrast)</option>
+                                            <option value="0.80" {{ $bCurOp === '0.80' ? 'selected' : '' }}>80% (Dark Contrast)</option>
+                                            <option value="0.90" {{ $bCurOp === '0.90' ? 'selected' : '' }}>90% (Extra Dark Contrast)</option>
+                                            <option value="0.95" {{ $bCurOp === '0.95' ? 'selected' : '' }}>95% (Near Opaque Blackout)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="range" class="form-range" id="banner_opacity_slider" min="0" max="1" step="0.05" value="{{ $bCurOp }}">
+                                            <span class="badge bg-dark px-2 py-1 fs-11 fw-bold" id="banner_opacity_badge">{{ round(floatval($bCurOp) * 100) }}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 3: Overlay Style & Height -->
+                        <div class="story-row">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-sliders text-dark"></i> Overlay Style & Height</div>
+                                <div class="story-label-desc">Choose solid tint or soft gradient, and overall banner vertical height.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="row g-3">
+                                    <div class="col-md-6 col-12">
+                                        <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Style:</label>
+                                        @php
+                                            $bCurStyle = $story['banner_overlay_style'] ?? 'solid';
+                                        @endphp
+                                        <select name="story[banner_overlay_style]" id="banner_overlay_style_select" class="form-select form-select-sm modern-select">
+                                            <option value="solid" {{ $bCurStyle === 'solid' ? 'selected' : '' }}>Solid Transparent Tint</option>
+                                            <option value="gradient" {{ $bCurStyle === 'gradient' ? 'selected' : '' }}>Soft Vertical Gradient (Vignette)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <label class="form-label fs-11 fw-bold text-dark mb-1">Banner Height:</label>
+                                        <select class="form-select form-select-sm modern-select bg-light" disabled>
+                                            <option selected>340px (Panoramic Banner)</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -1816,8 +2008,13 @@
         const simJOverlay = document.getElementById('sim_journey_overlay');
 
         const jColorPicker = document.getElementById('journey_color_picker');
-        const jColorInput = document.getElementById('input_journey_overlay_color');
-        const jOpacitySelect = document.getElementById('select_journey_overlay_opacity');
+        const jColorInput = document.getElementById('journey_overlay_color_input');
+        const jOpacitySelect = document.getElementById('journey_opacity_select');
+        const jOpacitySlider = document.getElementById('journey_opacity_slider');
+        const jOpacityBadge = document.getElementById('journey_opacity_badge');
+        const jStyleSelect = document.getElementById('journey_overlay_style_select');
+        const jPresetBtns = document.querySelectorAll('.journey-overlay-preset-btn');
+
         const jFileInput = document.getElementById('input_journey_image_file');
         const jVideoInput = document.getElementById('input_journey_video_file');
         const jYtInput = document.getElementById('input_journey_youtube_url');
@@ -1825,10 +2022,50 @@
         function updateJOverlay() {
             if (!simJOverlay) return;
             const hex = jColorInput ? jColorInput.value : '#083b3c';
-            const op = jOpacitySelect ? parseFloat(jOpacitySelect.value) : 0.85;
+            const op = jOpacitySlider ? parseFloat(jOpacitySlider.value) : (jOpacitySelect ? parseFloat(jOpacitySelect.value) : 0.85);
+            const style = jStyleSelect ? jStyleSelect.value : 'solid';
             const [r, g, b] = parseHexToRgb(hex, [8, 59, 60]);
-            simJOverlay.style.background = `linear-gradient(135deg, rgba(${r}, ${g}, ${b}, ${op}) 0%, rgba(${Math.max(0, r - 10)}, ${Math.max(0, g - 10)}, ${Math.max(0, b - 10)}, ${Math.min(1, op + 0.08)}) 100%)`;
+
+            if (style === 'gradient') {
+                simJOverlay.style.background = `linear-gradient(135deg, rgba(${r}, ${g}, ${b}, ${op}) 0%, rgba(${Math.max(0, r - 10)}, ${Math.max(0, g - 10)}, ${Math.max(0, b - 10)}, ${Math.min(1, op + 0.08)}) 100%)`;
+            } else {
+                simJOverlay.style.background = `rgba(${r}, ${g}, ${b}, ${op})`;
+            }
+
+            if (jOpacityBadge) {
+                jOpacityBadge.textContent = Math.round(op * 100) + '%';
+            }
         }
+
+        // Two-way sync for Chapter 2 slider and select
+        if (jOpacitySlider) {
+            jOpacitySlider.addEventListener('input', function () {
+                const val = parseFloat(this.value).toFixed(2);
+                if (jOpacitySelect) jOpacitySelect.value = val;
+                updateJOverlay();
+            });
+        }
+        if (jOpacitySelect) {
+            jOpacitySelect.addEventListener('change', function () {
+                if (jOpacitySlider) jOpacitySlider.value = this.value;
+                updateJOverlay();
+            });
+        }
+        if (jStyleSelect) {
+            jStyleSelect.addEventListener('change', updateJOverlay);
+        }
+
+        // Preset color buttons for Chapter 2
+        jPresetBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const color = this.getAttribute('data-color');
+                if (color) {
+                    if (jColorPicker) jColorPicker.value = color;
+                    if (jColorInput) jColorInput.value = color;
+                    updateJOverlay();
+                }
+            });
+        });
 
         function syncJMedia() {
             const val = jTypeSelect ? jTypeSelect.value : 'image';
@@ -1852,7 +2089,7 @@
             if (!jYtInput || !simJYt) return;
             const val = jYtInput.value.trim();
             let id = '';
-            const m = val.match(/(?:youtube(?:-nocookie)?\.com/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+            const m = val.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
             if (m) id = m[1];
             else if (val.length === 11 && !val.includes('/')) id = val;
             if (id) {
@@ -1871,7 +2108,6 @@
                 updateJOverlay();
             });
         }
-        if (jOpacitySelect) jOpacitySelect.addEventListener('change', updateJOverlay);
         if (jFileInput && simJImg) {
             jFileInput.addEventListener('change', function () {
                 const file = this.files[0];
@@ -1918,8 +2154,13 @@
         const simBOverlay = document.getElementById('sim_banner_overlay');
 
         const bColorPicker = document.getElementById('banner_color_picker');
-        const bColorInput = document.getElementById('input_banner_overlay_color');
-        const bOpacitySelect = document.getElementById('select_banner_overlay_opacity');
+        const bColorInput = document.getElementById('banner_overlay_color_input');
+        const bOpacitySelect = document.getElementById('banner_opacity_select');
+        const bOpacitySlider = document.getElementById('banner_opacity_slider');
+        const bOpacityBadge = document.getElementById('banner_opacity_badge');
+        const bStyleSelect = document.getElementById('banner_overlay_style_select');
+        const bPresetBtns = document.querySelectorAll('.banner-overlay-preset-btn');
+
         const bFileInput = document.getElementById('input_banner_image_file');
         const bVideoInput = document.getElementById('input_banner_video_file');
         const bYtInput = document.getElementById('input_banner_youtube_url');
@@ -1927,10 +2168,50 @@
         function updateBOverlay() {
             if (!simBOverlay) return;
             const hex = bColorInput ? bColorInput.value : '#000000';
-            const op = bOpacitySelect ? parseFloat(bOpacitySelect.value) : 0.65;
+            const op = bOpacitySlider ? parseFloat(bOpacitySlider.value) : (bOpacitySelect ? parseFloat(bOpacitySelect.value) : 0.65);
+            const style = bStyleSelect ? bStyleSelect.value : 'solid';
             const [r, g, b] = parseHexToRgb(hex, [0, 0, 0]);
-            simBOverlay.style.background = `linear-gradient(to bottom, rgba(${r}, ${g}, ${b}, ${Math.max(0, op - 0.2)}) 0%, rgba(${r}, ${g}, ${b}, ${op}) 100%)`;
+
+            if (style === 'gradient') {
+                simBOverlay.style.background = `linear-gradient(to bottom, rgba(${r}, ${g}, ${b}, ${Math.max(0, op - 0.2)}) 0%, rgba(${r}, ${g}, ${b}, ${op}) 100%)`;
+            } else {
+                simBOverlay.style.background = `rgba(${r}, ${g}, ${b}, ${op})`;
+            }
+
+            if (bOpacityBadge) {
+                bOpacityBadge.textContent = Math.round(op * 100) + '%';
+            }
         }
+
+        // Two-way sync for Section 8 slider and select
+        if (bOpacitySlider) {
+            bOpacitySlider.addEventListener('input', function () {
+                const val = parseFloat(this.value).toFixed(2);
+                if (bOpacitySelect) bOpacitySelect.value = val;
+                updateBOverlay();
+            });
+        }
+        if (bOpacitySelect) {
+            bOpacitySelect.addEventListener('change', function () {
+                if (bOpacitySlider) bOpacitySlider.value = this.value;
+                updateBOverlay();
+            });
+        }
+        if (bStyleSelect) {
+            bStyleSelect.addEventListener('change', updateBOverlay);
+        }
+
+        // Preset color buttons for Section 8
+        bPresetBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const color = this.getAttribute('data-color');
+                if (color) {
+                    if (bColorPicker) bColorPicker.value = color;
+                    if (bColorInput) bColorInput.value = color;
+                    updateBOverlay();
+                }
+            });
+        });
 
         function syncBMedia() {
             const val = bTypeSelect ? bTypeSelect.value : 'image';
@@ -1954,7 +2235,7 @@
             if (!bYtInput || !simBYt) return;
             const val = bYtInput.value.trim();
             let id = '';
-            const m = val.match(/(?:youtube(?:-nocookie)?\.com/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+            const m = val.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
             if (m) id = m[1];
             else if (val.length === 11 && !val.includes('/')) id = val;
             if (id) {
@@ -1973,7 +2254,6 @@
                 updateBOverlay();
             });
         }
-        if (bOpacitySelect) bOpacitySelect.addEventListener('change', updateBOverlay);
         if (bFileInput && simBImg) {
             bFileInput.addEventListener('change', function () {
                 const file = this.files[0];

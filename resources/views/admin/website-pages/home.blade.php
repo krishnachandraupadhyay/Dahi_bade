@@ -1924,36 +1924,99 @@
                                         <small class="text-muted fs-11 mt-1 d-block">Auto-plays silently on loop in the background.</small>
                                     </div>
 
-                                    <!-- Transparent Color & Darkness Overlay -->
+                                    <!-- TRANSPARENT COLOR & DARKNESS OVERLAY (Exact User Requested Layout) -->
                                     <div class="border-top pt-3 mt-3">
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1.5 d-flex align-items-center gap-1.5">
-                                            <i class="bi bi-paint-bucket text-primary"></i>
-                                            <span>Transparent Tint Overlay Color:</span>
-                                        </label>
-                                        <div class="d-flex align-items-center gap-2 mb-2">
-                                            <input type="color" id="franchise_cta_color_picker" class="form-control form-control-color p-1" value="{{ $ctaOverlayColor }}" style="width: 42px; height: 32px;">
-                                            <input type="text" name="franchise_cta[overlay_color]" id="franchise_cta_color_input" value="{{ $ctaOverlayColor }}" class="form-control form-control-sm modern-input font-monospace fw-semibold" placeholder="#083b3c">
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1.5">
+                                                <i class="bi bi-palette-fill text-primary"></i>
+                                                <span>Overlay Tint Color:</span>
+                                            </label>
+                                            <span class="badge bg-light text-muted border fs-10">Presets & Custom Hex</span>
                                         </div>
-                                    </div>
+                                        <div class="d-flex flex-wrap align-items-center gap-1.5 mb-2">
+                                            <button type="button" class="btn btn-sm btn-outline-dark cta-overlay-preset-btn px-2 py-0.5 d-flex align-items-center gap-1" data-color="#000000" style="font-size: 11px;">
+                                                <span class="rounded-circle" style="width: 10px; height: 10px; background: #000; display: inline-block;"></span>
+                                                <span>Midnight Black</span>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-0.5 d-flex align-items-center gap-1" data-color="#083b3c" style="font-size: 11px;">
+                                                <span class="rounded-circle" style="width: 10px; height: 10px; background: #083b3c; display: inline-block;"></span>
+                                                <span>Brand Spruce Teal</span>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-0.5 d-flex align-items-center gap-1" data-color="#3a1313" style="font-size: 11px;">
+                                                <span class="rounded-circle" style="width: 10px; height: 10px; background: #3a1313; display: inline-block;"></span>
+                                                <span>Vintage Burgundy</span>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-0.5 d-flex align-items-center gap-1" data-color="#231714" style="font-size: 11px;">
+                                                <span class="rounded-circle" style="width: 10px; height: 10px; background: #231714; display: inline-block;"></span>
+                                                <span>Warm Cocoa</span>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-0.5 d-flex align-items-center gap-1" data-color="#0c1929" style="font-size: 11px;">
+                                                <span class="rounded-circle" style="width: 10px; height: 10px; background: #0c1929; display: inline-block;"></span>
+                                                <span>Navy Midnight</span>
+                                            </button>
+                                        </div>
+                                        <div class="row g-2 align-items-center mb-3">
+                                            <div class="col-12">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text bg-light text-muted">Custom Hex:</span>
+                                                    <input type="color" id="franchise_cta_color_picker" class="form-control form-control-color p-1" value="{{ $ctaOverlayColor }}" style="width: 44px; height: 33px;">
+                                                    <input type="text" name="franchise_cta[overlay_color]" id="franchise_cta_color_input" value="{{ $ctaOverlayColor }}" class="form-control modern-input font-monospace fw-semibold" placeholder="#083b3c">
+                                                </div>
+                                                <small class="text-muted fs-11 mt-1 d-block"><i class="bi bi-info-circle me-1"></i> Pick a preset or enter any custom HEX color code.</small>
+                                            </div>
+                                        </div>
 
-                                    <!-- Overlay Opacity -->
-                                    <div class="mb-0">
+                                        <!-- Overlay Transparency (Select + Slider + Badge) -->
                                         <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center gap-1.5">
                                             <i class="bi bi-transparency text-primary"></i>
-                                            <span>Overlay Opacity (Darkness):</span>
+                                            <span>Overlay Transparency:</span>
                                         </label>
-                                        <select name="franchise_cta[overlay_opacity]" id="franchise_cta_opacity_select" class="form-select form-select-sm modern-input fs-12">
-                                            <option value="0.95" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.95' ? 'selected' : '' }}>95% (Extra Dark / Maximum Contrast)</option>
-                                            <option value="0.92" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.92' ? 'selected' : '' }}>92% (High Contrast / Darker)</option>
-                                            <option value="0.90" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.90' ? 'selected' : '' }}>90% (Standard / Recommended)</option>
-                                            <option value="0.85" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.85' ? 'selected' : '' }}>85% (Balanced Dark / Medium Visibility)</option>
-                                            <option value="0.80" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.80' ? 'selected' : '' }}>80% (Moderate Darkness)</option>
-                                            <option value="0.75" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.75' ? 'selected' : '' }}>75% (Lighter Background)</option>
-                                            <option value="0.65" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.65' ? 'selected' : '' }}>65% (High Media Visibility)</option>
-                                            <option value="0.50" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.50' ? 'selected' : '' }}>50% (Subtle Tint / Vivid Media)</option>
-                                            <option value="0.35" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.35' ? 'selected' : '' }}>35% (Light Tint / Media Focused)</option>
-                                        </select>
-                                </div>
+                                        <small class="text-muted fs-11 d-block mb-1.5">Control darkness & transparency level. Recommended: 65% - 75% for readable text.</small>
+                                        @php
+                                            $ctaCurOp = strval($franchiseCta['overlay_opacity'] ?? '0.90');
+                                        @endphp
+                                        <div class="mb-2">
+                                            <select name="franchise_cta[overlay_opacity]" id="franchise_cta_opacity_select" class="form-select form-select-sm modern-select fw-semibold mb-2">
+                                                <option value="0.00" {{ $ctaCurOp === '0.00' ? 'selected' : '' }}>0% (No Overlay / 100% Transparent)</option>
+                                                <option value="0.25" {{ $ctaCurOp === '0.25' ? 'selected' : '' }}>25% (Light Transparent Tint)</option>
+                                                <option value="0.40" {{ $ctaCurOp === '0.40' ? 'selected' : '' }}>40% (Soft Tint)</option>
+                                                <option value="0.55" {{ $ctaCurOp === '0.55' ? 'selected' : '' }}>55% (Medium Tint)</option>
+                                                <option value="0.70" {{ $ctaCurOp === '0.70' ? 'selected' : '' }}>70% (Standard / High Readability)</option>
+                                                <option value="0.80" {{ $ctaCurOp === '0.80' ? 'selected' : '' }}>80% (Dark Contrast)</option>
+                                                <option value="0.85" {{ $ctaCurOp === '0.85' ? 'selected' : '' }}>85% (Balanced Dark / Medium Visibility)</option>
+                                                <option value="0.90" {{ $ctaCurOp === '0.90' ? 'selected' : '' }}>90% (Standard / Recommended)</option>
+                                                <option value="0.95" {{ $ctaCurOp === '0.95' ? 'selected' : '' }}>95% (Extra Dark / Maximum Contrast)</option>
+                                            </select>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <input type="range" class="form-range" id="franchise_cta_opacity_slider" min="0" max="1" step="0.05" value="{{ $ctaCurOp }}">
+                                                <span class="badge bg-dark px-2 py-1 fs-11 fw-bold" id="franchise_cta_opacity_badge">{{ round(floatval($ctaCurOp) * 100) }}%</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Overlay Style & Height -->
+                                        <div class="mt-3 pt-2.5 border-top">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center gap-1.5">
+                                                <i class="bi bi-sliders text-primary"></i>
+                                                <span>Overlay Style & Height:</span>
+                                            </label>
+                                            <div class="row g-2">
+                                                <div class="col-7">
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Style:</label>
+                                                    @php
+                                                        $ctaCurStyle = $franchiseCta['overlay_style'] ?? 'solid';
+                                                    @endphp
+                                                    <select name="franchise_cta[overlay_style]" id="franchise_cta_overlay_style_select" class="form-select form-select-sm modern-select">
+                                                        <option value="solid" {{ $ctaCurStyle === 'solid' ? 'selected' : '' }}>Solid Transparent Tint</option>
+                                                        <option value="gradient" {{ $ctaCurStyle === 'gradient' ? 'selected' : '' }}>Soft Atmospheric Gradient</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-5">
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Banner Height:</label>
+                                                    <input type="text" class="form-control form-control-sm modern-input bg-light" value="380px (Standard)" readonly disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
 
@@ -3456,16 +3519,61 @@
             return [8, 59, 60];
         }
 
+        const ctaOpacitySlider = document.getElementById('franchise_cta_opacity_slider');
+        const ctaOpacityBadge = document.getElementById('franchise_cta_opacity_badge');
+        const ctaStyleSelect = document.getElementById('franchise_cta_overlay_style_select');
+        const ctaPresetBtns = document.querySelectorAll('.cta-overlay-preset-btn');
+
         function updateCtaOverlay() {
             if (!simCtaOverlay) return;
             const hex = ctaColorInput ? ctaColorInput.value : '#083b3c';
-            const op = ctaOpacitySelect ? parseFloat(ctaOpacitySelect.value) : 0.90;
+            const op = ctaOpacitySlider ? parseFloat(ctaOpacitySlider.value) : (ctaOpacitySelect ? parseFloat(ctaOpacitySelect.value) : 0.90);
+            const style = ctaStyleSelect ? ctaStyleSelect.value : 'solid';
             const [r, g, b] = hexToRgb(hex);
-            const r2 = Math.max(0, r - 5);
-            const g2 = Math.max(0, g - 15);
-            const b2 = Math.max(0, b - 15);
-            simCtaOverlay.style.background = `linear-gradient(135deg, rgba(${r}, ${g}, ${b}, ${op}) 0%, rgba(${r2}, ${g2}, ${b2}, ${op}) 100%)`;
+
+            if (style === 'gradient') {
+                const r2 = Math.max(0, r - 5);
+                const g2 = Math.max(0, g - 15);
+                const b2 = Math.max(0, b - 15);
+                simCtaOverlay.style.background = `linear-gradient(135deg, rgba(${r}, ${g}, ${b}, ${op}) 0%, rgba(${r2}, ${g2}, ${b2}, ${op}) 100%)`;
+            } else {
+                simCtaOverlay.style.background = `rgba(${r}, ${g}, ${b}, ${op})`;
+            }
+
+            if (ctaOpacityBadge) {
+                ctaOpacityBadge.textContent = Math.round(op * 100) + '%';
+            }
         }
+
+        // Two-way sync for Franchise CTA slider and select
+        if (ctaOpacitySlider) {
+            ctaOpacitySlider.addEventListener('input', function () {
+                const val = parseFloat(this.value).toFixed(2);
+                if (ctaOpacitySelect) ctaOpacitySelect.value = val;
+                updateCtaOverlay();
+            });
+        }
+        if (ctaOpacitySelect) {
+            ctaOpacitySelect.addEventListener('change', function () {
+                if (ctaOpacitySlider) ctaOpacitySlider.value = this.value;
+                updateCtaOverlay();
+            });
+        }
+        if (ctaStyleSelect) {
+            ctaStyleSelect.addEventListener('change', updateCtaOverlay);
+        }
+
+        // Preset color buttons for Franchise CTA
+        ctaPresetBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const color = this.getAttribute('data-color');
+                if (color) {
+                    if (ctaColorPicker) ctaColorPicker.value = color;
+                    if (ctaColorInput) ctaColorInput.value = color;
+                    updateCtaOverlay();
+                }
+            });
+        });
 
         function syncCtaMedia() {
             const val = ctaMediaTypeSelect ? ctaMediaTypeSelect.value : 'image';

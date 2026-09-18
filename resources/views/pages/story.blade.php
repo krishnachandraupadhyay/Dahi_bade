@@ -204,6 +204,12 @@
             $jg = hexdec(substr($jHex, 2, 2));
             $jb = hexdec(substr($jHex, 4, 2));
         }
+        $jOverlayStyle = $story['journey_overlay_style'] ?? 'solid';
+        if ($jOverlayStyle === 'gradient') {
+            $jOverlayBg = "linear-gradient(135deg, rgba({$jr}, {$jg}, {$jb}, {$jOverlayOpacity}) 0%, rgba(" . max(0, $jr - 10) . ", " . max(0, $jg - 10) . ", " . max(0, $jb - 10) . ", " . min(1, $jOverlayOpacity + 0.08) . ") 100%)";
+        } else {
+            $jOverlayBg = "rgba({$jr}, {$jg}, {$jb}, {$jOverlayOpacity})";
+        }
       @endphp
       <section class="humble-legacy-dark" style="margin: 50px 0; position: relative; overflow: hidden;">
         @if($jMediaType === 'youtube' && !empty($jYtId))
@@ -216,7 +222,7 @@
         @else
           <img src="{{ asset($story['journey_image'] ?? 'images/storefront.jpg') }}" alt="The GPO Journey Hazratganj" class="bg-photo">
         @endif
-        <div class="gradient-overlay" style="background: linear-gradient(135deg, rgba({{ $jr }}, {{ $jg }}, {{ $jb }}, {{ $jOverlayOpacity }}) 0%, rgba({{ max(0, $jr - 10) }}, {{ max(0, $jg - 10) }}, {{ max(0, $jb - 10) }}, {{ min(1, $jOverlayOpacity + 0.08) }}) 100%);"></div>
+        <div class="gradient-overlay" style="background: {{ $jOverlayBg }};"></div>
         <div class="text-pad" style="position: relative; z-index: 2;">
           <div style="font-family: var(--font-serif); font-size: 0.88rem; font-weight: 700; color: var(--c-gold-amber); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px;">
             {{ $story['journey_badge'] ?? 'THE GPO JOURNEY' }}
@@ -367,6 +373,12 @@
           $bg = hexdec(substr($bHex, 2, 2));
           $bb = hexdec(substr($bHex, 4, 2));
       }
+      $bOverlayStyle = $story['banner_overlay_style'] ?? 'solid';
+      if ($bOverlayStyle === 'gradient') {
+          $bOverlayBg = "linear-gradient(to bottom, rgba({$br}, {$bg}, {$bb}, " . max(0, $bOverlayOpacity - 0.2) . ") 0%, rgba({$br}, {$bg}, {$bb}, {$bOverlayOpacity}) 100%)";
+      } else {
+          $bOverlayBg = "rgba({$br}, {$bg}, {$bb}, {$bOverlayOpacity})";
+      }
     @endphp
     <section class="lucknow-fullwidth-banner" style="margin-bottom: 10px; position: relative; overflow: hidden;">
       @if($bMediaType === 'youtube' && !empty($bYtId))
@@ -380,7 +392,7 @@
       @else
         <img src="{{ asset($story['banner_image'] ?? 'images/lucknow_heritage.jpg') }}" alt="{{ $story['banner_title'] ?? 'Lucknow' }} Heritage">
       @endif
-      <div class="overlay" style="background: linear-gradient(to bottom, rgba({{ $br }}, {{ $bg }}, {{ $bb }}, {{ max(0, $bOverlayOpacity - 0.2) }}) 0%, rgba({{ $br }}, {{ $bg }}, {{ $bb }}, {{ $bOverlayOpacity }}) 100%);">
+      <div class="overlay" style="background: {{ $bOverlayBg }};">
         <h3>{{ $story['banner_title'] ?? 'LUCKNOW' }}</h3>
         <p>{{ $story['banner_subtitle'] ?? 'A City of Nawabs • A Taste of Tradition • Since 1976' }}</p>
       </div>

@@ -559,6 +559,12 @@
             $cg = hexdec(substr($hex, 2, 2));
             $cb = hexdec(substr($hex, 4, 2));
         }
+        $ctaOverlayStyle = $franchiseCta['overlay_style'] ?? 'solid';
+        if ($ctaOverlayStyle === 'gradient') {
+            $ctaOverlayBg = "linear-gradient(135deg, rgba({$cr}, {$cg}, {$cb}, {$overlayOp}) 0%, rgba(" . max(0, $cr - 3) . ", " . max(0, $cg - 15) . ", " . max(0, $cb - 15) . ", " . min(1, $overlayOp + 0.08) . ") 100%)";
+        } else {
+            $ctaOverlayBg = "rgba({$cr}, {$cg}, {$cb}, {$overlayOp})";
+        }
       @endphp
       <section class="home-franchise-cta-card" style="position: relative; overflow: hidden; background: #083b3c;">
         @if($mediaType === 'youtube' && !empty($ytId))
@@ -572,7 +578,7 @@
         @else
           <img src="{{ $ctaImgSrc }}" alt="Franchise Opportunity" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
         @endif
-        <div style="position: absolute; inset: 0; z-index: 1.5; background: linear-gradient(135deg, rgba({{ $cr }}, {{ $cg }}, {{ $cb }}, {{ $overlayOp }}) 0%, rgba({{ max(0, $cr - 3) }}, {{ max(0, $cg - 15) }}, {{ max(0, $cb - 15) }}, {{ $overlayOp }}) 100%);"></div>
+        <div style="position: absolute; inset: 0; z-index: 1.5; background: {{ $ctaOverlayBg }};"></div>
 
         <div class="home-franchise-cta-inner" style="position: relative; z-index: 2;">
           @if(!empty($franchiseCta['heading']))
