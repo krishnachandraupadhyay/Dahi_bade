@@ -56,12 +56,12 @@
                     <div class="collapse menu-dropdown {{ $isWebsitePagesActive ? 'show' : '' }}" id="sidebarWebsitePages">
                         <ul class="nav nav-sm flex-column">
 
-                            <!-- All Pages Table / Overview Link -->
+                            <!-- Preview Page Link -->
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center gap-2 {{ request()->routeIs('admin.website-pages.index') ? 'active' : '' }}" 
                                    href="{{ route('admin.website-pages.index') }}">
                                     <i class="bi bi-grid-fill fs-12 text-info"></i>
-                                    <span>All Pages Overview</span>
+                                    <span>Preview Page</span>
                                 </a>
                             </li>
 
