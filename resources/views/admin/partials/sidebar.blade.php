@@ -113,6 +113,20 @@
                         </ul>
                     </div>
                 </li>
+
+                <li class="menu-title px-3 py-2 text-uppercase fs-11 fw-semibold mt-2" style="color: #6d7899; letter-spacing: 0.8px;">
+                    <span>System Settings</span>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link px-3 py-2 d-flex align-items-center gap-2.5 text-white {{ request()->routeIs('admin.settings.*') ? 'active text-white' : '' }}" 
+                       href="{{ route('admin.settings.index') }}" 
+                       style="{{ request()->routeIs('admin.settings.*') ? 'background: rgba(1, 98, 232, 0.25); color: #ffffff !important; border-left: 3px solid #0162e8;' : '' }}">
+                        <i class="bi bi-sliders2-vertical fs-15 text-info"></i>
+                        <span class="fs-13">Global Settings</span>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-10 ms-auto">All Pages</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

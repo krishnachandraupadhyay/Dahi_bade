@@ -24,7 +24,14 @@
     "journey_sub": "Over the years, GPO Ke Thandey Dahi Bade became associated with a simple food experience:",
     "journey_quote": "Come hungry. Have a plate. Leave happy.",
     "journey_desc": "The brand\u2019s identity has been shaped by generations of customers who have enjoyed our food, recommended us to others and returned with their families. That customer love is one of the most important chapters of the GPO story.",
+    "journey_media_type": "image",
     "journey_image": "images\/storefront.jpg",
+    "journey_video": "",
+    "journey_youtube_url": "",
+    "journey_youtube_id": "",
+    "journey_overlay_color": "#083b3c",
+    "journey_overlay_opacity": "0.85",
+    "journey_overlay_style": "solid",
     "secret_heading": "THE SECRET IS SIMPLE",
     "secret_tagline": "GOOD FOOD DOESN\u2019T NEED TO BE COMPLICATED.",
     "secret_desc": "At GPO, we believe that the best food comes from respecting the basics.",
@@ -106,5 +113,12 @@
     "cta_btn2_url": "\/menu",
     "banner_title": "LUCKNOW",
     "banner_subtitle": "A City of Nawabs \u2022 A Taste of Tradition \u2022 Since 1976",
-    "banner_image": "images\/lucknow_heritage.jpg"
+    "banner_media_type": "youtube",
+    "banner_image": "images\/lucknow_heritage.jpg",
+    "banner_video": null,
+    "banner_youtube_url": "https:\/\/youtu.be\/ombEPMyTpNk?si=cc4kyJO2dMe5ZSta",
+    "banner_youtube_id": "ombEPMyTpNk",
+    "banner_overlay_color": "#000000",
+    "banner_overlay_opacity": "0.65",
+    "banner_overlay_style": "solid"
 }

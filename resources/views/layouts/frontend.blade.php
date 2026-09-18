@@ -3,10 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Original GPO Ke Thandey Dahi Bade')</title>
-    <meta name="description" content="@yield('meta_description', 'The Original Taste of Lucknow Since 1976 — Original GPO Ke Thandey Dahi Bade.')">
+    <title>@yield('title', $globalSettings['general']['site_title'] ?? 'Original GPO Ke Thandey Dahi Bade | Lucknow Since 1976')</title>
+    <meta name="description" content="@yield('meta_description', $globalSettings['general']['meta_description'] ?? 'The Original Taste of Lucknow Since 1976 — Original GPO Ke Thandey Dahi Bade.')">
+    <meta name="keywords" content="{{ $globalSettings['general']['meta_keywords'] ?? 'Original GPO Dahi Bade, Lucknow Dahi Vada, Hazratganj food' }}">
+    <link rel="icon" type="image/x-icon" href="{{ !empty($globalSettings['general']['favicon']) ? asset($globalSettings['general']['favicon']) : asset('favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/style.css') }}">
+
+    @php
+        $currentPageKey = 'home';
+        if (request()->routeIs('story')) $currentPageKey = 'story';
+        elseif (request()->routeIs('menu')) $currentPageKey = 'menu';
+        elseif (request()->routeIs('franchise')) $currentPageKey = 'franchise';
+        elseif (request()->routeIs('contact')) $currentPageKey = 'contact';
+
+        $currentHeroConf = $globalSettings['hero_pages'][$currentPageKey] ?? [];
+        $custHeight = $currentHeroConf['height'] ?? '';
+        $custWidth = $currentHeroConf['max_width'] ?? '';
+        $custOverlayCol = $currentHeroConf['overlay_color'] ?? '';
+        $custOverlayOp = floatval($currentHeroConf['overlay_opacity'] ?? 0.75);
+        $custOverlayStyle = $currentHeroConf['overlay_style'] ?? 'solid';
+
+        $hex = ltrim($custOverlayCol, '#');
+        if (strlen($hex) == 3) {
+            $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
+            $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
+            $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
+        } elseif (strlen($hex) >= 6) {
+            $r = hexdec(substr($hex, 0, 2));
+            $g = hexdec(substr($hex, 2, 2));
+            $b = hexdec(substr($hex, 4, 2));
+        } else {
+            $r = 25; $g = 48; $b = 46;
+        }
+
+        if ($custOverlayStyle === 'gradient') {
+            $topO = min(1.0, $custOverlayOp + 0.12);
+            $botO = min(1.0, $custOverlayOp + 0.18);
+            $computedOverlay = "linear-gradient(135deg, rgba({$r}, {$g}, {$b}, {$topO}) 0%, rgba({$r}, {$g}, {$b}, {$custOverlayOp}) 50%, rgba({$r}, {$g}, {$b}, {$botO}) 100%)";
+        } else {
+            $computedOverlay = "rgba({$r}, {$g}, {$b}, {$custOverlayOp})";
+        }
+    @endphp
+
+    <style>
+        :root {
+            @if(!empty($custHeight)) --custom-hero-height: {{ $custHeight }}; @endif
+            @if(!empty($custWidth)) --custom-hero-max-width: {{ $custWidth }}; @endif
+            @if(!empty($custOverlayCol)) --custom-hero-overlay: {{ $computedOverlay }}; @endif
+        }
+        @if(!empty($custHeight))
+        .hero-home-exact, .hero-slide-item, .story-hero-exact {
+            min-height: var(--custom-hero-height) !important;
+        }
+        @endif
+        @if(!empty($custOverlayCol))
+        .hero-home-exact-overlay, .story-hero-overlay {
+            background: var(--custom-hero-overlay) !important;
+        }
+        @endif
+    </style>
+
     @yield('styles')
 </head>
 <body class="@yield('body_class', 'theme-aqua')">
@@ -15,13 +72,17 @@
     <header class="site-header">
         <div class="header-inner">
             <a href="{{ route('home') }}" class="brand-wrapper">
-                <div class="brand-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7v3c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm-1 14l-3.5-3.5 1.42-1.42L11 13.17l5.08-5.09L17.5 9.5 11 16z"/></svg>
-                </div>
-                <div class="brand-titles">
-                    <span class="brand-main">ORIGINAL GPO</span>
-                    <span class="brand-sub">Ke Thandey Dahi Bade • Since 1976</span>
-                </div>
+                @if(!empty($globalSettings['general']['header_logo']))
+                    <img src="{{ asset($globalSettings['general']['header_logo']) }}" alt="{{ $globalSettings['general']['site_title'] ?? 'Original GPO Ke Thandey Dahi Bade' }}" style="max-height: 48px; width: auto; object-fit: contain;">
+                @else
+                    <div class="brand-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7v3c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm-1 14l-3.5-3.5 1.42-1.42L11 13.17l5.08-5.09L17.5 9.5 11 16z"/></svg>
+                    </div>
+                    <div class="brand-titles">
+                        <span class="brand-main">ORIGINAL GPO</span>
+                        <span class="brand-sub">{{ $globalSettings['general']['site_tagline'] ?? 'Ke Thandey Dahi Bade • Since 1976' }}</span>
+                    </div>
+                @endif
             </a>
 
             <ul class="main-nav-list" id="mainNav">
@@ -114,13 +175,13 @@
                 </ul>
                 <div class="footer-contact-info-doc">
                     <div>
-                        <strong>Outlet:</strong> Shop No. 1, Awadh Bazaar, Mahatma Gandhi Marg, Near K.D. Singh Babu Stadium, Hazratganj, Lucknow, UP – 226001
+                        <strong>Outlet:</strong> {{ $globalSettings['general']['contact_address'] ?? 'Shop No. 1, Awadh Bazaar, Mahatma Gandhi Marg, Near K.D. Singh Babu Stadium, Hazratganj, Lucknow, UP – 226001' }}
                     </div>
                     <div>
-                        <strong>Call:</strong> <a href="tel:+919140631433">+91 91406 31433</a>
+                        <strong>Call:</strong> <a href="tel:{{ preg_replace('/[^0-9\+]/', '', $globalSettings['general']['contact_phone'] ?? '+919140631433') }}">{{ $globalSettings['general']['contact_phone'] ?? '+91 91406 31433' }}</a>
                     </div>
                     <div>
-                        <strong>Email:</strong> <a href="mailto:support@gpokethandeydahibade.com">support@gpokethandeydahibade.com</a>
+                        <strong>Email:</strong> <a href="mailto:{{ $globalSettings['general']['contact_email'] ?? 'support@gpokethandeydahibade.com' }}">{{ $globalSettings['general']['contact_email'] ?? 'support@gpokethandeydahibade.com' }}</a>
                     </div>
                 </div>
             </div>

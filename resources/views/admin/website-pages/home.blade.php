@@ -252,29 +252,54 @@
             </div>
 
             <!-- Right Side: Section Dropdown -->
+            @php $activeSection = request('section', 'hero_section'); @endphp
             <div class="d-flex align-items-center gap-2.5">
                 <label for="homeSectionSelector" class="fs-13 text-muted mb-0 fw-semibold text-nowrap d-flex align-items-center gap-1.5">
                     <i class="bi bi-layers text-primary fs-14"></i> <span>Select Section:</span>
                 </label>
-                <select id="homeSectionSelector" class="form-select form-select-sm fw-medium shadow-none" style="min-width: 290px; font-size: 13px; border-color: #cbd5e1; border-radius: 8px; padding: 6px 12px;">
-                    <option value="hero_section" selected>🌟 Hero Section (Main Banner & Carousel)</option>
-                    <option value="highlights_strip">📌 Highlights Strip (3 Feature Cards)</option>
-                    <option value="welcome_section">📖 Welcome Section (Founders & Legacy)</option>
-                    <option value="why_gpo">⭐ Why People Love GPO (6 Key Highlights)</option>
-                    <option value="signature_dish">🍛 Star of GPO (Thandey Dahi Bade)</option>
-                    <option value="favourite_dishes">🍽️ More Than Just Dahi Bade (Dishes Menu)</option>
-                    <option value="gpo_experience">✨ The GPO Experience</option>
-                    <option value="testimonials">💬 Customer Reviews / Testimonials</option>
-                    <option value="visit_us">📍 Visit Us & Store Information</option>
-                    <option value="franchise_cta">🤝 Franchise Opportunity CTA</option>
+                <select id="homeSectionSelector" onchange="window.switchHomeSection(this.value)" class="form-select form-select-sm fw-medium shadow-none" style="min-width: 290px; font-size: 13px; border-color: #cbd5e1; border-radius: 8px; padding: 6px 12px; cursor: pointer;">
+                    <option value="hero_section" {{ $activeSection === 'hero_section' ? 'selected' : '' }}> Hero Section (Main Banner & Carousel)</option>
+                    <option value="highlights_strip" {{ $activeSection === 'highlights_strip' ? 'selected' : '' }}> Highlights Strip (3 Feature Cards)</option>
+                    <option value="welcome_section" {{ $activeSection === 'welcome_section' ? 'selected' : '' }}> Welcome Section (Founders & Legacy)</option>
+                    <option value="why_gpo" {{ $activeSection === 'why_gpo' ? 'selected' : '' }}> Why People Love GPO (6 Key Highlights)</option>
+                    <option value="signature_dish" {{ $activeSection === 'signature_dish' ? 'selected' : '' }}> Star of GPO (Thandey Dahi Bade)</option>
+                    <option value="favourite_dishes" {{ $activeSection === 'favourite_dishes' ? 'selected' : '' }}> More Than Just Dahi Bade (Dishes Menu)</option>
+                    <option value="gpo_experience" {{ $activeSection === 'gpo_experience' ? 'selected' : '' }}> The GPO Experience</option>
+                    <option value="testimonials" {{ $activeSection === 'testimonials' ? 'selected' : '' }}> Customer Reviews / Testimonials</option>
+                    <option value="visit_us" {{ $activeSection === 'visit_us' ? 'selected' : '' }}> Visit Us & Store Information</option>
+                    <option value="franchise_cta" {{ $activeSection === 'franchise_cta' ? 'selected' : '' }}> Franchise Opportunity CTA</option>
                 </select>
             </div>
         </div>
 
+        <script>
+            // Self-contained, bulletproof switcher that cannot fail
+            window.switchHomeSection = function(sectionId) {
+                if (!sectionId) return;
+                var panels = document.querySelectorAll('.home-section-panel');
+                panels.forEach(function(panel) {
+                    if (panel.id === 'panel_' + sectionId) {
+                        panel.style.display = 'block';
+                    } else {
+                        panel.style.display = 'none';
+                    }
+                });
+                var sel = document.getElementById('homeSectionSelector');
+                if (sel && sel.value !== sectionId) {
+                    sel.value = sectionId;
+                }
+                try {
+                    var newUrl = new URL(window.location.href);
+                    newUrl.searchParams.set('section', sectionId);
+                    window.history.replaceState({}, '', newUrl.toString());
+                } catch(e) {}
+            };
+        </script>
+
         <!-- Card Body Content Area (Dynamically changes based on dropdown selection) -->
         <div class="card-body p-4">
             <!-- ================= 1. HERO SECTION PANEL ================= -->
-            <div class="home-section-panel" id="panel_hero_section">
+            <div class="home-section-panel" id="panel_hero_section" style="{{ $activeSection === 'hero_section' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-primary px-2.5 py-1.5 fs-12">Hero Section</span>
@@ -597,7 +622,7 @@
             </div>
 
             <!-- ================= 2. HIGHLIGHTS STRIP PANEL ================= -->
-            <div class="home-section-panel" id="panel_highlights_strip" style="display: none;">
+            <div class="home-section-panel" id="panel_highlights_strip" style="{{ $activeSection === 'highlights_strip' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-info px-2.5 py-1.5 fs-12">Section 2</span>
@@ -773,7 +798,7 @@
             </div>
 
             <!-- ================= 3. WELCOME SECTION PANEL ================= -->
-            <div class="home-section-panel" id="panel_welcome_section" style="display: none;">
+            <div class="home-section-panel" id="panel_welcome_section" style="{{ $activeSection === 'welcome_section' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-warning text-dark px-2.5 py-1.5 fs-12 fw-bold">Section 3</span>
@@ -1008,7 +1033,7 @@
             </div>
 
             <!-- ================= 4. WHY GPO PANEL ================= -->
-            <div class="home-section-panel" id="panel_why_gpo" style="display: none;">
+            <div class="home-section-panel" id="panel_why_gpo" style="{{ $activeSection === 'why_gpo' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-success px-2.5 py-1.5 fs-12">Section 4</span>
@@ -1174,7 +1199,7 @@
             </div>
 
             <!-- ================= 5. SIGNATURE DISH PANEL ================= -->
-            <div class="home-section-panel" id="panel_signature_dish" style="display: none;">
+            <div class="home-section-panel" id="panel_signature_dish" style="{{ $activeSection === 'signature_dish' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-danger px-2.5 py-1.5 fs-12">Section 5</span>
@@ -1381,7 +1406,7 @@
             </div>
 
             <!-- ================= 6. FAVOURITE DISHES PANEL ================= -->
-            <div class="home-section-panel" id="panel_favourite_dishes" style="display: none;">
+            <div class="home-section-panel" id="panel_favourite_dishes" style="{{ $activeSection === 'favourite_dishes' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-dark px-2.5 py-1.5 fs-12">Section 6</span>
@@ -1396,7 +1421,7 @@
             </div>
 
             <!-- ================= 7. GPO EXPERIENCE PANEL ================= -->
-            <div class="home-section-panel" id="panel_gpo_experience" style="display: none;">
+            <div class="home-section-panel" id="panel_gpo_experience" style="{{ $activeSection === 'gpo_experience' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-primary px-2.5 py-1.5 fs-12">Section 7</span>
@@ -1545,7 +1570,7 @@
             </div>
 
             <!-- ================= 8. TESTIMONIALS PANEL ================= -->
-            <div class="home-section-panel" id="panel_testimonials" style="display: none;">
+            <div class="home-section-panel" id="panel_testimonials" style="{{ $activeSection === 'testimonials' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-warning text-dark px-2.5 py-1.5 fs-12">Section 8</span>
@@ -1560,7 +1585,7 @@
             </div>
 
             <!-- ================= 9. VISIT US PANEL ================= -->
-            <div class="home-section-panel" id="panel_visit_us" style="display: none;">
+            <div class="home-section-panel" id="panel_visit_us" style="{{ $activeSection === 'visit_us' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-info px-2.5 py-1.5 fs-12 fw-bold text-white">Section 9</span>
@@ -1808,7 +1833,7 @@
             </div>
 
             <!-- ================= 10. FRANCHISE CTA PANEL ================= -->
-            <div class="home-section-panel" id="panel_franchise_cta" style="display: none;">
+            <div class="home-section-panel" id="panel_franchise_cta" style="{{ $activeSection === 'franchise_cta' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-secondary px-2.5 py-1.5 fs-12 fw-bold text-white">Section 10</span>
@@ -2142,15 +2167,12 @@
             const urlSection = urlParams.get('section');
             if (urlSection && selector.querySelector(`option[value="${urlSection}"]`)) {
                 selector.value = urlSection;
+                window.switchHomeSection(urlSection);
             }
 
             selector.addEventListener('change', function () {
-                switchSection();
-                const newUrl = new URL(window.location);
-                newUrl.searchParams.set('section', selector.value);
-                window.history.replaceState({}, '', newUrl);
+                window.switchHomeSection(this.value);
             });
-            switchSection();
         }
 
         // ================= SLIDES ADD / REMOVE / MEDIA / BUTTONS LOGIC =================
@@ -2510,9 +2532,11 @@
         }
 
         // Bind existing panes
-        panesContainer.querySelectorAll('.slide-tab-pane').forEach(pane => {
-            bindSlideEvents(pane);
-        });
+        if (panesContainer) {
+            panesContainer.querySelectorAll('.slide-tab-pane').forEach(pane => {
+                bindSlideEvents(pane);
+            });
+        }
 
         // Add New Slide button click
         if (addSlideBtn) {
@@ -3594,19 +3618,19 @@
         }
 
         function updateCtaYtPreview() {
-            if (!ctaYtUrlInput || !simCtaYt) return;
-            const val = ctaYtUrlInput.value.trim();
-            let id = '';
-            const m = val.match(/(?:youtube(?:-nocookie)?\.com/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
-            if (m) {
-                id = m[1];
-            } else if (val.length === 11 && !val.includes('/')) {
-                id = val;
-            }
-            if (id) {
-                simCtaYt.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&rel=0&modestbranding=1`;
-            }
-        }
+    if (!ctaYtUrlInput || !simCtaYt) return;
+    const val = ctaYtUrlInput.value.trim();
+    let id = '';
+    const m = val.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+    if (m) {
+        id = m[1];
+    } else if (val.length === 11 && !val.includes('/')) {
+        id = val;
+    }
+    if (id) {
+        simCtaYt.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&rel=0&modestbranding=1`;
+    }
+}
 
         if (ctaMediaTypeSelect) {
             ctaMediaTypeSelect.addEventListener('change', syncCtaMedia);

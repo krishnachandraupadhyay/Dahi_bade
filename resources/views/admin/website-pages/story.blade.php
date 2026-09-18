@@ -161,22 +161,47 @@
             </div>
 
             <!-- Right Side: Section Dropdown Selector -->
+            @php $activeSection = request('section', 'hero_banner'); @endphp
             <div class="d-flex align-items-center gap-2.5">
                 <label for="storySectionSelector" class="fs-13 text-muted mb-0 fw-semibold text-nowrap d-flex align-items-center gap-1.5">
                     <i class="bi bi-layers text-primary fs-14"></i> <span>Select Section:</span>
                 </label>
-                <select id="storySectionSelector" class="form-select form-select-sm fw-medium shadow-none" style="min-width: 300px; font-size: 13px; border-color: #cbd5e1; border-radius: 8px; padding: 6px 12px;">
-                    <option value="hero_banner" selected>🌟 Hero Banner & Introduction</option>
-                    <option value="where_it_began">📖 Chapter 1: Where It All Began (1976)</option>
-                    <option value="gpo_journey">⏳ Chapter 2: The GPO Journey</option>
-                    <option value="secret_pillars">🌱 The Secret Is Simple (4 Pillars)</option>
-                    <option value="why_thandey">❄️ Why "Thandey" Dahi Bade?</option>
-                    <option value="our_values">💎 Our Values (6 Core Principles)</option>
-                    <option value="tradition_cta">✨ Tradition Meets Today & CTA</option>
-                    <option value="panoramic_banner">🏙️ Panoramic Lucknow Banner</option>
+                <select id="storySectionSelector" onchange="window.switchStorySection(this.value)" class="form-select form-select-sm fw-medium shadow-none" style="min-width: 300px; font-size: 13px; border-color: #cbd5e1; border-radius: 8px; padding: 6px 12px; cursor: pointer;">
+                    <option value="hero_banner" {{ $activeSection === 'hero_banner' ? 'selected' : '' }}> Hero Banner & Introduction</option>
+                    <option value="where_it_began" {{ $activeSection === 'where_it_began' ? 'selected' : '' }}> Chapter 1: Where It All Began (1976)</option>
+                    <option value="gpo_journey" {{ $activeSection === 'gpo_journey' ? 'selected' : '' }}> Chapter 2: The GPO Journey</option>
+                    <option value="secret_pillars" {{ $activeSection === 'secret_pillars' ? 'selected' : '' }}> The Secret Is Simple (4 Pillars)</option>
+                    <option value="why_thandey" {{ $activeSection === 'why_thandey' ? 'selected' : '' }}> Why "Thandey" Dahi Bade?</option>
+                    <option value="our_values" {{ $activeSection === 'our_values' ? 'selected' : '' }}> Our Values (6 Core Principles)</option>
+                    <option value="tradition_cta" {{ $activeSection === 'tradition_cta' ? 'selected' : '' }}> Tradition Meets Today & CTA</option>
+                    <option value="panoramic_banner" {{ $activeSection === 'panoramic_banner' ? 'selected' : '' }}> Panoramic Lucknow Banner</option>
                 </select>
             </div>
         </div>
+
+        <script>
+            // Self-contained, bulletproof switcher that cannot fail
+            window.switchStorySection = function(sectionId) {
+                if (!sectionId) return;
+                var panels = document.querySelectorAll('.story-section-panel');
+                panels.forEach(function(panel) {
+                    if (panel.id === 'panel_' + sectionId) {
+                        panel.style.display = 'block';
+                    } else {
+                        panel.style.display = 'none';
+                    }
+                });
+                var sel = document.getElementById('storySectionSelector');
+                if (sel && sel.value !== sectionId) {
+                    sel.value = sectionId;
+                }
+                try {
+                    var newUrl = new URL(window.location.href);
+                    newUrl.searchParams.set('section', sectionId);
+                    window.history.replaceState({}, '', newUrl.toString());
+                } catch(e) {}
+            };
+        </script>
 
         <!-- Card Body Content Area (Dynamically changes based on dropdown selection) -->
         <div class="card-body p-4">
@@ -189,7 +214,7 @@
             @endif
 
             <!-- ================= 1. HERO BANNER PANEL ================= -->
-            <div class="story-section-panel" id="panel_hero_banner">
+            <div class="story-section-panel" id="panel_hero_banner" style="{{ $activeSection === 'hero_banner' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-primary px-2.5 py-1.5 fs-12">Top Banner</span>
@@ -588,7 +613,7 @@
             </div>
 
             <!-- ================= 2. CHAPTER 1: WHERE IT ALL BEGAN ================= -->
-            <div class="story-section-panel" id="panel_where_it_began" style="display: none;">
+            <div class="story-section-panel" id="panel_where_it_began" style="{{ $activeSection === 'where_it_began' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-success px-2.5 py-1.5 fs-12">Chapter 1</span>
@@ -716,7 +741,7 @@
             </div>
 
             <!-- ================= 3. CHAPTER 2: THE GPO JOURNEY ================= -->
-            <div class="story-section-panel" id="panel_gpo_journey" style="display: none;">
+            <div class="story-section-panel" id="panel_gpo_journey" style="{{ $activeSection === 'gpo_journey' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-warning text-dark px-2.5 py-1.5 fs-12">Chapter 2</span>
@@ -1014,7 +1039,7 @@
             </div>
 
             <!-- ================= 4. THE SECRET IS SIMPLE (4 PILLARS) ================= -->
-            <div class="story-section-panel" id="panel_secret_pillars" style="display: none;">
+            <div class="story-section-panel" id="panel_secret_pillars" style="{{ $activeSection === 'secret_pillars' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-info px-2.5 py-1.5 fs-12">Section 3</span>
@@ -1113,7 +1138,7 @@
             </div>
 
             <!-- ================= 5. WHY "THANDEY" DAHI BADE ================= -->
-            <div class="story-section-panel" id="panel_why_thandey" style="display: none;">
+            <div class="story-section-panel" id="panel_why_thandey" style="{{ $activeSection === 'why_thandey' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-teal px-2.5 py-1.5 fs-12 text-white" style="background-color: #0d9488;">Section 4</span>
@@ -1213,7 +1238,7 @@
             </div>
 
             <!-- ================= 6. OUR VALUES (6 VALUES) ================= -->
-            <div class="story-section-panel" id="panel_our_values" style="display: none;">
+            <div class="story-section-panel" id="panel_our_values" style="{{ $activeSection === 'our_values' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-secondary px-2.5 py-1.5 fs-12">Section 5</span>
@@ -1306,7 +1331,7 @@
             </div>
 
             <!-- ================= 7. TRADITION MEETS TODAY & CTA ================= -->
-            <div class="story-section-panel" id="panel_tradition_cta" style="display: none;">
+            <div class="story-section-panel" id="panel_tradition_cta" style="{{ $activeSection === 'tradition_cta' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-danger px-2.5 py-1.5 fs-12">Section 6</span>
@@ -1446,7 +1471,7 @@
             </div>
 
             <!-- ================= 8. PANORAMIC LUCKNOW BANNER ================= -->
-            <div class="story-section-panel" id="panel_panoramic_banner" style="display: none;">
+            <div class="story-section-panel" id="panel_panoramic_banner" style="{{ $activeSection === 'panoramic_banner' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-dark px-2.5 py-1.5 fs-12 text-white">Footer Banner</span>
@@ -1738,16 +1763,12 @@
             const urlSection = urlParams.get('section');
             if (urlSection && storySelector.querySelector(`option[value="${urlSection}"]`)) {
                 storySelector.value = urlSection;
+                window.switchStorySection(urlSection);
             }
 
             storySelector.addEventListener('change', function () {
-                switchStorySection();
-                const newUrl = new URL(window.location);
-                newUrl.searchParams.set('section', storySelector.value);
-                window.history.replaceState({}, '', newUrl);
+                window.switchStorySection(this.value);
             });
-
-            switchStorySection();
         }
 
         // ================= HERO BANNER MEDIA & OVERLAY INTERACTIVE SIMULATOR =================
@@ -1769,6 +1790,7 @@
         const opacitySlider = document.getElementById('hero_opacity_slider');
         const opacityBadge = document.getElementById('opacity_display_badge');
         const styleSelect = document.getElementById('hero_overlay_style_select');
+        const ytInput = document.getElementById('input_hero_youtube_url');
 
         // Switch Media Type UI & Simulator
         function setMediaType(type) {
@@ -1925,7 +1947,6 @@
             }
         }
 
-        const ytInput = document.getElementById('input_hero_youtube_url');
         if (ytInput) {
             ytInput.addEventListener('input', function () {
                 updateSimYouTube(this.value);

@@ -1,0 +1,61 @@
+{
+    "general": {
+        "site_title": "Original GPO Ke Thandey Dahi Bade | Lucknow 1976",
+        "site_tagline": "Iconic Heritage",
+        "favicon": "",
+        "header_logo": "",
+        "footer_logo": "",
+        "meta_description": "Experience the legendary authentic taste of Lucknow's iconic GPO Ke Thandey Dahi Bade since 1976.",
+        "meta_keywords": "Original GPO Dahi Bade, Lucknow Dahi Vada, Hazratganj food, street food Lucknow, best dahi vada India",
+        "contact_phone": "+91 98765 43210",
+        "contact_email": "contact@gpodahibade.com",
+        "contact_address": "Awadh Bazaar, Hazratganj, Lucknow, UP - 226001"
+    },
+    "hero_pages": {
+        "home": {
+            "title": "Home Page Hero",
+            "height": "620px",
+            "max_width": "100%",
+            "overlay_color": "#19302e",
+            "overlay_opacity": "0.80",
+            "overlay_style": "gradient",
+            "preview_image": "images/dahi_vada.jpg"
+        },
+        "story": {
+            "title": "Our Story Hero",
+            "height": "460px",
+            "max_width": "100%",
+            "overlay_color": "#000000",
+            "overlay_opacity": "0.70",
+            "overlay_style": "solid",
+            "preview_image": "images/lucknow_heritage.jpg"
+        },
+        "menu": {
+            "title": "Menu & Specialities Hero",
+            "height": "420px",
+            "max_width": "100%",
+            "overlay_color": "#083b3c",
+            "overlay_opacity": "0.75",
+            "overlay_style": "solid",
+            "preview_image": "images/dahi_bada_bowl.jpg"
+        },
+        "franchise": {
+            "title": "Franchise Partnership Hero",
+            "height": "480px",
+            "max_width": "100%",
+            "overlay_color": "#111827",
+            "overlay_opacity": "0.80",
+            "overlay_style": "gradient",
+            "preview_image": "images/storefront.jpg"
+        },
+        "contact": {
+            "title": "Contact & Visit Us Hero",
+            "height": "400px",
+            "max_width": "100%",
+            "overlay_color": "#1e293b",
+            "overlay_opacity": "0.75",
+            "overlay_style": "solid",
+            "preview_image": "images/outlet.jpg"
+        }
+    }
+}
