@@ -1656,72 +1656,7 @@
                                 </div>
                             </div>
 
-                            <!-- 2. Store Location & Contact Information Card -->
-                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
-                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="bi bi-geo-alt-fill text-danger fs-15"></i>
-                                        <h6 class="fs-13 fw-bold text-dark mb-0">Store Location & Contact Details</h6>
-                                    </div>
-                                    <span class="badge bg-light text-muted border fs-11">Contact Info</span>
-                                </div>
-                                <div class="card-body p-3.5">
-                                    <div class="row g-3">
-                                        <!-- Address -->
-                                        <div class="col-12">
-                                            <div class="row g-2">
-                                                <div class="col-md-3 col-12">
-                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                        📍 Address Label:
-                                                    </label>
-                                                    <input type="text" name="visit_us[address_label]" value="{{ old('visit_us.address_label', $visitUs['address_label'] ?? 'ADDRESS:') }}" class="form-control form-control-sm modern-input" placeholder="e.g. ADDRESS:">
-                                                </div>
-                                                <div class="col-md-9 col-12">
-                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                        Full Outlet Address:
-                                                    </label>
-                                                    <textarea name="visit_us[address]" rows="2" class="form-control form-control-sm modern-input" placeholder="Enter complete outlet address...">{{ old('visit_us.address', $visitUs['address'] ?? '') }}</textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Phone -->
-                                        <div class="col-md-6 col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                📞 Phone Number (Calling):
-                                            </label>
-                                            <div class="input-group input-group-sm">
-                                                <input type="text" name="visit_us[phone_label]" value="{{ old('visit_us.phone_label', $visitUs['phone_label'] ?? 'CALL:') }}" class="form-control modern-input" style="max-width: 80px;" placeholder="CALL:">
-                                                <input type="text" name="visit_us[phone]" value="{{ old('visit_us.phone', $visitUs['phone'] ?? '+91 91406 31433') }}" class="form-control modern-input fw-semibold" placeholder="+91 91406 31433">
-                                            </div>
-                                        </div>
-
-                                        <!-- Email -->
-                                        <div class="col-md-6 col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                ✉️ Email Address:
-                                            </label>
-                                            <div class="input-group input-group-sm">
-                                                <input type="text" name="visit_us[email_label]" value="{{ old('visit_us.email_label', $visitUs['email_label'] ?? 'EMAIL:') }}" class="form-control modern-input" style="max-width: 85px;" placeholder="EMAIL:">
-                                                <input type="email" name="visit_us[email]" value="{{ old('visit_us.email', $visitUs['email'] ?? 'support@gpokethandeydahibade.com') }}" class="form-control modern-input" placeholder="support@gpokethandeydahibade.com">
-                                            </div>
-                                        </div>
-
-                                        <!-- Timings -->
-                                        <div class="col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                ⏰ Operational Timings:
-                                            </label>
-                                            <div class="input-group input-group-sm">
-                                                <input type="text" name="visit_us[timings_label]" value="{{ old('visit_us.timings_label', $visitUs['timings_label'] ?? 'TIMINGS:') }}" class="form-control modern-input" style="max-width: 95px;" placeholder="TIMINGS:">
-                                                <input type="text" name="visit_us[timings]" value="{{ old('visit_us.timings', $visitUs['timings'] ?? 'Monday – Sunday | 1:00 PM – 9:00 PM') }}" class="form-control modern-input" placeholder="Monday – Sunday | 1:00 PM – 9:00 PM">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 3. Action Buttons Card -->
+                            <!-- 2. Action Buttons Card (Moved Up) -->
                             <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
                                 <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center gap-2">
@@ -1759,6 +1694,73 @@
                                                     <label class="form-label fs-11 fw-bold text-dark mb-1">Target Page URL / Route:</label>
                                                     <input type="text" name="visit_us[btn2_url]" value="{{ old('visit_us.btn2_url', $visitUs['btn2_url'] ?? '/menu') }}" class="form-control form-control-sm modern-input" placeholder="/menu">
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Store Location & Contact Information Card (Full Width at Bottom) -->
+                        <div class="col-12">
+                            <div class="card border border-light-subtle shadow-sm mb-2" style="border-radius: 12px; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-geo-alt-fill text-danger fs-15"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Store Location & Contact Details</h6>
+                                    </div>
+                                    <span class="badge bg-light text-muted border fs-11">Full Width Contact Details</span>
+                                </div>
+                                <div class="card-body p-3.5">
+                                    <div class="row g-3">
+                                        <!-- Address (Full Width) -->
+                                        <div class="col-12">
+                                            <div class="row g-2">
+                                                <div class="col-md-3 col-lg-2 col-12">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                        📍 Address Label:
+                                                    </label>
+                                                    <input type="text" name="visit_us[address_label]" value="{{ old('visit_us.address_label', $visitUs['address_label'] ?? 'ADDRESS:') }}" class="form-control form-control-sm modern-input" placeholder="e.g. ADDRESS:">
+                                                </div>
+                                                <div class="col-md-9 col-lg-10 col-12">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                        Full Outlet Address:
+                                                    </label>
+                                                    <textarea name="visit_us[address]" rows="2" class="form-control form-control-sm modern-input" placeholder="Enter complete outlet address...">{{ old('visit_us.address', $visitUs['address'] ?? '') }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Phone (1/3rd width) -->
+                                        <div class="col-md-4 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                📞 Phone Number (Calling):
+                                            </label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" name="visit_us[phone_label]" value="{{ old('visit_us.phone_label', $visitUs['phone_label'] ?? 'CALL:') }}" class="form-control modern-input" style="max-width: 80px;" placeholder="CALL:">
+                                                <input type="text" name="visit_us[phone]" value="{{ old('visit_us.phone', $visitUs['phone'] ?? '+91 91406 31433') }}" class="form-control modern-input fw-semibold" placeholder="+91 91406 31433">
+                                            </div>
+                                        </div>
+
+                                        <!-- Email (1/3rd width) -->
+                                        <div class="col-md-4 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                ✉️ Email Address:
+                                            </label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" name="visit_us[email_label]" value="{{ old('visit_us.email_label', $visitUs['email_label'] ?? 'EMAIL:') }}" class="form-control modern-input" style="max-width: 85px;" placeholder="EMAIL:">
+                                                <input type="email" name="visit_us[email]" value="{{ old('visit_us.email', $visitUs['email'] ?? 'support@gpokethandeydahibade.com') }}" class="form-control modern-input" placeholder="support@gpokethandeydahibade.com">
+                                            </div>
+                                        </div>
+
+                                        <!-- Timings (1/3rd width) -->
+                                        <div class="col-md-4 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                ⏰ Operational Timings:
+                                            </label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" name="visit_us[timings_label]" value="{{ old('visit_us.timings_label', $visitUs['timings_label'] ?? 'TIMINGS:') }}" class="form-control modern-input" style="max-width: 95px;" placeholder="TIMINGS:">
+                                                <input type="text" name="visit_us[timings]" value="{{ old('visit_us.timings', $visitUs['timings'] ?? 'Monday – Sunday | 1:00 PM – 9:00 PM') }}" class="form-control modern-input" placeholder="Monday – Sunday | 1:00 PM – 9:00 PM">
                                             </div>
                                         </div>
                                     </div>
