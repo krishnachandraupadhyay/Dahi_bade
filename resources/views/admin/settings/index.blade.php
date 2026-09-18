@@ -94,20 +94,88 @@
     .format-check-card {
         background: #ffffff;
         border: 1.5px solid #e2e8f0;
-        border-radius: 10px;
-        padding: 12px 16px;
-        transition: all 0.2s ease;
+        border-radius: 12px;
+        padding: 12px 14px;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
+        position: relative;
+        user-select: none;
     }
     .format-check-card:hover {
-        border-color: #0162e8;
+        border-color: #93c5fd;
         background: #f8fafc;
+        transform: translateY(-1px);
     }
-    .format-check-card input:checked ~ .format-info .format-name {
-        color: #0162e8;
+    .format-check-card:has(input:checked) {
+        border-color: #0162e8 !important;
+        background: #eff6ff !important;
+        box-shadow: 0 2px 8px rgba(1, 98, 232, 0.08);
+    }
+    .format-check-card .form-check-input {
+        width: 17px;
+        height: 17px;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+    .format-check-card .form-check-input:checked {
+        background-color: #0162e8;
+        border-color: #0162e8;
+    }
+    .format-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 2px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+    .format-desc {
+        font-size: 11px;
+        color: #64748b;
+        white-space: nowrap;
+        line-height: 1.2;
+    }
+    .preset-chip {
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        color: #334155;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 3px 12px;
+        border-radius: 9999px;
+        transition: all 0.15s ease;
+        cursor: pointer;
+    }
+    .preset-chip:hover {
+        background: #e2e8f0;
+        border-color: #94a3b8;
+        color: #0f172a;
+        transform: translateY(-1px);
+    }
+    .preset-chip.active {
+        background: #0162e8 !important;
+        border-color: #0162e8 !important;
+        color: #ffffff !important;
+        box-shadow: 0 2px 6px rgba(1, 98, 232, 0.25);
+    }
+    .color-swatch-btn {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid #ffffff;
+        box-shadow: 0 0 0 1px #cbd5e1;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        padding: 0;
+    }
+    .color-swatch-btn:hover {
+        transform: scale(1.15);
+        box-shadow: 0 0 0 2px #0162e8;
     }
 
     @media (max-width: 768px) {
@@ -454,16 +522,25 @@
                                     $overlayStyle = $secData['overlay_style'] ?? 'solid';
                                 @endphp
                                 <div class="section-config-panel settings-config-card mb-4" id="{{ $panelId }}" style="display: none;">
-                                    <div class="p-3 bg-light border-bottom d-flex align-items-center justify-content-between">
-                                        <div class="fw-bold text-dark fs-14 d-flex align-items-center gap-2">
-                                            <i class="bi bi-sliders text-primary"></i>
-                                            <span>{{ $secData['name'] ?? ucfirst($secKey) }}</span>
+                                    <!-- Section Header Bar -->
+                                    <div class="p-3 bg-white border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2" style="border-top-left-radius: 12px; border-top-right-radius: 12px; background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%) !important;">
+                                        <div class="d-flex align-items-center gap-2.5">
+                                            <div class="rounded-3 bg-primary-subtle text-primary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px; font-size: 17px;">
+                                                <i class="bi bi-sliders"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="fw-bold text-dark mb-0 fs-15">{{ $secData['name'] ?? ucfirst($secKey) }}</h6>
+                                                <small class="text-muted fs-11">Page: <strong class="text-primary">{{ strtoupper($pageKey) }}</strong> • Section Key: <code>{{ $secKey }}</code></small>
+                                            </div>
                                         </div>
                                         <div class="d-flex align-items-center gap-2">
-                                            <span class="badge bg-info-subtle text-info border border-info-subtle fs-11">Page: {{ strtoupper($pageKey) }}</span>
-                                            <span class="badge bg-secondary-subtle text-secondary border fs-11">Section: {{ $secKey }}</span>
+                                            <span class="badge bg-light text-secondary border fs-11 rounded-pill px-2.5 py-1">
+                                                <i class="bi bi-folder2-open me-1"></i> {{ strtoupper($pageKey) }}
+                                            </span>
                                             @if($isCarousel)
-                                                <span class="badge bg-warning text-dark fs-11 fw-bold"><i class="bi bi-collection-play me-1"></i> Carousel Slider</span>
+                                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1 fs-11 rounded-pill fw-bold d-flex align-items-center gap-1">
+                                                    <i class="bi bi-collection-play-fill"></i> Carousel Slider
+                                                </span>
                                             @endif
                                         </div>
                                     </div>
@@ -474,83 +551,98 @@
                                             <div class="settings-label-title text-primary">
                                                 <i class="bi bi-shield-check"></i> Allowed Media Formats
                                             </div>
-                                            <p class="settings-label-desc">Choose which background media options the editor is permitted to use on this page/section. If unchecked, it will be hidden from the page editor form.</p>
+                                            <p class="settings-label-desc">Select which background media options the editor is permitted to use. Formats not selected here will be hidden in the page editor.</p>
                                         </div>
                                         <div class="settings-input-col">
-                                            <div class="row g-2 mb-2">
+                                            <div class="row g-2.5 mb-2">
                                                 <!-- Image -->
-                                                <div class="col-md-3 col-sm-6 col-12">
+                                                <div class="col-lg-3 col-sm-6 col-12">
                                                     <label class="format-check-card h-100">
                                                         <input type="checkbox" name="sections[{{ $pageKey }}][{{ $secKey }}][allowed_media][]" value="image" class="form-check-input mt-0 sec-media-check" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" {{ in_array('image', $allowedMedia) ? 'checked' : '' }}>
                                                         <div class="format-info">
-                                                            <div class="format-name fw-bold fs-13">🖼️ Photo / Image</div>
-                                                            <small class="text-muted fs-11 d-block">JPG, PNG, WebP</small>
+                                                            <div class="format-name">🖼️ Photo / Image</div>
+                                                            <div class="format-desc">JPG, PNG, WebP</div>
                                                         </div>
                                                     </label>
                                                 </div>
 
                                                 <!-- Video -->
-                                                <div class="col-md-3 col-sm-6 col-12">
+                                                <div class="col-lg-3 col-sm-6 col-12">
                                                     <label class="format-check-card h-100">
                                                         <input type="checkbox" name="sections[{{ $pageKey }}][{{ $secKey }}][allowed_media][]" value="video" class="form-check-input mt-0 sec-media-check" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" {{ in_array('video', $allowedMedia) ? 'checked' : '' }}>
                                                         <div class="format-info">
-                                                            <div class="format-name fw-bold fs-13">🎥 MP4 Video File</div>
-                                                            <small class="text-muted fs-11 d-block">Local MP4 upload</small>
+                                                            <div class="format-name">🎥 MP4 Video</div>
+                                                            <div class="format-desc">Local MP4 / WebM</div>
                                                         </div>
                                                     </label>
                                                 </div>
 
                                                 <!-- GIF -->
-                                                <div class="col-md-3 col-sm-6 col-12">
+                                                <div class="col-lg-3 col-sm-6 col-12">
                                                     <label class="format-check-card h-100">
                                                         <input type="checkbox" name="sections[{{ $pageKey }}][{{ $secKey }}][allowed_media][]" value="gif" class="form-check-input mt-0 sec-media-check" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" {{ in_array('gif', $allowedMedia) ? 'checked' : '' }}>
                                                         <div class="format-info">
-                                                            <div class="format-name fw-bold fs-13">🎞️ Animated GIF</div>
-                                                            <small class="text-muted fs-11 d-block">Looping animated GIF</small>
+                                                            <div class="format-name">🎞️ Animated GIF</div>
+                                                            <div class="format-desc">Looping GIF asset</div>
                                                         </div>
                                                     </label>
                                                 </div>
 
                                                 <!-- YouTube -->
-                                                <div class="col-md-3 col-sm-6 col-12">
+                                                <div class="col-lg-3 col-sm-6 col-12">
                                                     <label class="format-check-card h-100">
                                                         <input type="checkbox" name="sections[{{ $pageKey }}][{{ $secKey }}][allowed_media][]" value="youtube" class="form-check-input mt-0 sec-media-check" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" {{ in_array('youtube', $allowedMedia) ? 'checked' : '' }}>
                                                         <div class="format-info">
-                                                            <div class="format-name fw-bold fs-13">▶️ YouTube Link</div>
-                                                            <small class="text-muted fs-11 d-block">Background embed</small>
+                                                            <div class="format-name">▶️ YouTube Video</div>
+                                                            <div class="format-desc">Embed URL / ID</div>
                                                         </div>
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="form-text fs-11 text-muted">
-                                                <i class="bi bi-info-circle me-1"></i> If you only select "Photo / Image", the video, gif and youtube options will not be shown to the user on this page's editor.
+                                            <div class="form-text fs-11 text-muted d-flex align-items-center gap-1.5 mt-1.5">
+                                                <i class="bi bi-info-circle text-primary"></i> <span>If only "Photo / Image" is selected, video, gif and youtube options will be completely hidden from the page editor.</span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- 2. MAX CAROUSEL SLIDES (Only for Carousel sections) -->
                                     @if($isCarousel)
-                                        <div class="settings-row bg-warning-subtle bg-opacity-25">
+                                        <div class="settings-row" style="background: #fafcff; border-left: 3.5px solid #f59e0b;">
                                             <div class="settings-label-col">
                                                 <div class="settings-label-title text-dark">
-                                                    <i class="bi bi-collection-play-fill text-warning"></i> Max Carousel Slides
+                                                    <i class="bi bi-collection-play-fill text-warning fs-15"></i> Max Carousel Slides
                                                 </div>
-                                                <p class="settings-label-desc">Control how many images/slides scroll in this hero section (e.g. set 4 to allow 4 slides).</p>
+                                                <p class="settings-label-desc">Control how many slides scroll on the website and can be added in the page editor.</p>
                                             </div>
                                             <div class="settings-input-col">
-                                                <div class="d-flex align-items-center gap-3" style="max-width: 400px;">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text bg-white fw-bold fs-13"><i class="bi bi-hash"></i> Max Slides:</span>
-                                                        <input type="number" name="sections[{{ $pageKey }}][{{ $secKey }}][max_slides]" id="input_max_slides_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input fw-bold text-center fs-15" value="{{ $maxSlides }}" min="1" max="10">
+                                                <div class="d-flex flex-wrap align-items-center gap-3">
+                                                    <!-- Interactive Stepper -->
+                                                    <div class="d-inline-flex align-items-center border rounded-pill bg-white px-2 py-1 shadow-sm" style="border-color: #cbd5e1 !important;">
+                                                        <button type="button" class="btn btn-sm btn-light rounded-circle p-0 d-flex align-items-center justify-content-center border-0 text-muted" style="width: 28px; height: 28px;" onclick="stepSlides('{{ $pageKey }}', '{{ $secKey }}', -1)" title="Decrease">
+                                                            <i class="bi bi-dash fs-14"></i>
+                                                        </button>
+                                                        <div class="d-flex align-items-center px-2.5 gap-1">
+                                                            <span class="fs-12 text-muted fw-semibold">Limit:</span>
+                                                            <input type="number" name="sections[{{ $pageKey }}][{{ $secKey }}][max_slides]" id="input_max_slides_{{ $pageKey }}_{{ $secKey }}" class="form-control border-0 p-0 text-center fw-bold fs-16 modern-num-input text-dark" value="{{ $maxSlides }}" min="1" max="10" style="width: 32px; box-shadow: none !important; background: transparent;" onchange="syncSlideChips('{{ $pageKey }}', '{{ $secKey }}', this.value)">
+                                                            <span class="fs-12 text-muted fw-semibold">Slides</span>
+                                                        </div>
+                                                        <button type="button" class="btn btn-sm btn-light rounded-circle p-0 d-flex align-items-center justify-content-center border-0 text-muted" style="width: 28px; height: 28px;" onclick="stepSlides('{{ $pageKey }}', '{{ $secKey }}', 1)" title="Increase">
+                                                            <i class="bi bi-plus fs-14"></i>
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Preset Chips -->
+                                                    <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                                        <span class="text-muted fs-11 fw-semibold me-1">PRESETS:</span>
+                                                        @foreach([2 => '2 Slides', 3 => '3 (Default)', 4 => '4 Slides', 5 => '5 Slides', 6 => '6 Slides'] as $n => $lbl)
+                                                            <button type="button" class="btn btn-xs preset-chip slide-preset-chip-{{ $pageKey }}-{{ $secKey }} {{ $maxSlides == $n ? 'active' : '' }}" data-val="{{ $n }}" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', {{ $n }})">
+                                                                {{ $lbl }}
+                                                            </button>
+                                                        @endforeach
                                                     </div>
                                                 </div>
-                                                <div class="d-flex align-items-center gap-1.5 mt-2 flex-wrap">
-                                                    <small class="text-muted me-1 fs-12">Quick Presets:</small>
-                                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', 2)">2 Slides</button>
-                                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', 3)">3 Slides (Default)</button>
-                                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', 4)">4 Slides</button>
-                                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', 5)">5 Slides</button>
-                                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', 6)">6 Slides</button>
+                                                <div class="form-text fs-11 text-muted mt-2">
+                                                    <i class="bi bi-info-circle text-primary me-1"></i> Public website will rotate up to <strong><span id="label_max_slides_{{ $pageKey }}_{{ $secKey }}">{{ $maxSlides }}</span> slides</strong>, and the page editor will allow adding up to this limit.
                                                 </div>
                                             </div>
                                         </div>
@@ -565,17 +657,19 @@
                                             <p class="settings-label-desc">Control exact or responsive height (e.g. 590px, 480px, 100vh).</p>
                                         </div>
                                         <div class="settings-input-col">
-                                            <div class="input-group" style="max-width: 380px;">
-                                                <span class="input-group-text bg-light text-muted border-end-0 fs-13"><i class="bi bi-arrows-expand-vertical"></i></span>
-                                                <input type="text" name="sections[{{ $pageKey }}][{{ $secKey }}][height]" id="input_height_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input sec-height-input" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $height }}" placeholder="e.g. 590px, 100vh">
+                                            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                                <div class="input-group" style="max-width: 280px;">
+                                                    <span class="input-group-text bg-light text-muted border-end-0 fs-13"><i class="bi bi-arrows-expand-vertical"></i></span>
+                                                    <input type="text" name="sections[{{ $pageKey }}][{{ $secKey }}][height]" id="input_height_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input sec-height-input fw-semibold fs-13" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $height }}" placeholder="e.g. 590px, 100vh">
+                                                </div>
                                             </div>
-                                            <div class="d-flex align-items-center gap-1.5 mt-2 flex-wrap">
-                                                <small class="text-muted me-1 fs-12">Quick Presets:</small>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '100vh')">Full Screen (100vh)</button>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '650px')">650px</button>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '590px')">590px</button>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '480px')">480px</button>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '380px')">380px</button>
+                                            <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                                <span class="text-muted fs-11 fw-semibold me-1">PRESETS:</span>
+                                                <button type="button" class="btn btn-xs preset-chip" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '100vh')">Full Screen (100vh)</button>
+                                                <button type="button" class="btn btn-xs preset-chip" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '650px')">650px</button>
+                                                <button type="button" class="btn btn-xs preset-chip" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '590px')">590px</button>
+                                                <button type="button" class="btn btn-xs preset-chip" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '480px')">480px</button>
+                                                <button type="button" class="btn btn-xs preset-chip" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '380px')">380px</button>
                                             </div>
                                         </div>
                                     </div>
@@ -589,15 +683,17 @@
                                             <p class="settings-label-desc">Full bleed width (100%) or boxed container layout (e.g. 1240px, 1400px).</p>
                                         </div>
                                         <div class="settings-input-col">
-                                            <div class="input-group" style="max-width: 380px;">
-                                                <span class="input-group-text bg-light text-muted border-end-0 fs-13"><i class="bi bi-arrows-expand"></i></span>
-                                                <input type="text" name="sections[{{ $pageKey }}][{{ $secKey }}][max_width]" id="input_width_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input sec-width-input" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $maxWidth }}" placeholder="e.g. 100%, 1240px">
+                                            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                                <div class="input-group" style="max-width: 280px;">
+                                                    <span class="input-group-text bg-light text-muted border-end-0 fs-13"><i class="bi bi-arrows-expand"></i></span>
+                                                    <input type="text" name="sections[{{ $pageKey }}][{{ $secKey }}][max_width]" id="input_width_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input sec-width-input fw-semibold fs-13" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $maxWidth }}" placeholder="e.g. 100%, 1240px">
+                                                </div>
                                             </div>
-                                            <div class="d-flex align-items-center gap-1.5 mt-2 flex-wrap">
-                                                <small class="text-muted me-1 fs-12">Quick Presets:</small>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetWidth('{{ $pageKey }}', '{{ $secKey }}', '100%')">100% (Full Width)</button>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetWidth('{{ $pageKey }}', '{{ $secKey }}', '1400px')">1400px</button>
-                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetWidth('{{ $pageKey }}', '{{ $secKey }}', '1240px')">1240px (Boxed)</button>
+                                            <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                                <span class="text-muted fs-11 fw-semibold me-1">PRESETS:</span>
+                                                <button type="button" class="btn btn-xs preset-chip" onclick="applyPresetWidth('{{ $pageKey }}', '{{ $secKey }}', '100%')">100% (Full Width)</button>
+                                                <button type="button" class="btn btn-xs preset-chip" onclick="applyPresetWidth('{{ $pageKey }}', '{{ $secKey }}', '1400px')">1400px</button>
+                                                <button type="button" class="btn btn-xs preset-chip" onclick="applyPresetWidth('{{ $pageKey }}', '{{ $secKey }}', '1240px')">1240px (Boxed)</button>
                                             </div>
                                         </div>
                                     </div>
@@ -612,30 +708,32 @@
                                         </div>
                                         <div class="settings-input-col">
                                             <div class="d-flex align-items-center gap-2 mb-3">
-                                                <input type="color" id="picker_{{ $pageKey }}_{{ $secKey }}" class="form-control form-control-color border-0 p-0 rounded-2 sec-color-picker" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $overlayColor }}" style="width: 44px; height: 38px; cursor: pointer;">
+                                                <input type="color" id="picker_{{ $pageKey }}_{{ $secKey }}" class="form-control form-control-color border-0 p-0 rounded-2 sec-color-picker shadow-sm" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $overlayColor }}" style="width: 42px; height: 38px; cursor: pointer;">
                                                 <div class="input-group" style="max-width: 170px;">
                                                     <span class="input-group-text bg-light text-muted fs-13">#</span>
-                                                    <input type="text" name="sections[{{ $pageKey }}][{{ $secKey }}][overlay_color]" id="input_color_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input sec-color-input" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $overlayColor }}" maxlength="7">
+                                                    <input type="text" name="sections[{{ $pageKey }}][{{ $secKey }}][overlay_color]" id="input_color_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input sec-color-input fw-bold font-monospace" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $overlayColor }}" maxlength="7">
                                                 </div>
-                                                <div class="d-flex align-items-center gap-1.5 flex-wrap ms-2">
-                                                    <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #19302e;" title="GPO Spruce #19302e" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#19302e')"></button>
-                                                    <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #083b3c;" title="Deep Teal #083b3c" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#083b3c')"></button>
-                                                    <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #000000;" title="True Black #000000" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#000000')"></button>
-                                                    <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #1e293b;" title="Navy Slate #1e293b" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#1e293b')"></button>
-                                                    <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #3b1d11;" title="Heritage Brown #3b1d11" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#3b1d11')"></button>
+                                                <div class="d-flex align-items-center gap-2 flex-wrap ms-2">
+                                                    <button type="button" class="btn btn-sm color-swatch-btn" style="background-color: #19302e;" title="GPO Spruce #19302e" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#19302e')"></button>
+                                                    <button type="button" class="btn btn-sm color-swatch-btn" style="background-color: #083b3c;" title="Deep Teal #083b3c" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#083b3c')"></button>
+                                                    <button type="button" class="btn btn-sm color-swatch-btn" style="background-color: #000000;" title="True Black #000000" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#000000')"></button>
+                                                    <button type="button" class="btn btn-sm color-swatch-btn" style="background-color: #1e293b;" title="Navy Slate #1e293b" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#1e293b')"></button>
+                                                    <button type="button" class="btn btn-sm color-swatch-btn" style="background-color: #3b1d11;" title="Heritage Brown #3b1d11" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#3b1d11')"></button>
                                                 </div>
                                             </div>
 
-                                            <!-- Opacity Slider -->
-                                            <div class="p-3 bg-light rounded-3 border" style="max-width: 500px;">
+                                            <!-- Opacity Slider Card -->
+                                            <div class="p-3 bg-white rounded-3 border shadow-sm" style="max-width: 480px; border-color: #e2e8f0 !important;">
                                                 <div class="d-flex align-items-center justify-content-between mb-1.5">
-                                                    <label class="fs-12 fw-bold text-dark mb-0">Overlay Darkness / Opacity:</label>
-                                                    <span class="badge bg-primary px-2 py-1 fs-11" id="badge_opacity_{{ $pageKey }}_{{ $secKey }}">{{ round(floatval($overlayOpacity) * 100) }}%</span>
+                                                    <label class="fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1.5">
+                                                        <i class="bi bi-transparency text-primary"></i> Overlay Opacity:
+                                                    </label>
+                                                    <span class="badge bg-primary rounded-pill px-2.5 py-1 fs-11 fw-bold" id="badge_opacity_{{ $pageKey }}_{{ $secKey }}">{{ round(floatval($overlayOpacity) * 100) }}%</span>
                                                 </div>
                                                 <input type="range" name="sections[{{ $pageKey }}][{{ $secKey }}][overlay_opacity]" id="slider_opacity_{{ $pageKey }}_{{ $secKey }}" class="form-range sec-opacity-slider" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" min="0.00" max="1.00" step="0.05" value="{{ $overlayOpacity }}">
-                                                <div class="d-flex justify-content-between fs-11 text-muted">
+                                                <div class="d-flex justify-content-between fs-11 text-muted mt-1">
                                                     <span>0% (Transparent)</span>
-                                                    <span>50%</span>
+                                                    <span>50% (Medium)</span>
                                                     <span>100% (Solid Tint)</span>
                                                 </div>
                                             </div>
@@ -970,12 +1068,38 @@
         updateLiveSimulator();
     };
 
+    window.stepSlides = function(pageKey, secKey, delta) {
+        const input = document.getElementById('input_max_slides_' + pageKey + '_' + secKey);
+        if (input) {
+            let val = parseInt(input.value) || 3;
+            val = Math.max(1, Math.min(10, val + delta));
+            input.value = val;
+            window.syncSlideChips(pageKey, secKey, val);
+        }
+    };
+
+    window.syncSlideChips = function(pageKey, secKey, val) {
+        val = parseInt(val) || 1;
+        const chips = document.querySelectorAll('.slide-preset-chip-' + pageKey + '-' + secKey);
+        chips.forEach(chip => {
+            if (parseInt(chip.getAttribute('data-val')) === val) {
+                chip.classList.add('active');
+            } else {
+                chip.classList.remove('active');
+            }
+        });
+        const lbl = document.getElementById('label_max_slides_' + pageKey + '_' + secKey);
+        if (lbl) lbl.textContent = val;
+    };
+
     window.applyPresetSlides = function(pageKey, secKey, slides) {
         const input = document.getElementById('input_max_slides_' + pageKey + '_' + secKey);
         if (input) {
             input.value = slides;
+            window.syncSlideChips(pageKey, secKey, slides);
         }
     };
+
 
     // Init script
     document.addEventListener('DOMContentLoaded', function () {
