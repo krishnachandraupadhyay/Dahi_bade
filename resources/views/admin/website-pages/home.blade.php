@@ -1785,17 +1785,173 @@
 
             <!-- ================= 10. FRANCHISE CTA PANEL ================= -->
             <div class="home-section-panel" id="panel_franchise_cta" style="display: none;">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle">
+                <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-secondary px-2.5 py-1.5 fs-12">Section 10</span>
-                        <h6 class="fw-bold text-dark mb-0 fs-15">Franchise & Business Expansion CTA</h6>
+                        <span class="badge bg-secondary px-2.5 py-1.5 fs-12 fw-bold text-white">Section 10</span>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 fs-16">Franchise & Business Expansion CTA</h6>
+                            <small class="text-muted fs-12">Edit banner background image, headline, legacy tagline, paragraph text, and franchise button.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-12"></i> View Live Website
+                        </a>
                     </div>
                 </div>
-                <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
-                    <i class="bi bi-briefcase fs-32 text-secondary mb-2 d-block"></i>
-                    <h6 class="fw-bold text-dark mb-1">Franchise CTA Section</h6>
-                    <p class="fs-13 text-muted mb-0">Manage franchise call-to-action text, buttons, and banner details here.</p>
-                </div>
+
+                @php
+                    $ctaImage = $franchiseCta['image'] ?? 'images/storefront.jpg';
+                    $ctaImageSrc = str_starts_with($ctaImage, 'http') ? $ctaImage : asset($ctaImage);
+                @endphp
+
+                <form action="{{ route('admin.website-pages.home.franchise_cta.update') }}" method="POST" enctype="multipart/form-data" id="franchiseCtaForm">
+                    @csrf
+
+                    <div class="row g-4">
+                        <!-- Left Column: Background Media & Live Banner Preview -->
+                        <div class="col-lg-5 col-12">
+                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-image-fill text-secondary fs-15"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Banner Background Photo</h6>
+                                    </div>
+                                    <span class="badge bg-light text-muted border fs-11">Dark Overlay Banner</span>
+                                </div>
+                                <div class="card-body p-3.5">
+                                    <!-- Live Simulated Banner Preview -->
+                                    <div class="mb-3">
+                                        <label class="form-label fs-11 fw-bold text-muted mb-1 text-uppercase">Live Visual Preview:</label>
+                                        <div class="rounded-3 border overflow-hidden position-relative shadow-sm p-4 text-center d-flex flex-column justify-content-center align-items-center" id="franchise_cta_preview_box" style="min-height: 180px; background-image: linear-gradient(135deg, rgba(8, 59, 60, 0.88) 0%, rgba(5, 44, 45, 0.85) 100%), url('{{ $ctaImageSrc }}'); background-size: cover; background-position: center; color: #ffffff;">
+                                            <h6 class="fw-bold fs-14 mb-1 text-white" id="preview_cta_heading" style="letter-spacing: 0.5px;">{{ $franchiseCta['heading'] ?? 'BRING THE GPO EXPERIENCE TO YOUR CITY' }}</h6>
+                                            <small class="fs-11 fst-italic mb-2" id="preview_cta_subheading" style="color: #ecc67d;">{{ $franchiseCta['subheading'] ?? 'Be Part of a Legacy That Started in 1976.' }}</small>
+                                            <span class="badge rounded-pill px-3 py-1.5 fs-11 fw-bold mt-1" id="preview_cta_btn" style="background: #ecc67d; color: #1f2723;">
+                                                {{ $franchiseCta['button_text'] ?? 'EXPLORE FRANCHISE OPPORTUNITY' }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Upload Input -->
+                                    <div class="mb-3">
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                            Upload New Background:
+                                        </label>
+                                        <input type="file" name="franchise_cta[image_file]" class="form-control form-control-sm modern-input mb-1.5" id="franchise_cta_file_input" accept="image/*">
+                                        <input type="hidden" name="franchise_cta[image]" id="franchise_cta_hidden_image" value="{{ $franchiseCta['image'] ?? 'images/storefront.jpg' }}">
+                                        <small class="text-muted fs-11 d-block">Recommended wide photo: 1400x600px JPG/PNG/WebP</small>
+                                    </div>
+
+                                    <!-- Overlay Opacity -->
+                                    <div class="mb-0">
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                            Teal Overlay Opacity (Darkness):
+                                        </label>
+                                        <select name="franchise_cta[overlay_opacity]" class="form-select form-select-sm modern-input fs-12">
+                                            <option value="0.92" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.92' ? 'selected' : '' }}>92% (High Contrast / Darker)</option>
+                                            <option value="0.90" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.90' ? 'selected' : '' }}>90% (Standard / Recommended)</option>
+                                            <option value="0.85" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.85' ? 'selected' : '' }}>85% (Medium Visibility)</option>
+                                            <option value="0.75" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.75' ? 'selected' : '' }}>75% (Lighter Background)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Text and Button Configuration -->
+                        <div class="col-lg-7 col-12">
+                            <!-- Titles & Description Card -->
+                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-fonts text-secondary fs-15"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Headlines & Pitch Copy</h6>
+                                    </div>
+                                    <span class="badge bg-light text-muted border fs-11">Card Content</span>
+                                </div>
+                                <div class="card-body p-3.5">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                Main Heading (White Uppercase):
+                                            </label>
+                                            <input type="text" name="franchise_cta[heading]" id="input_cta_heading" value="{{ old('franchise_cta.heading', $franchiseCta['heading'] ?? 'BRING THE GPO EXPERIENCE TO YOUR CITY') }}" class="form-control form-control-sm modern-input fw-bold" placeholder="e.g. BRING THE GPO EXPERIENCE TO YOUR CITY">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                Golden Subtitle Tagline (Italic):
+                                            </label>
+                                            <input type="text" name="franchise_cta[subheading]" id="input_cta_subheading" value="{{ old('franchise_cta.subheading', $franchiseCta['subheading'] ?? 'Be Part of a Legacy That Started in 1976.') }}" class="form-control form-control-sm modern-input" placeholder="e.g. Be Part of a Legacy That Started in 1976.">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                Franchise Opportunity Description:
+                                            </label>
+                                            <textarea name="franchise_cta[description]" rows="4" class="form-control form-control-sm modern-input" style="line-height: 1.55;" placeholder="Enter description text...">{{ old('franchise_cta.description', $franchiseCta['description'] ?? 'GPO Ke Thandey Dahi Bade is expanding its journey and inviting entrepreneurs to become part of the brand. Build a food business with an established brand identity, operational support, marketing support and a product loved by generations.') }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Button Card -->
+                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-cursor-fill text-warning fs-14"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Call-To-Action Button</h6>
+                                    </div>
+                                    <span class="badge bg-light text-muted border fs-11">Button Settings</span>
+                                </div>
+                                <div class="card-body p-3.5">
+                                    <div class="row g-3">
+                                        <div class="col-md-6 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                Button Label:
+                                            </label>
+                                            <input type="text" name="franchise_cta[button_text]" id="input_cta_btn_text" value="{{ old('franchise_cta.button_text', $franchiseCta['button_text'] ?? 'EXPLORE FRANCHISE OPPORTUNITY') }}" class="form-control form-control-sm modern-input fw-semibold" placeholder="e.g. EXPLORE FRANCHISE OPPORTUNITY">
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                Button Target Link:
+                                            </label>
+                                            <input type="text" name="franchise_cta[button_url]" value="{{ old('franchise_cta.button_url', $franchiseCta['button_url'] ?? '/franchise') }}" class="form-control form-control-sm modern-input" placeholder="/franchise">
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                Button Color Style:
+                                            </label>
+                                            @php
+                                                $curStyle = $franchiseCta['button_style'] ?? 'amber';
+                                            @endphp
+                                            <select name="franchise_cta[button_style]" class="form-select form-select-sm modern-input fs-12">
+                                                <option value="amber" {{ $curStyle === 'amber' ? 'selected' : '' }}>🟡 Amber Gold (Default - High Contrast)</option>
+                                                <option value="terracotta" {{ $curStyle === 'terracotta' ? 'selected' : '' }}>🔴 Terracotta Coral</option>
+                                                <option value="spruce" {{ $curStyle === 'spruce' ? 'selected' : '' }}>🟢 Deep Spruce Teal</option>
+                                                <option value="crimson" {{ $curStyle === 'crimson' ? 'selected' : '' }}>🍷 Crimson Red</option>
+                                                <option value="emerald" {{ $curStyle === 'emerald' ? 'selected' : '' }}>🌲 Emerald Green</option>
+                                                <option value="white" {{ $curStyle === 'white' ? 'selected' : '' }}>⚪ Clean White Pill</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Bar -->
+                    <div class="p-3 bg-white border border-light-subtle rounded-3 shadow-sm d-flex flex-wrap align-items-center gap-2.5 mt-2">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2">
+                            <i class="bi bi-cloud-check-fill fs-16"></i>
+                            <span>Save Franchise CTA Changes</span>
+                        </button>
+                        <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                        </button>
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -3105,6 +3261,43 @@
                     };
                     reader.readAsDataURL(file);
                 }
+        // Franchise CTA Live Image Preview
+        const ctaFileInput = document.getElementById('franchise_cta_file_input');
+        const ctaPreviewBox = document.getElementById('franchise_cta_preview_box');
+        if (ctaFileInput && ctaPreviewBox) {
+            ctaFileInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        ctaPreviewBox.style.backgroundImage = `linear-gradient(135deg, rgba(8, 59, 60, 0.88) 0%, rgba(5, 44, 45, 0.85) 100%), url('${e.target.result}')`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Live text sync for banner preview
+        const ctaHeadingInput = document.getElementById('input_cta_heading');
+        const ctaSubheadingInput = document.getElementById('input_cta_subheading');
+        const ctaBtnTextInput = document.getElementById('input_cta_btn_text');
+        const previewCtaHeading = document.getElementById('preview_cta_heading');
+        const previewCtaSubheading = document.getElementById('preview_cta_subheading');
+        const previewCtaBtn = document.getElementById('preview_cta_btn');
+
+        if (ctaHeadingInput && previewCtaHeading) {
+            ctaHeadingInput.addEventListener('input', function () {
+                previewCtaHeading.textContent = this.value.trim() || 'BRING THE GPO EXPERIENCE TO YOUR CITY';
+            });
+        }
+        if (ctaSubheadingInput && previewCtaSubheading) {
+            ctaSubheadingInput.addEventListener('input', function () {
+                previewCtaSubheading.textContent = this.value.trim() || 'Be Part of a Legacy That Started in 1976.';
+            });
+        }
+        if (ctaBtnTextInput && previewCtaBtn) {
+            ctaBtnTextInput.addEventListener('input', function () {
+                previewCtaBtn.textContent = this.value.trim() || 'EXPLORE FRANCHISE OPPORTUNITY';
             });
         }
     });

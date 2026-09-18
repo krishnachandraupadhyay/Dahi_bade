@@ -16,7 +16,8 @@ class PageController extends Controller
         $starDish = $webpageController->getStarDishData();
         $experience = $webpageController->getExperienceData();
         $visitUs = $webpageController->getVisitUsData();
-        return view('pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish', 'experience', 'visitUs'));
+        $franchiseCta = $webpageController->getFranchiseCtaData();
+        return view('pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish', 'experience', 'visitUs', 'franchiseCta'));
     }
 
     public function story()

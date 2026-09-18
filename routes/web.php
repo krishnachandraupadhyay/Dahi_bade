@@ -37,6 +37,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('/website-pages/home/star-dish', [WebpageController::class, 'updateStarDish'])->name('website-pages.home.star_dish.update');
     Route::post('/website-pages/home/experience', [WebpageController::class, 'updateExperience'])->name('website-pages.home.experience.update');
     Route::post('/website-pages/home/visit-us', [WebpageController::class, 'updateVisitUs'])->name('website-pages.home.visit_us.update');
+    Route::post('/website-pages/home/franchise-cta', [WebpageController::class, 'updateFranchiseCta'])->name('website-pages.home.franchise_cta.update');
 
     Route::get('/menu', function () {
         return view('admin.menu.index');

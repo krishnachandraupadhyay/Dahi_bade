@@ -42,6 +42,11 @@ class WebpageController extends Controller
         return storage_path('app/website_content/home_visit_us.json');
     }
 
+    private function getFranchiseCtaFilePath()
+    {
+        return storage_path('app/website_content/home_franchise_cta.json');
+    }
+
     private function normalizeSlide($slide)
     {
         if (!isset($slide['media'])) {
@@ -418,6 +423,30 @@ class WebpageController extends Controller
         return $defaultData;
     }
 
+    public function getFranchiseCtaData()
+    {
+        $defaultData = [
+            'heading' => 'BRING THE GPO EXPERIENCE TO YOUR CITY',
+            'subheading' => 'Be Part of a Legacy That Started in 1976.',
+            'description' => 'GPO Ke Thandey Dahi Bade is expanding its journey and inviting entrepreneurs to become part of the brand. Build a food business with an established brand identity, operational support, marketing support and a product loved by generations.',
+            'button_text' => 'EXPLORE FRANCHISE OPPORTUNITY',
+            'button_url' => '/franchise',
+            'button_style' => 'amber',
+            'image' => 'images/storefront.jpg',
+            'overlay_opacity' => '0.90',
+        ];
+
+        $path = $this->getFranchiseCtaFilePath();
+        if (File::exists($path)) {
+            $content = json_decode(File::get($path), true);
+            if (is_array($content) && !empty($content)) {
+                return array_merge($defaultData, $content);
+            }
+        }
+
+        return $defaultData;
+    }
+
     public function index()
     {
         return view('admin.website-pages.index');
@@ -432,7 +461,8 @@ class WebpageController extends Controller
         $starDish = $this->getStarDishData();
         $experience = $this->getExperienceData();
         $visitUs = $this->getVisitUsData();
-        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish', 'experience', 'visitUs'));
+        $franchiseCta = $this->getFranchiseCtaData();
+        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish', 'experience', 'visitUs', 'franchiseCta'));
     }
 
     public function updateHero(Request $request)
@@ -810,5 +840,47 @@ class WebpageController extends Controller
 
         return redirect()->route('admin.website-pages.home', ['section' => 'visit_us'])
             ->with('success', 'Visit Us & Store Information successfully updated!');
+    }
+
+    public function updateFranchiseCta(Request $request)
+    {
+        $cta = $request->input('franchise_cta', []);
+        $imagePath = $cta['image'] ?? 'images/storefront.jpg';
+
+        $uploadDir = public_path('uploads/franchise_cta');
+        if (!File::isDirectory($uploadDir)) {
+            File::makeDirectory($uploadDir, 0755, true, true);
+        }
+
+        if ($request->hasFile('franchise_cta.image_file')) {
+            $file = $request->file('franchise_cta.image_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_franchise_cta_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $imagePath = 'uploads/franchise_cta/' . $filename;
+            }
+        }
+
+        $savedData = [
+            'heading' => trim($cta['heading'] ?? 'BRING THE GPO EXPERIENCE TO YOUR CITY'),
+            'subheading' => trim($cta['subheading'] ?? 'Be Part of a Legacy That Started in 1976.'),
+            'description' => trim($cta['description'] ?? ''),
+            'button_text' => trim($cta['button_text'] ?? 'EXPLORE FRANCHISE OPPORTUNITY'),
+            'button_url' => trim($cta['button_url'] ?? '/franchise'),
+            'button_style' => trim($cta['button_style'] ?? 'amber'),
+            'image' => $imagePath,
+            'overlay_opacity' => trim($cta['overlay_opacity'] ?? '0.90'),
+        ];
+
+        $dir = dirname($this->getFranchiseCtaFilePath());
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true, true);
+        }
+
+        File::put($this->getFranchiseCtaFilePath(), json_encode($savedData, JSON_PRETTY_PRINT));
+
+        return redirect()->route('admin.website-pages.home', ['section' => 'franchise_cta'])
+            ->with('success', 'Franchise Opportunity CTA successfully updated!');
     }
 }

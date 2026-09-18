@@ -515,14 +515,37 @@
       </section>
 
       <!-- SECTION 08 — FRANCHISE CTA -->
-      <section class="home-franchise-cta-card" style="background-image: linear-gradient(135deg, rgba(8, 59, 60, 0.90) 0%, rgba(5, 44, 45, 0.88) 100%), url('{{ asset('images/storefront.jpg') }}');">
+      @php
+        $ctaImg = $franchiseCta['image'] ?? 'images/storefront.jpg';
+        $ctaImgSrc = str_starts_with($ctaImg, 'http') ? $ctaImg : asset($ctaImg);
+        $btnStyle = $franchiseCta['button_style'] ?? 'amber';
+        $btnClassMap = [
+            'amber'         => 'btn-amber-pill',
+            'spruce'        => 'btn-spruce-pill',
+            'terracotta'    => 'btn-terracotta-pill',
+            'crimson'       => 'btn-crimson-pill',
+            'emerald'       => 'btn-emerald-pill',
+            'white'         => 'btn-white-pill',
+        ];
+        $btnClass = $btnClassMap[$btnStyle] ?? 'btn-amber-pill';
+        $overlayOp = $franchiseCta['overlay_opacity'] ?? '0.90';
+      @endphp
+      <section class="home-franchise-cta-card" style="background-image: linear-gradient(135deg, rgba(8, 59, 60, {{ $overlayOp }}) 0%, rgba(5, 44, 45, {{ $overlayOp }}) 100%), url('{{ $ctaImgSrc }}');">
         <div class="home-franchise-cta-inner">
-          <h3>BRING THE GPO EXPERIENCE TO YOUR CITY</h3>
-          <span class="sub-gold">Be Part of a Legacy That Started in 1976.</span>
-          <p>
-            GPO Ke Thandey Dahi Bade is expanding its journey and inviting entrepreneurs to become part of the brand. Build a food business with an established brand identity, operational support, marketing support and a product loved by generations.
-          </p>
-          <a href="{{ route('franchise') }}" class="btn-amber-pill">EXPLORE FRANCHISE OPPORTUNITY</a>
+          @if(!empty($franchiseCta['heading']))
+            <h3>{{ $franchiseCta['heading'] }}</h3>
+          @endif
+          @if(!empty($franchiseCta['subheading']))
+            <span class="sub-gold">{{ $franchiseCta['subheading'] }}</span>
+          @endif
+          @if(!empty($franchiseCta['description']))
+            <p>
+              {!! nl2br(e($franchiseCta['description'])) !!}
+            </p>
+          @endif
+          @if(!empty($franchiseCta['button_text']))
+            <a href="{{ $franchiseCta['button_url'] ?? route('franchise') }}" class="{{ $btnClass }}">{{ $franchiseCta['button_text'] }}</a>
+          @endif
         </div>
       </section>
 
