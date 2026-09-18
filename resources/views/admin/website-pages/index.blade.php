@@ -26,7 +26,7 @@
     <div class="card border-0 shadow-sm" style="border-radius: 12px; background: #ffffff;">
         <div class="card-header border-0 bg-transparent py-3 px-4 d-flex justify-content-between align-items-center">
             <div>
-                <h5 class="fw-bold text-dark mb-0 fs-16">All Website Pages</h5>
+                <h5 class="fw-bold text-dark mb-0 fs-16">Website Pages</h5>
                 <small class="text-muted fs-12">Manage and view all public frontend pages of the website.</small>
             </div>
         </div>

@@ -36,7 +36,7 @@
                     $currentSection = request('section', 'hero_section');
                 @endphp
 
-                <!-- 1. All Website Pages (Collapsible Parent) -->
+                <!-- 1. Website Pages (Collapsible Parent) -->
                 <li class="nav-item">
                     <a class="nav-link menu-link px-3 py-2 d-flex align-items-center justify-content-between text-white {{ $isWebsitePagesActive ? 'active' : '' }}" 
                        data-bs-toggle="collapse" 
@@ -47,7 +47,7 @@
                        style="{{ $isWebsitePagesActive ? 'background: linear-gradient(135deg, rgba(1, 98, 232, 0.95), rgba(5, 195, 251, 0.85)) !important; color: #ffffff !important; font-weight: 600 !important; box-shadow: 0 4px 12px rgba(1, 98, 232, 0.35) !important;' : '' }}">
                         <div class="d-flex align-items-center gap-2.5">
                             <i class="bi bi-layout-text-window-reverse fs-15 text-primary"></i>
-                            <span class="fs-13">All Website Pages</span>
+                            <span class="fs-13">Website Pages</span>
                         </div>
                         <i class="bi bi-chevron-down fs-11 menu-arrow"></i>
                     </a>
