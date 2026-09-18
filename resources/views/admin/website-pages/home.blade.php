@@ -1836,13 +1836,16 @@
             <div class="home-section-panel" id="panel_franchise_cta" style="{{ $activeSection === 'franchise_cta' ? 'display: block;' : 'display: none;' }}">
                 <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-secondary px-2.5 py-1.5 fs-12 fw-bold text-white">Section 10</span>
+                        <span class="badge bg-primary px-2.5 py-1.5 fs-12 fw-bold text-white">Section 10</span>
                         <div>
-                            <h6 class="fw-bold text-dark mb-0 fs-16">Franchise & Business Expansion CTA</h6>
-                            <small class="text-muted fs-12">Edit banner background image, headline, legacy tagline, paragraph text, and franchise button.</small>
+                            <h6 class="fw-bold text-dark mb-0 fs-16">Franchise & Business Expansion Banner (CTA)</h6>
+                            <small class="text-muted fs-12">Configure banner background media (Photo/GIF, MP4 Video, YouTube), transparent color tint, headlines, and call-to-action button.</small>
                         </div>
                     </div>
                     <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1">
+                            <i class="bi bi-camera-reels me-1"></i> Multi-Media & Transparent Overlays
+                        </span>
                         <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1.5">
                             <i class="bi bi-box-arrow-up-right fs-12"></i> View Live Website
                         </a>
@@ -1852,289 +1855,327 @@
                 @php
                     $ctaImage = $franchiseCta['image'] ?? 'images/storefront.jpg';
                     $ctaImageSrc = str_starts_with($ctaImage, 'http') ? $ctaImage : asset($ctaImage);
+                    $ctaMediaType = $franchiseCta['media_type'] ?? 'image';
+                    $ctaOverlayColor = $franchiseCta['overlay_color'] ?? '#083b3c';
+                    $ctaOverlayOp = floatval($franchiseCta['overlay_opacity'] ?? 0.90);
+                    $ctaCurStyle = $franchiseCta['overlay_style'] ?? 'solid';
+                    $ctaYtId = $franchiseCta['youtube_id'] ?? '';
+                    if (empty($ctaYtId) && !empty($franchiseCta['youtube_url'])) {
+                        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $franchiseCta['youtube_url'], $cm)) {
+                            $ctaYtId = $cm[1];
+                        }
+                    }
+                    $ctaHex = ltrim($ctaOverlayColor, '#');
+                    $cr = 8; $cg = 59; $cb = 60;
+                    if (strlen($ctaHex) >= 6) {
+                        $cr = hexdec(substr($ctaHex, 0, 2));
+                        $cg = hexdec(substr($ctaHex, 2, 2));
+                        $cb = hexdec(substr($ctaHex, 4, 2));
+                    }
                 @endphp
 
                 <form action="{{ route('admin.website-pages.home.franchise_cta.update') }}" method="POST" enctype="multipart/form-data" id="franchiseCtaForm">
                     @csrf
+                    <input type="hidden" name="current_section" value="franchise_cta">
 
-                    <div class="row g-4">
-                        <!-- Left Column: Background Media & Live Banner Preview -->
-                        <div class="col-lg-5 col-12">
-                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
-                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="bi bi-camera-reels-fill text-secondary fs-15"></i>
-                                        <h6 class="fs-13 fw-bold text-dark mb-0">Banner Background Media</h6>
-                                    </div>
-                                    <span class="badge bg-light text-muted border fs-11">Multi-Format Banner</span>
-                                </div>
-                                <div class="card-body p-3.5">
-                                    @php
-                                        $ctaMediaType = $franchiseCta['media_type'] ?? 'image';
-                                        $ctaOverlayColor = $franchiseCta['overlay_color'] ?? '#083b3c';
-                                        $ctaOverlayOp = floatval($franchiseCta['overlay_opacity'] ?? 0.90);
-                                        $ctaYtId = $franchiseCta['youtube_id'] ?? '';
-                                        if (empty($ctaYtId) && !empty($franchiseCta['youtube_url'])) {
-                                            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $franchiseCta['youtube_url'], $cm)) {
-                                                $ctaYtId = $cm[1];
-                                            }
-                                        }
-                                        $ctaHex = ltrim($ctaOverlayColor, '#');
-                                        $cr = 8; $cg = 59; $cb = 60;
-                                        if (strlen($ctaHex) >= 6) {
-                                            $cr = hexdec(substr($ctaHex, 0, 2));
-                                            $cg = hexdec(substr($ctaHex, 2, 2));
-                                            $cb = hexdec(substr($ctaHex, 4, 2));
-                                        }
-                                    @endphp
-
-                                    <!-- Live Simulated Banner Preview -->
-                                    <div class="mb-3">
-                                        <label class="form-label fs-11 fw-bold text-muted mb-1 text-uppercase">Live Visual Preview:</label>
-                                        <div class="rounded-3 border overflow-hidden position-relative shadow-sm p-4 text-center d-flex flex-column justify-content-center align-items-center" id="franchise_cta_preview_box" style="min-height: 180px; position: relative; background: #000; color: #ffffff;">
-                                            <!-- Media layers -->
-                                            <div style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; pointer-events: none;">
-                                                <iframe id="sim_franchise_cta_yt" src="{{ !empty($ctaYtId) ? 'https://www.youtube.com/embed/'.$ctaYtId.'?autoplay=1&mute=1&loop=1&playlist='.$ctaYtId.'&controls=0&showinfo=0&rel=0&modestbranding=1' : '' }}" style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100%; min-width: 177.77vh; transform: translate(-50%, -50%); border: none; display: {{ $ctaMediaType === 'youtube' ? 'block' : 'none' }};" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-                                                <video id="sim_franchise_cta_vid" autoplay muted loop playsinline src="{{ !empty($franchiseCta['video']) ? asset($franchiseCta['video']) : '' }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: {{ $ctaMediaType === 'video' ? 'block' : 'none' }};"></video>
-                                                <img id="sim_franchise_cta_img" src="{{ $ctaImageSrc }}" alt="CTA Preview" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: {{ !in_array($ctaMediaType, ['video', 'youtube']) ? 'block' : 'none' }};">
-                                            </div>
-                                            <!-- Transparent Overlay Layer -->
-                                            <div id="sim_franchise_cta_overlay" style="position: absolute; inset: 0; z-index: 1.5; background: linear-gradient(135deg, rgba({{ $cr }}, {{ $cg }}, {{ $cb }}, {{ $ctaOverlayOp }}) 0%, rgba({{ max(0, $cr - 3) }}, {{ max(0, $cg - 15) }}, {{ max(0, $cb - 15) }}, {{ $ctaOverlayOp }}) 100%);"></div>
-
-                                            <div style="position: relative; z-index: 2; width: 100%;">
-                                                <h6 class="fw-bold fs-14 mb-1 text-white" id="preview_cta_heading" style="letter-spacing: 0.5px;">{{ $franchiseCta['heading'] ?? 'BRING THE GPO EXPERIENCE TO YOUR CITY' }}</h6>
-                                                <small class="fs-11 fst-italic mb-2 d-block" id="preview_cta_subheading" style="color: #ecc67d;">{{ $franchiseCta['subheading'] ?? 'Be Part of a Legacy That Started in 1976.' }}</small>
-                                                <span class="badge rounded-pill px-3 py-1.5 fs-11 fw-bold mt-1" id="preview_cta_btn" style="background: #ecc67d; color: #1f2723;">
-                                                    {{ $franchiseCta['button_text'] ?? 'EXPLORE FRANCHISE OPPORTUNITY' }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Media Format Selector -->
-                                    <div class="mb-3">
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                            Background Media Format:
-                                        </label>
-                                        <select name="franchise_cta[media_type]" id="franchise_cta_media_type_select" class="form-select form-select-sm modern-select fw-semibold mb-2">
-                                            <option value="image" {{ $ctaMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / GIF Image</option>
-                                            <option value="video" {{ $ctaMediaType === 'video' ? 'selected' : '' }}>🎬 Upload MP4 / WebM Video</option>
-                                            <option value="youtube" {{ $ctaMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video Link</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Upload Image/GIF (When photo selected) -->
-                                    <div class="mb-3" id="wrap_franchise_cta_image" style="display: {{ $ctaMediaType === 'image' ? 'block' : 'none' }};">
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">Upload Photo / GIF File:</label>
-                                        <input type="file" name="franchise_cta[image_file]" class="form-control form-control-sm modern-input mb-1.5" id="franchise_cta_file_input" accept="image/*">
-                                        <input type="hidden" name="franchise_cta[image]" id="franchise_cta_hidden_image" value="{{ $franchiseCta['image'] ?? 'images/storefront.jpg' }}">
-                                        <small class="text-muted fs-11 d-block">Recommended wide photo: 1400x600px JPG/PNG/WebP/GIF</small>
-                                    </div>
-
-                                    <!-- Upload Video File (When video selected) -->
-                                    <div class="mb-3" id="wrap_franchise_cta_video" style="display: {{ $ctaMediaType === 'video' ? 'block' : 'none' }};">
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">Upload Video File (MP4/WebM):</label>
-                                        <input type="file" name="franchise_cta[video_file]" class="form-control form-control-sm modern-input mb-1.5" id="franchise_cta_video_file_input" accept="video/mp4,video/webm">
-                                        <input type="hidden" name="franchise_cta[video]" id="franchise_cta_hidden_video" value="{{ $franchiseCta['video'] ?? '' }}">
-                                        <small class="text-muted fs-11 d-block">Max 25MB MP4 / WebM video file.</small>
-                                    </div>
-
-                                    <!-- YouTube Link (When YouTube selected) -->
-                                    <div class="mb-3" id="wrap_franchise_cta_youtube" style="display: {{ $ctaMediaType === 'youtube' ? 'block' : 'none' }};">
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">YouTube Video Link / ID:</label>
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-light text-danger"><i class="bi bi-youtube"></i></span>
-                                            <input type="text" name="franchise_cta[youtube_url]" id="franchise_cta_youtube_url_input" value="{{ old('franchise_cta.youtube_url', $franchiseCta['youtube_url'] ?? '') }}" class="form-control modern-input" placeholder="https://www.youtube.com/watch?v=...">
-                                        </div>
-                                        <small class="text-muted fs-11 mt-1 d-block">Auto-plays silently on loop in the background.</small>
-                                    </div>
-
-                                    <!-- TRANSPARENT COLOR & DARKNESS OVERLAY (Exact User Requested Layout) -->
-                                    <div class="border-top pt-3 mt-3">
-                                        <div class="d-flex align-items-center justify-content-between mb-2">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1.5">
-                                                <i class="bi bi-palette-fill text-primary"></i>
-                                                <span>Overlay Tint Color:</span>
-                                            </label>
-                                            <span class="badge bg-light text-muted border fs-10">Presets & Custom Hex</span>
-                                        </div>
-                                        <div class="d-flex flex-wrap align-items-center gap-1.5 mb-2">
-                                            <button type="button" class="btn btn-sm btn-outline-dark cta-overlay-preset-btn px-2 py-0.5 d-flex align-items-center gap-1" data-color="#000000" style="font-size: 11px;">
-                                                <span class="rounded-circle" style="width: 10px; height: 10px; background: #000; display: inline-block;"></span>
-                                                <span>Midnight Black</span>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-0.5 d-flex align-items-center gap-1" data-color="#083b3c" style="font-size: 11px;">
-                                                <span class="rounded-circle" style="width: 10px; height: 10px; background: #083b3c; display: inline-block;"></span>
-                                                <span>Brand Spruce Teal</span>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-0.5 d-flex align-items-center gap-1" data-color="#3a1313" style="font-size: 11px;">
-                                                <span class="rounded-circle" style="width: 10px; height: 10px; background: #3a1313; display: inline-block;"></span>
-                                                <span>Vintage Burgundy</span>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-0.5 d-flex align-items-center gap-1" data-color="#231714" style="font-size: 11px;">
-                                                <span class="rounded-circle" style="width: 10px; height: 10px; background: #231714; display: inline-block;"></span>
-                                                <span>Warm Cocoa</span>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-0.5 d-flex align-items-center gap-1" data-color="#0c1929" style="font-size: 11px;">
-                                                <span class="rounded-circle" style="width: 10px; height: 10px; background: #0c1929; display: inline-block;"></span>
-                                                <span>Navy Midnight</span>
-                                            </button>
-                                        </div>
-                                        <div class="row g-2 align-items-center mb-3">
-                                            <div class="col-12">
-                                                <div class="input-group input-group-sm">
-                                                    <span class="input-group-text bg-light text-muted">Custom Hex:</span>
-                                                    <input type="color" id="franchise_cta_color_picker" class="form-control form-control-color p-1" value="{{ $ctaOverlayColor }}" style="width: 44px; height: 33px;">
-                                                    <input type="text" name="franchise_cta[overlay_color]" id="franchise_cta_color_input" value="{{ $ctaOverlayColor }}" class="form-control modern-input font-monospace fw-semibold" placeholder="#083b3c">
-                                                </div>
-                                                <small class="text-muted fs-11 mt-1 d-block"><i class="bi bi-info-circle me-1"></i> Pick a preset or enter any custom HEX color code.</small>
-                                            </div>
-                                        </div>
-
-                                        <!-- Overlay Transparency (Select + Slider + Badge) -->
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center gap-1.5">
-                                            <i class="bi bi-transparency text-primary"></i>
-                                            <span>Overlay Transparency:</span>
-                                        </label>
-                                        <small class="text-muted fs-11 d-block mb-1.5">Control darkness & transparency level. Recommended: 65% - 75% for readable text.</small>
-                                        @php
-                                            $ctaCurOp = strval($franchiseCta['overlay_opacity'] ?? '0.90');
-                                        @endphp
-                                        <div class="mb-2">
-                                            <select name="franchise_cta[overlay_opacity]" id="franchise_cta_opacity_select" class="form-select form-select-sm modern-select fw-semibold mb-2">
-                                                <option value="0.00" {{ $ctaCurOp === '0.00' ? 'selected' : '' }}>0% (No Overlay / 100% Transparent)</option>
-                                                <option value="0.25" {{ $ctaCurOp === '0.25' ? 'selected' : '' }}>25% (Light Transparent Tint)</option>
-                                                <option value="0.40" {{ $ctaCurOp === '0.40' ? 'selected' : '' }}>40% (Soft Tint)</option>
-                                                <option value="0.55" {{ $ctaCurOp === '0.55' ? 'selected' : '' }}>55% (Medium Tint)</option>
-                                                <option value="0.70" {{ $ctaCurOp === '0.70' ? 'selected' : '' }}>70% (Standard / High Readability)</option>
-                                                <option value="0.80" {{ $ctaCurOp === '0.80' ? 'selected' : '' }}>80% (Dark Contrast)</option>
-                                                <option value="0.85" {{ $ctaCurOp === '0.85' ? 'selected' : '' }}>85% (Balanced Dark / Medium Visibility)</option>
-                                                <option value="0.90" {{ $ctaCurOp === '0.90' ? 'selected' : '' }}>90% (Standard / Recommended)</option>
-                                                <option value="0.95" {{ $ctaCurOp === '0.95' ? 'selected' : '' }}>95% (Extra Dark / Maximum Contrast)</option>
-                                            </select>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <input type="range" class="form-range" id="franchise_cta_opacity_slider" min="0" max="1" step="0.05" value="{{ $ctaCurOp }}">
-                                                <span class="badge bg-dark px-2 py-1 fs-11 fw-bold" id="franchise_cta_opacity_badge">{{ round(floatval($ctaCurOp) * 100) }}%</span>
-                                            </div>
-                                        </div>
-
-                                        <!-- Overlay Style & Height -->
-                                        <div class="mt-3 pt-2.5 border-top">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center gap-1.5">
-                                                <i class="bi bi-sliders text-primary"></i>
-                                                <span>Overlay Style & Height:</span>
-                                            </label>
-                                            <div class="row g-2">
-                                                <div class="col-7">
-                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Style:</label>
-                                                    @php
-                                                        $ctaCurStyle = $franchiseCta['overlay_style'] ?? 'solid';
-                                                    @endphp
-                                                    <select name="franchise_cta[overlay_style]" id="franchise_cta_overlay_style_select" class="form-select form-select-sm modern-select">
-                                                        <option value="solid" {{ $ctaCurStyle === 'solid' ? 'selected' : '' }}>Solid Transparent Tint</option>
-                                                        <option value="gradient" {{ $ctaCurStyle === 'gradient' ? 'selected' : '' }}>Soft Atmospheric Gradient</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-5">
-                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Banner Height:</label>
-                                                    <input type="text" class="form-control form-control-sm modern-input bg-light" value="380px (Standard)" readonly disabled>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                    <!-- TOP: FULL-WIDTH LIVE INTERACTIVE SIMULATOR PREVIEW -->
+                    <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
+                        <div class="card-header bg-white py-2.5 px-3.5 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-eye-fill text-primary fs-14"></i>
+                                <span class="fw-bold fs-13 text-dark">Live Interactive Banner Simulation</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-light text-muted border fs-11">
+                                    Format: <strong class="text-dark text-uppercase" id="sim_badge_media_type">{{ $ctaMediaType }}</strong>
+                                </span>
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-11" id="sim_badge_overlay_info">
+                                    Overlay: {{ round($ctaOverlayOp * 100) }}% ({{ $ctaOverlayColor }})
+                                </span>
                             </div>
                         </div>
 
-                        <!-- Right Column: Text and Button Configuration -->
-                        <div class="col-lg-7 col-12">
-                            <!-- Titles & Description Card -->
-                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
-                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="bi bi-fonts text-secondary fs-15"></i>
-                                        <h6 class="fs-13 fw-bold text-dark mb-0">Headlines & Pitch Copy</h6>
-                                    </div>
-                                    <span class="badge bg-light text-muted border fs-11">Card Content</span>
-                                </div>
-                                <div class="card-body p-3.5">
-                                    <div class="row g-3">
-                                        <div class="col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                Main Heading (White Uppercase):
-                                            </label>
-                                            <input type="text" name="franchise_cta[heading]" id="input_cta_heading" value="{{ old('franchise_cta.heading', $franchiseCta['heading'] ?? 'BRING THE GPO EXPERIENCE TO YOUR CITY') }}" class="form-control form-control-sm modern-input fw-bold" placeholder="e.g. BRING THE GPO EXPERIENCE TO YOUR CITY">
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                Golden Subtitle Tagline (Italic):
-                                            </label>
-                                            <input type="text" name="franchise_cta[subheading]" id="input_cta_subheading" value="{{ old('franchise_cta.subheading', $franchiseCta['subheading'] ?? 'Be Part of a Legacy That Started in 1976.') }}" class="form-control form-control-sm modern-input" placeholder="e.g. Be Part of a Legacy That Started in 1976.">
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                Franchise Opportunity Description:
-                                            </label>
-                                            <textarea name="franchise_cta[description]" rows="4" class="form-control form-control-sm modern-input" style="line-height: 1.55;" placeholder="Enter description text...">{{ old('franchise_cta.description', $franchiseCta['description'] ?? 'GPO Ke Thandey Dahi Bade is expanding its journey and inviting entrepreneurs to become part of the brand. Build a food business with an established brand identity, operational support, marketing support and a product loved by generations.') }}</textarea>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="card-body p-0 position-relative bg-dark overflow-hidden" id="franchise_cta_preview_box" style="min-height: 250px; display: flex; align-items: center; justify-content: center; text-align: center; color: #ffffff;">
+                            <!-- Media Background Layers -->
+                            <div style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; pointer-events: none;">
+                                <iframe id="sim_franchise_cta_yt" src="{{ !empty($ctaYtId) ? 'https://www.youtube.com/embed/'.$ctaYtId.'?autoplay=1&mute=1&loop=1&playlist='.$ctaYtId.'&controls=0&showinfo=0&rel=0&modestbranding=1' : '' }}" style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100%; min-width: 177.77vh; transform: translate(-50%, -50%); border: none; display: {{ $ctaMediaType === 'youtube' ? 'block' : 'none' }};" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+                                <video id="sim_franchise_cta_vid" autoplay muted loop playsinline src="{{ !empty($franchiseCta['video']) ? asset($franchiseCta['video']) : '' }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: {{ $ctaMediaType === 'video' ? 'block' : 'none' }};"></video>
+                                <img id="sim_franchise_cta_img" src="{{ $ctaImageSrc }}" alt="CTA Preview" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: {{ !in_array($ctaMediaType, ['video', 'youtube']) ? 'block' : 'none' }};">
                             </div>
 
-                            <!-- Button Card -->
-                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
-                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="bi bi-cursor-fill text-warning fs-14"></i>
-                                        <h6 class="fs-13 fw-bold text-dark mb-0">Call-To-Action Button</h6>
-                                    </div>
-                                    <span class="badge bg-light text-muted border fs-11">Button Settings</span>
+                            <!-- Transparent Overlay Layer -->
+                            <div id="sim_franchise_cta_overlay" style="position: absolute; inset: 0; z-index: 2; pointer-events: none; transition: background 0.2s ease; background: {{ $ctaCurStyle === 'gradient' ? 'linear-gradient(135deg, rgba('.$cr.', '.$cg.', '.$cb.', '.$ctaOverlayOp.') 0%, rgba('.max(0, $cr - 5).', '.max(0, $cg - 15).', '.max(0, $cb - 15).', '.$ctaOverlayOp.') 100%)' : 'rgba('.$cr.', '.$cg.', '.$cb.', '.$ctaOverlayOp.')' }};"></div>
+
+                            <!-- Live Text Content Overlay -->
+                            <div class="position-relative p-4" style="z-index: 3; max-width: 850px;">
+                                <h4 class="fw-bold fs-20 mb-1 text-white" id="preview_cta_heading" style="letter-spacing: 0.8px; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">
+                                    {{ $franchiseCta['heading'] ?? 'BRING THE GPO EXPERIENCE TO YOUR CITY' }}
+                                </h4>
+                                <div class="fs-13 fst-italic mb-2 fw-medium" id="preview_cta_subheading" style="color: #ecc67d; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+                                    {{ $franchiseCta['subheading'] ?? 'Be Part of a Legacy That Started in 1976.' }}
                                 </div>
-                                <div class="card-body p-3.5">
-                                    <div class="row g-3">
-                                        <div class="col-md-6 col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                Button Label:
-                                            </label>
-                                            <input type="text" name="franchise_cta[button_text]" id="input_cta_btn_text" value="{{ old('franchise_cta.button_text', $franchiseCta['button_text'] ?? 'EXPLORE FRANCHISE OPPORTUNITY') }}" class="form-control form-control-sm modern-input fw-semibold" placeholder="e.g. EXPLORE FRANCHISE OPPORTUNITY">
+                                <p class="fs-12 text-white-50 mb-3 mx-auto text-truncate-2" id="preview_cta_desc" style="max-width: 650px; line-height: 1.45; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">
+                                    {{ $franchiseCta['description'] ?? 'GPO Ke Thandey Dahi Bade is expanding its journey and inviting entrepreneurs to become part of the brand.' }}
+                                </p>
+                                <div>
+                                    <span class="badge rounded-pill px-4 py-2 fs-12 fw-bold shadow-sm" id="preview_cta_btn" style="background: #ecc67d; color: #1f2723; letter-spacing: 0.5px;">
+                                        {{ $franchiseCta['button_text'] ?? 'EXPLORE FRANCHISE OPPORTUNITY' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 1: BACKGROUND MEDIA CONFIGURATION -->
+                    <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                        <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-camera-reels-fill text-primary fs-15"></i>
+                                <h6 class="fs-14 fw-bold text-dark mb-0">1. Background Media Source & Asset</h6>
+                            </div>
+                            <span class="badge bg-light text-muted border fs-11">Photo • Video • YouTube</span>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-4">
+                                <!-- Media Format Selector -->
+                                <div class="col-md-4 col-12">
+                                    <label class="form-label fs-13 fw-bold text-dark mb-1.5 d-flex align-items-center gap-1.5">
+                                        <i class="bi bi-collection-play text-primary"></i> Media Format:
+                                    </label>
+                                    <select name="franchise_cta[media_type]" id="franchise_cta_media_type_select" class="form-select modern-select fw-semibold" style="height: 42px;">
+                                        <option value="image" {{ $ctaMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / GIF Image</option>
+                                        <option value="video" {{ $ctaMediaType === 'video' ? 'selected' : '' }}>🎬 Upload MP4 / WebM Video</option>
+                                        <option value="youtube" {{ $ctaMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video Link</option>
+                                    </select>
+                                    <small class="text-muted fs-11 mt-1.5 d-block">Select whether this banner shows a photo, custom uploaded video, or background YouTube video.</small>
+                                </div>
+
+                                <!-- Dynamic Media Input Columns -->
+                                <div class="col-md-8 col-12">
+                                    <!-- Photo/GIF File Upload -->
+                                    <div id="wrap_franchise_cta_image" style="display: {{ $ctaMediaType === 'image' ? 'block' : 'none' }};">
+                                        <label class="form-label fs-13 fw-bold text-dark mb-1.5 d-flex align-items-center gap-1.5">
+                                            <i class="bi bi-image text-primary"></i> Upload Photo / Animated GIF:
+                                        </label>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="border rounded-3 p-1 bg-light d-flex align-items-center justify-content-center flex-shrink-0" style="width: 70px; height: 50px; overflow: hidden;">
+                                                <img id="thumb_franchise_cta_image" src="{{ $ctaImageSrc }}" alt="Current CTA Image" style="width: 100%; height: 100%; object-fit: cover;">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <input type="file" name="franchise_cta[image_file]" class="form-control modern-input" id="franchise_cta_file_input" accept="image/*">
+                                                <input type="hidden" name="franchise_cta[image]" id="franchise_cta_hidden_image" value="{{ $franchiseCta['image'] ?? 'images/storefront.jpg' }}">
+                                                <small class="text-muted fs-11 mt-1 d-block">Recommended wide banner: 1600x650px JPG, PNG, WebP, or GIF (max 10MB).</small>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6 col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                Button Target Link:
-                                            </label>
-                                            <input type="text" name="franchise_cta[button_url]" value="{{ old('franchise_cta.button_url', $franchiseCta['button_url'] ?? '/franchise') }}" class="form-control form-control-sm modern-input" placeholder="/franchise">
+                                    </div>
+
+                                    <!-- Video File Upload -->
+                                    <div id="wrap_franchise_cta_video" style="display: {{ $ctaMediaType === 'video' ? 'block' : 'none' }};">
+                                        <label class="form-label fs-13 fw-bold text-dark mb-1.5 d-flex align-items-center gap-1.5">
+                                            <i class="bi bi-film text-primary"></i> Upload MP4 / WebM Video File:
+                                        </label>
+                                        <input type="file" name="franchise_cta[video_file]" class="form-control modern-input" id="franchise_cta_video_file_input" accept="video/mp4,video/webm">
+                                        <input type="hidden" name="franchise_cta[video]" id="franchise_cta_hidden_video" value="{{ $franchiseCta['video'] ?? '' }}">
+                                        <small class="text-muted fs-11 mt-1 d-block">
+                                            <i class="bi bi-info-circle me-1"></i> Current video: {{ !empty($franchiseCta['video']) ? $franchiseCta['video'] : 'None uploaded yet' }} (Max 25MB). Auto-plays muted and loops smoothly.
+                                        </small>
+                                    </div>
+
+                                    <!-- YouTube Video Link -->
+                                    <div id="wrap_franchise_cta_youtube" style="display: {{ $ctaMediaType === 'youtube' ? 'block' : 'none' }};">
+                                        <label class="form-label fs-13 fw-bold text-dark mb-1.5 d-flex align-items-center gap-1.5">
+                                            <i class="bi bi-youtube text-danger"></i> YouTube Video Link or Video ID:
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light text-danger"><i class="bi bi-youtube"></i></span>
+                                            <input type="text" name="franchise_cta[youtube_url]" id="franchise_cta_youtube_url_input" value="{{ old('franchise_cta.youtube_url', $franchiseCta['youtube_url'] ?? '') }}" class="form-control modern-input" placeholder="e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ or video ID">
                                         </div>
-                                        <div class="col-md-6 col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                                Button Color Style:
-                                            </label>
-                                            @php
-                                                $curStyle = $franchiseCta['button_style'] ?? 'amber';
-                                            @endphp
-                                            <select name="franchise_cta[button_style]" class="form-select form-select-sm modern-input fs-12">
-                                                <option value="amber" {{ $curStyle === 'amber' ? 'selected' : '' }}>🟡 Amber Gold (Default - High Contrast)</option>
-                                                <option value="terracotta" {{ $curStyle === 'terracotta' ? 'selected' : '' }}>🔴 Terracotta Coral</option>
-                                                <option value="spruce" {{ $curStyle === 'spruce' ? 'selected' : '' }}>🟢 Deep Spruce Teal</option>
-                                                <option value="crimson" {{ $curStyle === 'crimson' ? 'selected' : '' }}>🍷 Crimson Red</option>
-                                                <option value="emerald" {{ $curStyle === 'emerald' ? 'selected' : '' }}>🌲 Emerald Green</option>
-                                                <option value="white" {{ $curStyle === 'white' ? 'selected' : '' }}>⚪ Clean White Pill</option>
-                                            </select>
-                                        </div>
+                                        <small class="text-muted fs-11 mt-1 d-block">Automatically extracts video ID and renders a seamless looping background video.</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Bottom Action Bar -->
-                    <div class="p-3 bg-white border border-light-subtle rounded-3 shadow-sm d-flex flex-wrap align-items-center gap-2.5 mt-2">
-                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2">
+                    <!-- CARD 2: TRANSPARENT COLOR & OVERLAY CONTROLS (Clean 4-Column Layout / col-sm-3) -->
+                    <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                        <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-palette-fill text-primary fs-15"></i>
+                                <h6 class="fs-14 fw-bold text-dark mb-0">2. Transparent Tint Color & Darkness Overlay</h6>
+                            </div>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-11">Live Color & Transparency</span>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-3">
+                                <!-- Col 1: Palette Presets (col-sm-3) -->
+                                <div class="col-lg-3 col-sm-6 col-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1.5 d-flex align-items-center gap-1">
+                                        <i class="bi bi-brush text-primary"></i> Color Presets:
+                                    </label>
+                                    <div class="d-flex flex-wrap gap-1.5">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-1 d-flex align-items-center gap-1 fs-11" data-color="#083b3c">
+                                            <span class="rounded-circle" style="width: 10px; height: 10px; background: #083b3c;"></span>
+                                            <span>Spruce Teal</span>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-dark cta-overlay-preset-btn px-2 py-1 d-flex align-items-center gap-1 fs-11" data-color="#000000">
+                                            <span class="rounded-circle" style="width: 10px; height: 10px; background: #000000;"></span>
+                                            <span>Midnight Black</span>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-1 d-flex align-items-center gap-1 fs-11" data-color="#3a1313">
+                                            <span class="rounded-circle" style="width: 10px; height: 10px; background: #3a1313;"></span>
+                                            <span>Burgundy</span>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-1 d-flex align-items-center gap-1 fs-11" data-color="#231714">
+                                            <span class="rounded-circle" style="width: 10px; height: 10px; background: #231714;"></span>
+                                            <span>Warm Cocoa</span>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-1 d-flex align-items-center gap-1 fs-11" data-color="#0c1929">
+                                            <span class="rounded-circle" style="width: 10px; height: 10px; background: #0c1929;"></span>
+                                            <span>Navy Midnight</span>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary cta-overlay-preset-btn px-2 py-1 d-flex align-items-center gap-1 fs-11" data-color="#19302e">
+                                            <span class="rounded-circle" style="width: 10px; height: 10px; background: #19302e;"></span>
+                                            <span>Forest Spruce</span>
+                                        </button>
+                                    </div>
+                                    <small class="text-muted fs-11 mt-1.5 d-block">Click any preset to apply instantly.</small>
+                                </div>
+
+                                <!-- Col 2: Custom Hex Color & Picker (col-sm-3) -->
+                                <div class="col-lg-3 col-sm-6 col-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1.5 d-flex align-items-center gap-1">
+                                        <i class="bi bi-eyedropper text-primary"></i> Custom HEX Color:
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="color" id="franchise_cta_color_picker" class="form-control form-control-color border-0 p-1" value="{{ $ctaOverlayColor }}" style="width: 44px; height: 38px; cursor: pointer;">
+                                        <input type="text" name="franchise_cta[overlay_color]" id="franchise_cta_color_input" value="{{ $ctaOverlayColor }}" class="form-control modern-input font-monospace fw-semibold" placeholder="#083b3c" maxlength="7">
+                                    </div>
+                                    <small class="text-muted fs-11 mt-1.5 d-block">Pick visually or type any 6-digit HEX color code.</small>
+                                </div>
+
+                                <!-- Col 3: Opacity Slider & Dropdown (col-sm-3) -->
+                                <div class="col-lg-3 col-sm-6 col-12">
+                                    <div class="d-flex align-items-center justify-content-between mb-1.5">
+                                        <label class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                            <i class="bi bi-transparency text-primary"></i> Transparency / Opacity:
+                                        </label>
+                                        <span class="badge bg-primary px-2 py-0.5 fs-11 fw-bold" id="franchise_cta_opacity_badge">{{ round(floatval($ctaOverlayOp) * 100) }}%</span>
+                                    </div>
+                                    <input type="range" class="form-range mb-1.5" id="franchise_cta_opacity_slider" min="0" max="1" step="0.05" value="{{ $ctaOverlayOp }}">
+                                    <select name="franchise_cta[overlay_opacity]" id="franchise_cta_opacity_select" class="form-select form-select-sm modern-select fw-semibold">
+                                        <option value="0.00" {{ strval($ctaOverlayOp) === '0.00' ? 'selected' : '' }}>0% (100% Transparent / No Tint)</option>
+                                        <option value="0.25" {{ strval($ctaOverlayOp) === '0.25' ? 'selected' : '' }}>25% (Light Tint)</option>
+                                        <option value="0.50" {{ strval($ctaOverlayOp) === '0.50' ? 'selected' : '' }}>50% (Semi-Transparent)</option>
+                                        <option value="0.70" {{ strval($ctaOverlayOp) === '0.70' ? 'selected' : '' }}>70% (Medium High Readability)</option>
+                                        <option value="0.80" {{ strval($ctaOverlayOp) === '0.80' ? 'selected' : '' }}>80% (Dark Contrast)</option>
+                                        <option value="0.85" {{ strval($ctaOverlayOp) === '0.85' ? 'selected' : '' }}>85% (Balanced Cinematic)</option>
+                                        <option value="0.90" {{ strval($ctaOverlayOp) === '0.90' ? 'selected' : '' }}>90% (Standard / Recommended)</option>
+                                        <option value="0.95" {{ strval($ctaOverlayOp) === '0.95' ? 'selected' : '' }}>95% (Maximum Dark Contrast)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Col 4: Overlay Style (col-sm-3) -->
+                                <div class="col-lg-3 col-sm-6 col-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1.5 d-flex align-items-center gap-1">
+                                        <i class="bi bi-layers-half text-primary"></i> Overlay Blend Style:
+                                    </label>
+                                    <select name="franchise_cta[overlay_style]" id="franchise_cta_overlay_style_select" class="form-select modern-select fw-semibold" style="height: 38px;">
+                                        <option value="solid" {{ $ctaCurStyle === 'solid' ? 'selected' : '' }}>Solid Transparent Color</option>
+                                        <option value="gradient" {{ $ctaCurStyle === 'gradient' ? 'selected' : '' }}>Atmospheric Directional Gradient</option>
+                                    </select>
+                                    <small class="text-muted fs-11 mt-1.5 d-block">Gradient adds subtle lighting angle across the banner.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 3: HEADLINES, SUBTITLE & PITCH COPY -->
+                    <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                        <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-fonts text-primary fs-15"></i>
+                                <h6 class="fs-14 fw-bold text-dark mb-0">3. Headline, Subtitle & Marketing Pitch</h6>
+                            </div>
+                            <span class="badge bg-light text-muted border fs-11">Content Copy</span>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-3">
+                                <div class="col-md-7 col-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        Main Banner Heading (White Bold Uppercase):
+                                    </label>
+                                    <input type="text" name="franchise_cta[heading]" id="input_cta_heading" value="{{ old('franchise_cta.heading', $franchiseCta['heading'] ?? 'BRING THE GPO EXPERIENCE TO YOUR CITY') }}" class="form-control modern-input fw-bold" placeholder="e.g. BRING THE GPO EXPERIENCE TO YOUR CITY">
+                                </div>
+                                <div class="col-md-5 col-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        Golden Subtitle Tagline (Awadh Legacy Serif):
+                                    </label>
+                                    <input type="text" name="franchise_cta[subheading]" id="input_cta_subheading" value="{{ old('franchise_cta.subheading', $franchiseCta['subheading'] ?? 'Be Part of a Legacy That Started in 1976.') }}" class="form-control modern-input fst-italic" placeholder="e.g. Be Part of a Legacy That Started in 1976.">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        Franchise Opportunity Paragraph Description:
+                                    </label>
+                                    <textarea name="franchise_cta[description]" id="input_cta_desc" rows="3" class="form-control modern-textarea" placeholder="Enter franchise expansion description...">{{ old('franchise_cta.description', $franchiseCta['description'] ?? 'GPO Ke Thandey Dahi Bade is expanding its journey and inviting entrepreneurs to become part of the brand. Build a food business with an established brand identity, operational support, marketing support and a product loved by generations.') }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 4: CALL-TO-ACTION BUTTON -->
+                    <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                        <div class="card-header bg-white py-3 px-4 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-cursor-fill text-warning fs-14"></i>
+                                <h6 class="fs-14 fw-bold text-dark mb-0">4. Call-To-Action Button Configuration</h6>
+                            </div>
+                            <span class="badge bg-warning-subtle text-dark border border-warning-subtle fs-11">Button Settings</span>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-3">
+                                <div class="col-md-4 col-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        Button Text Label:
+                                    </label>
+                                    <input type="text" name="franchise_cta[button_text]" id="input_cta_btn_text" value="{{ old('franchise_cta.button_text', $franchiseCta['button_text'] ?? 'EXPLORE FRANCHISE OPPORTUNITY') }}" class="form-control modern-input fw-semibold" placeholder="e.g. EXPLORE FRANCHISE OPPORTUNITY">
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        Button Target URL:
+                                    </label>
+                                    <input type="text" name="franchise_cta[button_url]" value="{{ old('franchise_cta.button_url', $franchiseCta['button_url'] ?? '/franchise') }}" class="form-control modern-input" placeholder="/franchise">
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                        Button Color Theme / Pill Style:
+                                    </label>
+                                    @php
+                                        $curStyle = $franchiseCta['button_style'] ?? 'amber';
+                                    @endphp
+                                    <select name="franchise_cta[button_style]" class="form-select modern-select fs-13">
+                                        <option value="amber" {{ $curStyle === 'amber' ? 'selected' : '' }}>🟡 Amber Gold (Default - High Contrast)</option>
+                                        <option value="terracotta" {{ $curStyle === 'terracotta' ? 'selected' : '' }}>🔴 Terracotta Coral</option>
+                                        <option value="spruce" {{ $curStyle === 'spruce' ? 'selected' : '' }}>🟢 Deep Spruce Teal</option>
+                                        <option value="crimson" {{ $curStyle === 'crimson' ? 'selected' : '' }}>🍷 Crimson Red</option>
+                                        <option value="emerald" {{ $curStyle === 'emerald' ? 'selected' : '' }}>🌲 Emerald Green</option>
+                                        <option value="white" {{ $curStyle === 'white' ? 'selected' : '' }}>⚪ Clean White Pill</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STICKY BOTTOM ACTION BAR -->
+                    <div class="p-3 bg-white border border-light-subtle rounded-3 shadow-sm d-flex flex-wrap align-items-center gap-2.5 mt-4">
+                        <button type="submit" class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm d-flex align-items-center gap-2">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save Franchise CTA Changes</span>
+                            <span>Save Franchise CTA Banner</span>
                         </button>
-                        <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
+                        <button type="reset" class="btn btn-light border px-3 py-2.5 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
                         </button>
-                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2.5 ms-auto d-flex align-items-center gap-1.5">
                             <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
                         </a>
                     </div>
@@ -3567,6 +3608,11 @@
             if (ctaOpacityBadge) {
                 ctaOpacityBadge.textContent = Math.round(op * 100) + '%';
             }
+
+            const infoBadge = document.getElementById('sim_badge_overlay_info');
+            if (infoBadge) {
+                infoBadge.textContent = 'Overlay: ' + Math.round(op * 100) + '% (' + hex + ')';
+            }
         }
 
         // Two-way sync for Franchise CTA slider and select
@@ -3604,6 +3650,11 @@
             if (wrapCtaImg) wrapCtaImg.style.display = val === 'image' ? 'block' : 'none';
             if (wrapCtaVid) wrapCtaVid.style.display = val === 'video' ? 'block' : 'none';
             if (wrapCtaYt) wrapCtaYt.style.display = val === 'youtube' ? 'block' : 'none';
+
+            const mediaBadge = document.getElementById('sim_badge_media_type');
+            if (mediaBadge) {
+                mediaBadge.textContent = val;
+            }
 
             if (simCtaImg) simCtaImg.style.display = val === 'image' ? 'block' : 'none';
             if (simCtaVid) simCtaVid.style.display = val === 'video' ? 'block' : 'none';
@@ -3657,6 +3708,8 @@
                     const reader = new FileReader();
                     reader.onload = function (e) {
                         simCtaImg.src = e.target.result;
+                        const thumb = document.getElementById('thumb_franchise_cta_image');
+                        if (thumb) thumb.src = e.target.result;
                         if (ctaMediaTypeSelect) {
                             ctaMediaTypeSelect.value = 'image';
                             syncCtaMedia();
@@ -3693,9 +3746,11 @@
         // Live text sync for banner preview
         const ctaHeadingInput = document.getElementById('input_cta_heading');
         const ctaSubheadingInput = document.getElementById('input_cta_subheading');
+        const ctaDescInput = document.getElementById('input_cta_desc');
         const ctaBtnTextInput = document.getElementById('input_cta_btn_text');
         const previewCtaHeading = document.getElementById('preview_cta_heading');
         const previewCtaSubheading = document.getElementById('preview_cta_subheading');
+        const previewCtaDesc = document.getElementById('preview_cta_desc');
         const previewCtaBtn = document.getElementById('preview_cta_btn');
 
         if (ctaHeadingInput && previewCtaHeading) {
@@ -3706,6 +3761,11 @@
         if (ctaSubheadingInput && previewCtaSubheading) {
             ctaSubheadingInput.addEventListener('input', function () {
                 previewCtaSubheading.textContent = this.value.trim() || 'Be Part of a Legacy That Started in 1976.';
+            });
+        }
+        if (ctaDescInput && previewCtaDesc) {
+            ctaDescInput.addEventListener('input', function () {
+                previewCtaDesc.textContent = this.value.trim() || 'GPO Ke Thandey Dahi Bade is expanding its journey...';
             });
         }
         if (ctaBtnTextInput && previewCtaBtn) {
