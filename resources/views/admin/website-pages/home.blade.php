@@ -3248,6 +3248,9 @@
                 if (titleInput) {
                     titleInput.focus();
                 }
+            });
+        }
+
         // Visit Us Live Image Preview
         const visitFileInput = document.getElementById('visit_us_file_input');
         const visitPreviewImg = document.getElementById('visit_us_preview_img');
@@ -3261,6 +3264,8 @@
                     };
                     reader.readAsDataURL(file);
                 }
+            });
+        }
         // Franchise CTA Live Image Preview
         const ctaFileInput = document.getElementById('franchise_cta_file_input');
         const ctaPreviewBox = document.getElementById('franchise_cta_preview_box');
