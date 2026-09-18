@@ -525,28 +525,50 @@
                                                             <option value="image" {{ ($slide['media_type'] ?? '') === 'image' ? 'selected' : '' }}>🖼️ Static Image (JPG / PNG)</option>
                                                             <option value="gif" {{ ($slide['media_type'] ?? '') === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
                                                             <option value="video" {{ ($slide['media_type'] ?? '') === 'video' ? 'selected' : '' }}>🎥 Video (MP4 / WebM)</option>
+                                                            <option value="youtube" {{ ($slide['media_type'] ?? '') === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video Link</option>
                                                         </select>
 
-                                                        <label class="fs-12 fw-semibold text-muted upload-label-text mb-1 d-block">
-                                                            {{ ($slide['media_type'] ?? '') === 'video' ? 'Upload Video File:' : (($slide['media_type'] ?? '') === 'gif' ? 'Upload GIF File:' : 'Upload Image File:') }}
-                                                        </label>
-                                                        <input type="file" name="slides[{{ $index }}][media_file]" class="form-control form-control-sm slide-media-input modern-input mb-1" accept="{{ ($slide['media_type'] ?? '') === 'video' ? 'video/mp4,video/webm' : 'image/*' }}">
-                                                        <input type="hidden" name="slides[{{ $index }}][media]" class="slide-media-hidden" value="{{ $slide['media'] ?? 'images/dahi_vada.jpg' }}">
-                                                        <small class="text-muted fs-11 d-block media-format-hint mt-1">
-                                                            <i class="bi bi-check-circle text-success me-1"></i> Formats: JPG, PNG, WEBP, GIF, MP4.
-                                                        </small>
+                                                        <div class="slide-file-upload-wrap" style="display: {{ ($slide['media_type'] ?? '') === 'youtube' ? 'none' : 'block' }};">
+                                                            <label class="fs-12 fw-semibold text-muted upload-label-text mb-1 d-block">
+                                                                {{ ($slide['media_type'] ?? '') === 'video' ? 'Upload Video File:' : (($slide['media_type'] ?? '') === 'gif' ? 'Upload GIF File:' : 'Upload Image File:') }}
+                                                            </label>
+                                                            <input type="file" name="slides[{{ $index }}][media_file]" class="form-control form-control-sm slide-media-input modern-input mb-1" accept="{{ ($slide['media_type'] ?? '') === 'video' ? 'video/mp4,video/webm' : 'image/*' }}">
+                                                            <input type="hidden" name="slides[{{ $index }}][media]" class="slide-media-hidden" value="{{ $slide['media'] ?? 'images/dahi_vada.jpg' }}">
+                                                            <small class="text-muted fs-11 d-block media-format-hint mt-1">
+                                                                <i class="bi bi-check-circle text-success me-1"></i> Formats: JPG, PNG, WEBP, GIF, MP4.
+                                                            </small>
+                                                        </div>
+
+                                                        <div class="slide-youtube-upload-wrap" style="display: {{ ($slide['media_type'] ?? '') === 'youtube' ? 'block' : 'none' }};">
+                                                            <label class="fs-12 fw-semibold text-muted mb-1 d-block">
+                                                                YouTube Video URL / ID:
+                                                            </label>
+                                                            <input type="text" name="slides[{{ $index }}][youtube_url]" class="form-control form-control-sm slide-youtube-input modern-input mb-1" placeholder="https://www.youtube.com/watch?v=..." value="{{ $slide['youtube_url'] ?? '' }}">
+                                                            <small class="text-muted fs-11 d-block">
+                                                                <i class="bi bi-youtube text-danger me-1"></i> Paste YouTube link or 11-char ID.
+                                                            </small>
+                                                        </div>
                                                     </div>
 
                                                     <div class="col-md-7 col-sm-12">
                                                         <div class="d-flex justify-content-between align-items-center mb-1">
                                                             <label class="fs-12 fw-bold text-dark mb-0">Live Visual Preview:</label>
                                                             <span class="badge bg-dark text-light fs-10 font-monospace text-truncate slide-preview-path" style="max-width: 220px;">
-                                                                {{ $slide['media'] ?? 'images/dahi_vada.jpg' }}
+                                                                {{ ($slide['media_type'] ?? '') === 'youtube' ? ($slide['youtube_url'] ?? 'YouTube') : ($slide['media'] ?? 'images/dahi_vada.jpg') }}
                                                             </span>
                                                         </div>
+                                                        @php
+                                                            $sYt = $slide['youtube_id'] ?? '';
+                                                            if(empty($sYt) && !empty($slide['youtube_url'])) {
+                                                                if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $slide['youtube_url'], $sym)) {
+                                                                    $sYt = $sym[1];
+                                                                }
+                                                            }
+                                                        @endphp
                                                         <div class="overflow-hidden position-relative bg-dark media-preview-box" style="height: 160px;">
+                                                            <iframe class="w-100 h-100 slide-preview-youtube" style="border: none; object-fit: cover; display: {{ ($slide['media_type'] ?? '') === 'youtube' ? 'block' : 'none' }};" src="{{ !empty($sYt) ? 'https://www.youtube.com/embed/'.$sYt.'?autoplay=1&mute=1&loop=1&playlist='.$sYt.'&controls=0' : '' }}" frameborder="0" allow="autoplay; encrypted-media"></iframe>
                                                             <video class="w-100 h-100 slide-preview-video" style="object-fit: cover; display: {{ ($slide['media_type'] ?? '') === 'video' ? 'block' : 'none' }};" autoplay muted loop playsinline src="{{ asset($slide['media'] ?? 'images/dahi_vada.jpg') }}"></video>
-                                                            <img class="w-100 h-100 slide-preview-img" style="object-fit: cover; display: {{ ($slide['media_type'] ?? '') !== 'video' ? 'block' : 'none' }};" src="{{ asset($slide['media'] ?? 'images/dahi_vada.jpg') }}" alt="Preview">
+                                                            <img class="w-100 h-100 slide-preview-img" style="object-fit: cover; display: {{ !in_array(($slide['media_type'] ?? ''), ['video', 'youtube']) ? 'block' : 'none' }};" src="{{ asset($slide['media'] ?? 'images/dahi_vada.jpg') }}" alt="Preview">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1816,38 +1838,109 @@
                             <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
                                 <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center gap-2">
-                                        <i class="bi bi-image-fill text-secondary fs-15"></i>
-                                        <h6 class="fs-13 fw-bold text-dark mb-0">Banner Background Photo</h6>
+                                        <i class="bi bi-camera-reels-fill text-secondary fs-15"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Banner Background Media</h6>
                                     </div>
-                                    <span class="badge bg-light text-muted border fs-11">Dark Overlay Banner</span>
+                                    <span class="badge bg-light text-muted border fs-11">Multi-Format Banner</span>
                                 </div>
                                 <div class="card-body p-3.5">
+                                    @php
+                                        $ctaMediaType = $franchiseCta['media_type'] ?? 'image';
+                                        $ctaOverlayColor = $franchiseCta['overlay_color'] ?? '#083b3c';
+                                        $ctaOverlayOp = floatval($franchiseCta['overlay_opacity'] ?? 0.90);
+                                        $ctaYtId = $franchiseCta['youtube_id'] ?? '';
+                                        if (empty($ctaYtId) && !empty($franchiseCta['youtube_url'])) {
+                                            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $franchiseCta['youtube_url'], $cm)) {
+                                                $ctaYtId = $cm[1];
+                                            }
+                                        }
+                                        $ctaHex = ltrim($ctaOverlayColor, '#');
+                                        $cr = 8; $cg = 59; $cb = 60;
+                                        if (strlen($ctaHex) >= 6) {
+                                            $cr = hexdec(substr($ctaHex, 0, 2));
+                                            $cg = hexdec(substr($ctaHex, 2, 2));
+                                            $cb = hexdec(substr($ctaHex, 4, 2));
+                                        }
+                                    @endphp
+
                                     <!-- Live Simulated Banner Preview -->
                                     <div class="mb-3">
                                         <label class="form-label fs-11 fw-bold text-muted mb-1 text-uppercase">Live Visual Preview:</label>
-                                        <div class="rounded-3 border overflow-hidden position-relative shadow-sm p-4 text-center d-flex flex-column justify-content-center align-items-center" id="franchise_cta_preview_box" style="min-height: 180px; background-image: linear-gradient(135deg, rgba(8, 59, 60, {{ $franchiseCta['overlay_opacity'] ?? '0.90' }}) 0%, rgba(5, 44, 45, {{ $franchiseCta['overlay_opacity'] ?? '0.90' }}) 100%), url('{{ $ctaImageSrc }}'); background-size: cover; background-position: center; color: #ffffff;">
-                                            <h6 class="fw-bold fs-14 mb-1 text-white" id="preview_cta_heading" style="letter-spacing: 0.5px;">{{ $franchiseCta['heading'] ?? 'BRING THE GPO EXPERIENCE TO YOUR CITY' }}</h6>
-                                            <small class="fs-11 fst-italic mb-2" id="preview_cta_subheading" style="color: #ecc67d;">{{ $franchiseCta['subheading'] ?? 'Be Part of a Legacy That Started in 1976.' }}</small>
-                                            <span class="badge rounded-pill px-3 py-1.5 fs-11 fw-bold mt-1" id="preview_cta_btn" style="background: #ecc67d; color: #1f2723;">
-                                                {{ $franchiseCta['button_text'] ?? 'EXPLORE FRANCHISE OPPORTUNITY' }}
-                                            </span>
+                                        <div class="rounded-3 border overflow-hidden position-relative shadow-sm p-4 text-center d-flex flex-column justify-content-center align-items-center" id="franchise_cta_preview_box" style="min-height: 180px; position: relative; background: #000; color: #ffffff;">
+                                            <!-- Media layers -->
+                                            <div style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; pointer-events: none;">
+                                                <iframe id="sim_franchise_cta_yt" src="{{ !empty($ctaYtId) ? 'https://www.youtube.com/embed/'.$ctaYtId.'?autoplay=1&mute=1&loop=1&playlist='.$ctaYtId.'&controls=0&showinfo=0&rel=0&modestbranding=1' : '' }}" style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100%; min-width: 177.77vh; transform: translate(-50%, -50%); border: none; display: {{ $ctaMediaType === 'youtube' ? 'block' : 'none' }};" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+                                                <video id="sim_franchise_cta_vid" autoplay muted loop playsinline src="{{ !empty($franchiseCta['video']) ? asset($franchiseCta['video']) : '' }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: {{ $ctaMediaType === 'video' ? 'block' : 'none' }};"></video>
+                                                <img id="sim_franchise_cta_img" src="{{ $ctaImageSrc }}" alt="CTA Preview" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: {{ !in_array($ctaMediaType, ['video', 'youtube']) ? 'block' : 'none' }};">
+                                            </div>
+                                            <!-- Transparent Overlay Layer -->
+                                            <div id="sim_franchise_cta_overlay" style="position: absolute; inset: 0; z-index: 1.5; background: linear-gradient(135deg, rgba({{ $cr }}, {{ $cg }}, {{ $cb }}, {{ $ctaOverlayOp }}) 0%, rgba({{ max(0, $cr - 3) }}, {{ max(0, $cg - 15) }}, {{ max(0, $cb - 15) }}, {{ $ctaOverlayOp }}) 100%);"></div>
+
+                                            <div style="position: relative; z-index: 2; width: 100%;">
+                                                <h6 class="fw-bold fs-14 mb-1 text-white" id="preview_cta_heading" style="letter-spacing: 0.5px;">{{ $franchiseCta['heading'] ?? 'BRING THE GPO EXPERIENCE TO YOUR CITY' }}</h6>
+                                                <small class="fs-11 fst-italic mb-2 d-block" id="preview_cta_subheading" style="color: #ecc67d;">{{ $franchiseCta['subheading'] ?? 'Be Part of a Legacy That Started in 1976.' }}</small>
+                                                <span class="badge rounded-pill px-3 py-1.5 fs-11 fw-bold mt-1" id="preview_cta_btn" style="background: #ecc67d; color: #1f2723;">
+                                                    {{ $franchiseCta['button_text'] ?? 'EXPLORE FRANCHISE OPPORTUNITY' }}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <!-- Upload Input -->
+                                    <!-- Media Format Selector -->
                                     <div class="mb-3">
                                         <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                            Upload New Background:
+                                            Background Media Format:
                                         </label>
+                                        <select name="franchise_cta[media_type]" id="franchise_cta_media_type_select" class="form-select form-select-sm modern-select fw-semibold mb-2">
+                                            <option value="image" {{ $ctaMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / GIF Image</option>
+                                            <option value="video" {{ $ctaMediaType === 'video' ? 'selected' : '' }}>🎬 Upload MP4 / WebM Video</option>
+                                            <option value="youtube" {{ $ctaMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video Link</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Upload Image/GIF (When photo selected) -->
+                                    <div class="mb-3" id="wrap_franchise_cta_image" style="display: {{ $ctaMediaType === 'image' ? 'block' : 'none' }};">
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">Upload Photo / GIF File:</label>
                                         <input type="file" name="franchise_cta[image_file]" class="form-control form-control-sm modern-input mb-1.5" id="franchise_cta_file_input" accept="image/*">
                                         <input type="hidden" name="franchise_cta[image]" id="franchise_cta_hidden_image" value="{{ $franchiseCta['image'] ?? 'images/storefront.jpg' }}">
-                                        <small class="text-muted fs-11 d-block">Recommended wide photo: 1400x600px JPG/PNG/WebP</small>
+                                        <small class="text-muted fs-11 d-block">Recommended wide photo: 1400x600px JPG/PNG/WebP/GIF</small>
+                                    </div>
+
+                                    <!-- Upload Video File (When video selected) -->
+                                    <div class="mb-3" id="wrap_franchise_cta_video" style="display: {{ $ctaMediaType === 'video' ? 'block' : 'none' }};">
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">Upload Video File (MP4/WebM):</label>
+                                        <input type="file" name="franchise_cta[video_file]" class="form-control form-control-sm modern-input mb-1.5" id="franchise_cta_video_file_input" accept="video/mp4,video/webm">
+                                        <input type="hidden" name="franchise_cta[video]" id="franchise_cta_hidden_video" value="{{ $franchiseCta['video'] ?? '' }}">
+                                        <small class="text-muted fs-11 d-block">Max 25MB MP4 / WebM video file.</small>
+                                    </div>
+
+                                    <!-- YouTube Link (When YouTube selected) -->
+                                    <div class="mb-3" id="wrap_franchise_cta_youtube" style="display: {{ $ctaMediaType === 'youtube' ? 'block' : 'none' }};">
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">YouTube Video Link / ID:</label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text bg-light text-danger"><i class="bi bi-youtube"></i></span>
+                                            <input type="text" name="franchise_cta[youtube_url]" id="franchise_cta_youtube_url_input" value="{{ old('franchise_cta.youtube_url', $franchiseCta['youtube_url'] ?? '') }}" class="form-control modern-input" placeholder="https://www.youtube.com/watch?v=...">
+                                        </div>
+                                        <small class="text-muted fs-11 mt-1 d-block">Auto-plays silently on loop in the background.</small>
+                                    </div>
+
+                                    <!-- Transparent Color & Darkness Overlay -->
+                                    <div class="border-top pt-3 mt-3">
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1.5 d-flex align-items-center gap-1.5">
+                                            <i class="bi bi-paint-bucket text-primary"></i>
+                                            <span>Transparent Tint Overlay Color:</span>
+                                        </label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <input type="color" id="franchise_cta_color_picker" class="form-control form-control-color p-1" value="{{ $ctaOverlayColor }}" style="width: 42px; height: 32px;">
+                                            <input type="text" name="franchise_cta[overlay_color]" id="franchise_cta_color_input" value="{{ $ctaOverlayColor }}" class="form-control form-control-sm modern-input font-monospace fw-semibold" placeholder="#083b3c">
+                                        </div>
                                     </div>
 
                                     <!-- Overlay Opacity -->
                                     <div class="mb-0">
-                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
-                                            Teal Overlay Opacity (Darkness):
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center gap-1.5">
+                                            <i class="bi bi-transparency text-primary"></i>
+                                            <span>Overlay Opacity (Darkness):</span>
                                         </label>
                                         <select name="franchise_cta[overlay_opacity]" id="franchise_cta_opacity_select" class="form-select form-select-sm modern-input fs-12">
                                             <option value="0.95" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.95' ? 'selected' : '' }}>95% (Extra Dark / Maximum Contrast)</option>
@@ -1856,11 +1949,10 @@
                                             <option value="0.85" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.85' ? 'selected' : '' }}>85% (Balanced Dark / Medium Visibility)</option>
                                             <option value="0.80" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.80' ? 'selected' : '' }}>80% (Moderate Darkness)</option>
                                             <option value="0.75" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.75' ? 'selected' : '' }}>75% (Lighter Background)</option>
-                                            <option value="0.65" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.65' ? 'selected' : '' }}>65% (High Photo Visibility)</option>
-                                            <option value="0.50" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.50' ? 'selected' : '' }}>50% (Subtle Tint / Vivid Photo)</option>
-                                            <option value="0.35" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.35' ? 'selected' : '' }}>35% (Light Tint / Photo Focused)</option>
+                                            <option value="0.65" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.65' ? 'selected' : '' }}>65% (High Media Visibility)</option>
+                                            <option value="0.50" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.50' ? 'selected' : '' }}>50% (Subtle Tint / Vivid Media)</option>
+                                            <option value="0.35" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.35' ? 'selected' : '' }}>35% (Light Tint / Media Focused)</option>
                                         </select>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2092,29 +2184,70 @@
             const typeSelect = pane.querySelector('.slide-media-type-select');
             const videoEl = pane.querySelector('.slide-preview-video');
             const imgEl = pane.querySelector('.slide-preview-img');
+            const ytIframe = pane.querySelector('.slide-preview-youtube');
             const badgeEl = pane.querySelector('.media-type-badge');
             const uploadLabel = pane.querySelector('.upload-label-text');
             const fileInput = pane.querySelector('.slide-media-input');
+            const fileWrap = pane.querySelector('.slide-file-upload-wrap');
+            const ytWrap = pane.querySelector('.slide-youtube-upload-wrap');
+            const ytInput = pane.querySelector('.slide-youtube-input');
             const removeBtn = pane.querySelector('.btn-remove-slide');
+
+            function updateYtPreview() {
+                if (!ytInput || !ytIframe) return;
+                const url = ytInput.value.trim();
+                let id = '';
+                const m = url.match(/(?:youtube(?:-nocookie)?\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+                if (m) {
+                    id = m[1];
+                } else if (url.length === 11 && !url.includes('/')) {
+                    id = url;
+                }
+                if (id) {
+                    ytIframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0`;
+                    const pathText = pane.querySelector('.slide-preview-path');
+                    if (pathText) pathText.textContent = 'YouTube ID: ' + id;
+                }
+            }
+
+            if (ytInput) {
+                ytInput.addEventListener('input', updateYtPreview);
+            }
 
             if (typeSelect) {
                 typeSelect.addEventListener('change', function () {
                     const val = this.value;
                     if (badgeEl) badgeEl.textContent = val;
 
-                    if (val === 'video') {
+                    if (val === 'youtube') {
+                        if (ytWrap) ytWrap.style.display = 'block';
+                        if (fileWrap) fileWrap.style.display = 'none';
+                        if (videoEl) videoEl.style.display = 'none';
+                        if (imgEl) imgEl.style.display = 'none';
+                        if (ytIframe) ytIframe.style.display = 'block';
+                        updateYtPreview();
+                    } else if (val === 'video') {
+                        if (ytWrap) ytWrap.style.display = 'none';
+                        if (fileWrap) fileWrap.style.display = 'block';
                         if (videoEl) videoEl.style.display = 'block';
                         if (imgEl) imgEl.style.display = 'none';
+                        if (ytIframe) ytIframe.style.display = 'none';
                         if (uploadLabel) uploadLabel.textContent = 'Upload New Video (MP4/WebM)';
                         if (fileInput) fileInput.accept = 'video/mp4,video/webm';
                     } else if (val === 'gif') {
+                        if (ytWrap) ytWrap.style.display = 'none';
+                        if (fileWrap) fileWrap.style.display = 'block';
                         if (videoEl) videoEl.style.display = 'none';
                         if (imgEl) imgEl.style.display = 'block';
+                        if (ytIframe) ytIframe.style.display = 'none';
                         if (uploadLabel) uploadLabel.textContent = 'Upload Animated GIF';
                         if (fileInput) fileInput.accept = 'image/gif';
                     } else {
+                        if (ytWrap) ytWrap.style.display = 'none';
+                        if (fileWrap) fileWrap.style.display = 'block';
                         if (videoEl) videoEl.style.display = 'none';
                         if (imgEl) imgEl.style.display = 'block';
+                        if (ytIframe) ytIframe.style.display = 'none';
                         if (uploadLabel) uploadLabel.textContent = 'Upload New Image';
                         if (fileInput) fileInput.accept = 'image/*';
                     }
@@ -2569,16 +2702,29 @@
                                                 <option value="image" selected>🖼️ Static Image (JPG / PNG)</option>
                                                 <option value="gif">🎞️ Animated GIF</option>
                                                 <option value="video">🎥 Video (MP4 / WebM)</option>
+                                                <option value="youtube">▶️ YouTube Video Link</option>
                                             </select>
 
-                                            <label class="fs-12 fw-semibold text-muted upload-label-text mb-1 d-block">
-                                                Upload Image File:
-                                            </label>
-                                            <input type="file" name="slides[${newIndex}][media_file]" class="form-control form-control-sm slide-media-input modern-input mb-1" accept="image/*">
-                                            <input type="hidden" name="slides[${newIndex}][media]" class="slide-media-hidden" value="images/dahi_vada.jpg">
-                                            <small class="text-muted fs-11 d-block media-format-hint mt-1">
-                                                <i class="bi bi-check-circle text-success me-1"></i> Formats: JPG, PNG, WEBP, GIF, MP4.
-                                            </small>
+                                            <div class="slide-file-upload-wrap">
+                                                <label class="fs-12 fw-semibold text-muted upload-label-text mb-1 d-block">
+                                                    Upload Image File:
+                                                </label>
+                                                <input type="file" name="slides[${newIndex}][media_file]" class="form-control form-control-sm slide-media-input modern-input mb-1" accept="image/*">
+                                                <input type="hidden" name="slides[${newIndex}][media]" class="slide-media-hidden" value="images/dahi_vada.jpg">
+                                                <small class="text-muted fs-11 d-block media-format-hint mt-1">
+                                                    <i class="bi bi-check-circle text-success me-1"></i> Formats: JPG, PNG, WEBP, GIF, MP4.
+                                                </small>
+                                            </div>
+
+                                            <div class="slide-youtube-upload-wrap" style="display: none;">
+                                                <label class="fs-12 fw-semibold text-muted mb-1 d-block">
+                                                    YouTube Video URL / ID:
+                                                </label>
+                                                <input type="text" name="slides[${newIndex}][youtube_url]" class="form-control form-control-sm slide-youtube-input modern-input mb-1" placeholder="https://www.youtube.com/watch?v=...">
+                                                <small class="text-muted fs-11 d-block">
+                                                    <i class="bi bi-youtube text-danger me-1"></i> Paste YouTube link or 11-char ID.
+                                                </small>
+                                            </div>
                                         </div>
 
                                         <div class="col-md-7 col-sm-12">
@@ -2589,6 +2735,7 @@
                                                 </span>
                                             </div>
                                             <div class="overflow-hidden position-relative bg-dark media-preview-box" style="height: 160px;">
+                                                <iframe class="w-100 h-100 slide-preview-youtube" style="border: none; object-fit: cover; display: none;" src="" frameborder="0" allow="autoplay; encrypted-media"></iframe>
                                                 <video class="w-100 h-100 slide-preview-video" style="object-fit: cover; display: none;" autoplay muted loop playsinline></video>
                                                 <img class="w-100 h-100 slide-preview-img" style="object-fit: cover; display: block;" src="{{ asset('images/dahi_vada.jpg') }}" alt="Preview">
                                             </div>
@@ -3273,40 +3420,141 @@
                 }
             });
         }
-        // Franchise CTA Live Image & Opacity Preview
-        const ctaFileInput = document.getElementById('franchise_cta_file_input');
-        const ctaPreviewBox = document.getElementById('franchise_cta_preview_box');
-        const ctaOpacitySelect = document.getElementById('franchise_cta_opacity_select');
+        // Franchise CTA Multi-Format & Transparent Overlay Preview
+        const ctaMediaTypeSelect = document.getElementById('franchise_cta_media_type_select');
+        const wrapCtaImg = document.getElementById('wrap_franchise_cta_image');
+        const wrapCtaVid = document.getElementById('wrap_franchise_cta_video');
+        const wrapCtaYt = document.getElementById('wrap_franchise_cta_youtube');
 
-        function updateCtaPreviewBackground(newImgUrl) {
-            if (!ctaPreviewBox) return;
-            const op = ctaOpacitySelect ? ctaOpacitySelect.value : '0.90';
-            if (newImgUrl) {
-                ctaPreviewBox.style.backgroundImage = `linear-gradient(135deg, rgba(8, 59, 60, ${op}) 0%, rgba(5, 44, 45, ${op}) 100%), url('${newImgUrl}')`;
-            } else {
-                const currentBg = ctaPreviewBox.style.backgroundImage;
-                const match = currentBg.match(/url\(['"]?(.*?)['"]?\)/);
-                const url = match ? match[1] : '';
-                ctaPreviewBox.style.backgroundImage = `linear-gradient(135deg, rgba(8, 59, 60, ${op}) 0%, rgba(5, 44, 45, ${op}) 100%), url('${url}')`;
+        const simCtaYt = document.getElementById('sim_franchise_cta_yt');
+        const simCtaVid = document.getElementById('sim_franchise_cta_vid');
+        const simCtaImg = document.getElementById('sim_franchise_cta_img');
+        const simCtaOverlay = document.getElementById('sim_franchise_cta_overlay');
+
+        const ctaColorPicker = document.getElementById('franchise_cta_color_picker');
+        const ctaColorInput = document.getElementById('franchise_cta_color_input');
+        const ctaOpacitySelect = document.getElementById('franchise_cta_opacity_select');
+        const ctaFileInput = document.getElementById('franchise_cta_file_input');
+        const ctaVideoInput = document.getElementById('franchise_cta_video_file_input');
+        const ctaYtUrlInput = document.getElementById('franchise_cta_youtube_url_input');
+
+        function hexToRgb(hex) {
+            hex = hex.replace(/^#/, '');
+            if (hex.length === 3) {
+                return [
+                    parseInt(hex[0] + hex[0], 16),
+                    parseInt(hex[1] + hex[1], 16),
+                    parseInt(hex[2] + hex[2], 16)
+                ];
+            } else if (hex.length >= 6) {
+                return [
+                    parseInt(hex.substring(0, 2), 16),
+                    parseInt(hex.substring(2, 4), 16),
+                    parseInt(hex.substring(4, 6), 16)
+                ];
+            }
+            return [8, 59, 60];
+        }
+
+        function updateCtaOverlay() {
+            if (!simCtaOverlay) return;
+            const hex = ctaColorInput ? ctaColorInput.value : '#083b3c';
+            const op = ctaOpacitySelect ? parseFloat(ctaOpacitySelect.value) : 0.90;
+            const [r, g, b] = hexToRgb(hex);
+            const r2 = Math.max(0, r - 5);
+            const g2 = Math.max(0, g - 15);
+            const b2 = Math.max(0, b - 15);
+            simCtaOverlay.style.background = `linear-gradient(135deg, rgba(${r}, ${g}, ${b}, ${op}) 0%, rgba(${r2}, ${g2}, ${b2}, ${op}) 100%)`;
+        }
+
+        function syncCtaMedia() {
+            const val = ctaMediaTypeSelect ? ctaMediaTypeSelect.value : 'image';
+            if (wrapCtaImg) wrapCtaImg.style.display = val === 'image' ? 'block' : 'none';
+            if (wrapCtaVid) wrapCtaVid.style.display = val === 'video' ? 'block' : 'none';
+            if (wrapCtaYt) wrapCtaYt.style.display = val === 'youtube' ? 'block' : 'none';
+
+            if (simCtaImg) simCtaImg.style.display = val === 'image' ? 'block' : 'none';
+            if (simCtaVid) simCtaVid.style.display = val === 'video' ? 'block' : 'none';
+            if (simCtaYt) simCtaYt.style.display = val === 'youtube' ? 'block' : 'none';
+
+            if (val === 'youtube') {
+                updateCtaYtPreview();
+            } else if (val === 'video' && simCtaVid) {
+                simCtaVid.play().catch(() => {});
+            }
+            updateCtaOverlay();
+        }
+
+        function updateCtaYtPreview() {
+            if (!ctaYtUrlInput || !simCtaYt) return;
+            const val = ctaYtUrlInput.value.trim();
+            let id = '';
+            const m = val.match(/(?:youtube(?:-nocookie)?\.com/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+            if (m) {
+                id = m[1];
+            } else if (val.length === 11 && !val.includes('/')) {
+                id = val;
+            }
+            if (id) {
+                simCtaYt.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&rel=0&modestbranding=1`;
             }
         }
 
-        if (ctaFileInput) {
+        if (ctaMediaTypeSelect) {
+            ctaMediaTypeSelect.addEventListener('change', syncCtaMedia);
+        }
+        if (ctaColorPicker && ctaColorInput) {
+            ctaColorPicker.addEventListener('input', function () {
+                ctaColorInput.value = this.value;
+                updateCtaOverlay();
+            });
+            ctaColorInput.addEventListener('input', function () {
+                if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
+                    ctaColorPicker.value = this.value;
+                }
+                updateCtaOverlay();
+            });
+        }
+        if (ctaOpacitySelect) {
+            ctaOpacitySelect.addEventListener('change', updateCtaOverlay);
+        }
+        if (ctaFileInput && simCtaImg) {
             ctaFileInput.addEventListener('change', function () {
                 const file = this.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        updateCtaPreviewBackground(e.target.result);
+                        simCtaImg.src = e.target.result;
+                        if (ctaMediaTypeSelect) {
+                            ctaMediaTypeSelect.value = 'image';
+                            syncCtaMedia();
+                        }
                     };
                     reader.readAsDataURL(file);
                 }
             });
         }
-
-        if (ctaOpacitySelect) {
-            ctaOpacitySelect.addEventListener('change', function () {
-                updateCtaPreviewBackground();
+        if (ctaVideoInput && simCtaVid) {
+            ctaVideoInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const objUrl = URL.createObjectURL(file);
+                    simCtaVid.src = objUrl;
+                    if (ctaMediaTypeSelect) {
+                        ctaMediaTypeSelect.value = 'video';
+                        syncCtaMedia();
+                    }
+                    simCtaVid.play().catch(() => {});
+                }
+            });
+        }
+        if (ctaYtUrlInput) {
+            ctaYtUrlInput.addEventListener('input', function () {
+                updateCtaYtPreview();
+                if (ctaMediaTypeSelect && ctaMediaTypeSelect.value !== 'youtube') {
+                    ctaMediaTypeSelect.value = 'youtube';
+                    syncCtaMedia();
+                }
             });
         }
 

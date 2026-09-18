@@ -187,10 +187,37 @@
       </section>
 
       <!-- SECTION 02 — THE GPO JOURNEY (Document Page 7) -->
-      <section class="humble-legacy-dark" style="margin: 50px 0;">
-        <img src="{{ asset($story['journey_image'] ?? 'images/storefront.jpg') }}" alt="The GPO Journey Hazratganj" class="bg-photo">
-        <div class="gradient-overlay"></div>
-        <div class="text-pad">
+      @php
+        $jMediaType = $story['journey_media_type'] ?? 'image';
+        $jOverlayColor = $story['journey_overlay_color'] ?? '#083b3c';
+        $jOverlayOpacity = floatval($story['journey_overlay_opacity'] ?? 0.85);
+        $jYtId = $story['journey_youtube_id'] ?? '';
+        if (empty($jYtId) && !empty($story['journey_youtube_url'])) {
+            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $story['journey_youtube_url'], $jm)) {
+                $jYtId = $jm[1];
+            }
+        }
+        $jHex = ltrim($jOverlayColor, '#');
+        $jr = 8; $jg = 59; $jb = 60;
+        if (strlen($jHex) >= 6) {
+            $jr = hexdec(substr($jHex, 0, 2));
+            $jg = hexdec(substr($jHex, 2, 2));
+            $jb = hexdec(substr($jHex, 4, 2));
+        }
+      @endphp
+      <section class="humble-legacy-dark" style="margin: 50px 0; position: relative; overflow: hidden;">
+        @if($jMediaType === 'youtube' && !empty($jYtId))
+          <div class="story-hero-video-wrap">
+            <iframe src="https://www.youtube.com/embed/{{ $jYtId }}?autoplay=1&mute=1&loop=1&playlist={{ $jYtId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" 
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        @elseif($jMediaType === 'video' && !empty($story['journey_video']))
+          <video class="bg-photo" autoplay muted loop playsinline src="{{ asset($story['journey_video']) }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
+        @else
+          <img src="{{ asset($story['journey_image'] ?? 'images/storefront.jpg') }}" alt="The GPO Journey Hazratganj" class="bg-photo">
+        @endif
+        <div class="gradient-overlay" style="background: linear-gradient(135deg, rgba({{ $jr }}, {{ $jg }}, {{ $jb }}, {{ $jOverlayOpacity }}) 0%, rgba({{ max(0, $jr - 10) }}, {{ max(0, $jg - 10) }}, {{ max(0, $jb - 10) }}, {{ min(1, $jOverlayOpacity + 0.08) }}) 100%);"></div>
+        <div class="text-pad" style="position: relative; z-index: 2;">
           <div style="font-family: var(--font-serif); font-size: 0.88rem; font-weight: 700; color: var(--c-gold-amber); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px;">
             {{ $story['journey_badge'] ?? 'THE GPO JOURNEY' }}
           </div>
@@ -323,9 +350,37 @@
     </div>
 
     <!-- FULL-WIDTH PANORAMIC LUCKNOW BANNER (10px Bottom Gap) -->
-    <section class="lucknow-fullwidth-banner" style="margin-bottom: 10px;">
-      <img src="{{ asset($story['banner_image'] ?? 'images/lucknow_heritage.jpg') }}" alt="{{ $story['banner_title'] ?? 'Lucknow' }} Heritage">
-      <div class="overlay">
+    @php
+      $bMediaType = $story['banner_media_type'] ?? 'image';
+      $bOverlayColor = $story['banner_overlay_color'] ?? '#000000';
+      $bOverlayOpacity = floatval($story['banner_overlay_opacity'] ?? 0.65);
+      $bYtId = $story['banner_youtube_id'] ?? '';
+      if (empty($bYtId) && !empty($story['banner_youtube_url'])) {
+          if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $story['banner_youtube_url'], $bm)) {
+              $bYtId = $bm[1];
+          }
+      }
+      $bHex = ltrim($bOverlayColor, '#');
+      $br = 0; $bg = 0; $bb = 0;
+      if (strlen($bHex) >= 6) {
+          $br = hexdec(substr($bHex, 0, 2));
+          $bg = hexdec(substr($bHex, 2, 2));
+          $bb = hexdec(substr($bHex, 4, 2));
+      }
+    @endphp
+    <section class="lucknow-fullwidth-banner" style="margin-bottom: 10px; position: relative; overflow: hidden;">
+      @if($bMediaType === 'youtube' && !empty($bYtId))
+        <div style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; pointer-events: none;">
+          <iframe src="https://www.youtube.com/embed/{{ $bYtId }}?autoplay=1&mute=1&loop=1&playlist={{ $bYtId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" 
+                  style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100%; min-width: 177.77vh; transform: translate(-50%, -50%); border: none;" 
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      @elseif($bMediaType === 'video' && !empty($story['banner_video']))
+        <video autoplay muted loop playsinline src="{{ asset($story['banner_video']) }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;"></video>
+      @else
+        <img src="{{ asset($story['banner_image'] ?? 'images/lucknow_heritage.jpg') }}" alt="{{ $story['banner_title'] ?? 'Lucknow' }} Heritage">
+      @endif
+      <div class="overlay" style="background: linear-gradient(to bottom, rgba({{ $br }}, {{ $bg }}, {{ $bb }}, {{ max(0, $bOverlayOpacity - 0.2) }}) 0%, rgba({{ $br }}, {{ $bg }}, {{ $bb }}, {{ $bOverlayOpacity }}) 100%);">
         <h3>{{ $story['banner_title'] ?? 'LUCKNOW' }}</h3>
         <p>{{ $story['banner_subtitle'] ?? 'A City of Nawabs • A Taste of Tradition • Since 1976' }}</p>
       </div>

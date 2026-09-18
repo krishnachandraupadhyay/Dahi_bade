@@ -792,26 +792,111 @@
                             </div>
                         </div>
 
-                        <!-- Background Photo -->
+                        <!-- Background Media Setup (Photo, GIF, Video, YouTube + Transparent Overlay) -->
                         <div class="story-row">
                             <div class="story-label-col">
-                                <div class="story-label-title"><i class="bi bi-image text-warning"></i> Store Background Photo</div>
-                                <div class="story-label-desc">Atmospheric photo displayed under dark gradient overlay.</div>
+                                <div class="story-label-title"><i class="bi bi-camera-reels-fill text-warning"></i> Atmosphere Media & Overlay</div>
+                                <div class="story-label-desc">Choose between Photo / GIF, Video Upload, or YouTube Link with customizable transparent overlay.</div>
                             </div>
                             <div class="story-input-col">
+                                @php
+                                    $jMediaType = $story['journey_media_type'] ?? 'image';
+                                    $jOverlayColor = $story['journey_overlay_color'] ?? '#083b3c';
+                                    $jOverlayOp = floatval($story['journey_overlay_opacity'] ?? 0.85);
+                                    $jYtId = $story['journey_youtube_id'] ?? '';
+                                    if (empty($jYtId) && !empty($story['journey_youtube_url'])) {
+                                        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $story['journey_youtube_url'], $jm)) {
+                                            $jYtId = $jm[1];
+                                        }
+                                    }
+                                    $jHex = ltrim($jOverlayColor, '#');
+                                    $jr = 8; $jg = 59; $jb = 60;
+                                    if (strlen($jHex) >= 6) {
+                                        $jr = hexdec(substr($jHex, 0, 2));
+                                        $jg = hexdec(substr($jHex, 2, 2));
+                                        $jb = hexdec(substr($jHex, 4, 2));
+                                    }
+                                @endphp
+
                                 <div class="media-card-box">
-                                    <div class="row align-items-center g-3">
-                                        <div class="col-md-4 col-12">
-                                            <div class="media-preview-box overflow-hidden" style="height: 120px; background: #000;">
-                                                <img id="preview_journey_image" src="{{ asset($story['journey_image'] ?? 'images/storefront.jpg') }}" alt="Chapter 2 Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <div class="row g-3">
+                                        <!-- Live Visual Preview Box -->
+                                        <div class="col-md-5 col-12">
+                                            <label class="form-label fs-11 fw-bold text-muted mb-1 text-uppercase">Live Atmospheric Preview:</label>
+                                            <div class="media-preview-box position-relative overflow-hidden rounded-2 shadow-sm d-flex align-items-center justify-content-center text-center p-3" id="journey_preview_box" style="height: 180px; background: #000; color: #ffffff;">
+                                                <div style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; pointer-events: none;">
+                                                    <iframe id="sim_journey_yt" src="{{ !empty($jYtId) ? 'https://www.youtube.com/embed/'.$jYtId.'?autoplay=1&mute=1&loop=1&playlist='.$jYtId.'&controls=0&showinfo=0&rel=0&modestbranding=1' : '' }}" style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100%; min-width: 177.77vh; transform: translate(-50%, -50%); border: none; display: {{ $jMediaType === 'youtube' ? 'block' : 'none' }};" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+                                                    <video id="sim_journey_vid" autoplay muted loop playsinline src="{{ !empty($story['journey_video']) ? asset($story['journey_video']) : '' }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: {{ $jMediaType === 'video' ? 'block' : 'none' }};"></video>
+                                                    <img id="sim_journey_img" src="{{ asset($story['journey_image'] ?? 'images/storefront.jpg') }}" alt="Chapter 2 Preview" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: {{ !in_array($jMediaType, ['video', 'youtube']) ? 'block' : 'none' }};">
+                                                </div>
+                                                <div id="sim_journey_overlay" style="position: absolute; inset: 0; z-index: 1.5; background: linear-gradient(135deg, rgba({{ $jr }}, {{ $jg }}, {{ $jb }}, {{ $jOverlayOp }}) 0%, rgba({{ max(0, $jr - 10) }}, {{ max(0, $jg - 10) }}, {{ max(0, $jb - 10) }}, {{ min(1, $jOverlayOp + 0.08) }}) 100%);"></div>
+                                                <div style="position: relative; z-index: 2;">
+                                                    <span class="badge bg-warning text-dark px-2 py-0.5 fs-10 fw-bold mb-1">THE GPO JOURNEY</span>
+                                                    <div class="fs-12 fw-bold text-white text-truncate" style="max-width: 220px;">{{ $story['journey_quote'] ?? 'Come hungry. Have a plate. Leave happy.' }}</div>
+                                                </div>
                                             </div>
                                             <small class="text-muted fs-11 mt-1 d-block">Current: {{ $story['journey_image'] ?? 'images/storefront.jpg' }}</small>
                                         </div>
-                                        <div class="col-md-8 col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">Upload Atmosphere Photo:</label>
-                                            <input type="file" name="story[journey_image_file]" id="input_journey_image_file" class="form-control modern-input form-control-sm mb-2" accept="image/*">
-                                            <input type="hidden" name="story[journey_image]" value="{{ $story['journey_image'] ?? 'images/storefront.jpg' }}">
-                                            <small class="text-muted fs-12">Recommended wide landscape store photo.</small>
+
+                                        <!-- Media Controls & Formats -->
+                                        <div class="col-md-7 col-12">
+                                            <!-- Media Format Selector -->
+                                            <div class="mb-2.5">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1">Media Format:</label>
+                                                <select name="story[journey_media_type]" id="journey_media_type_select" class="form-select form-select-sm modern-select fw-semibold">
+                                                    <option value="image" {{ $jMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / GIF Image</option>
+                                                    <option value="video" {{ $jMediaType === 'video' ? 'selected' : '' }}>🎬 Video File Upload (MP4/WebM)</option>
+                                                    <option value="youtube" {{ $jMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video Link</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Image/GIF Upload -->
+                                            <div class="mb-2.5" id="wrap_journey_image" style="display: {{ $jMediaType === 'image' ? 'block' : 'none' }};">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1">Upload Photo / GIF File:</label>
+                                                <input type="file" name="story[journey_image_file]" id="input_journey_image_file" class="form-control modern-input form-control-sm mb-1" accept="image/*">
+                                                <input type="hidden" name="story[journey_image]" value="{{ $story['journey_image'] ?? 'images/storefront.jpg' }}">
+                                                <small class="text-muted fs-11 d-block">JPG, PNG, WEBP, or animated GIF.</small>
+                                            </div>
+
+                                            <!-- Video Upload -->
+                                            <div class="mb-2.5" id="wrap_journey_video" style="display: {{ $jMediaType === 'video' ? 'block' : 'none' }};">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1">Upload Video File (MP4/WebM):</label>
+                                                <input type="file" name="story[journey_video_file]" id="input_journey_video_file" class="form-control modern-input form-control-sm mb-1" accept="video/mp4,video/webm">
+                                                <input type="hidden" name="story[journey_video]" value="{{ $story['journey_video'] ?? '' }}">
+                                                <small class="text-muted fs-11 d-block">Recommended loop video under 20MB.</small>
+                                            </div>
+
+                                            <!-- YouTube Link -->
+                                            <div class="mb-2.5" id="wrap_journey_youtube" style="display: {{ $jMediaType === 'youtube' ? 'block' : 'none' }};">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1">YouTube Video Link / ID:</label>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text bg-light text-danger"><i class="bi bi-youtube"></i></span>
+                                                    <input type="text" name="story[journey_youtube_url]" id="input_journey_youtube_url" value="{{ old('story.journey_youtube_url', $story['journey_youtube_url'] ?? '') }}" class="form-control modern-input" placeholder="https://www.youtube.com/watch?v=...">
+                                                </div>
+                                                <small class="text-muted fs-11 mt-1 d-block">Plays in the background automatically.</small>
+                                            </div>
+
+                                            <!-- Overlay Color & Opacity -->
+                                            <div class="row g-2 pt-2 border-top">
+                                                <div class="col-6">
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Tint:</label>
+                                                    <div class="d-flex align-items-center gap-1.5">
+                                                        <input type="color" id="journey_color_picker" class="form-control form-control-color p-0.5" value="{{ $jOverlayColor }}" style="width: 36px; height: 30px;">
+                                                        <input type="text" name="story[journey_overlay_color]" id="input_journey_overlay_color" value="{{ $jOverlayColor }}" class="form-control form-control-sm modern-input font-monospace" placeholder="#083b3c">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Opacity:</label>
+                                                    <select name="story[journey_overlay_opacity]" id="select_journey_overlay_opacity" class="form-select form-select-sm modern-select">
+                                                        <option value="0.95" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.95' ? 'selected' : '' }}>95% Dark</option>
+                                                        <option value="0.90" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.90' ? 'selected' : '' }}>90% Deep</option>
+                                                        <option value="0.85" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.85' ? 'selected' : '' }}>85% Balanced</option>
+                                                        <option value="0.75" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.75' ? 'selected' : '' }}>75% Medium</option>
+                                                        <option value="0.60" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.60' ? 'selected' : '' }}>60% Light</option>
+                                                        <option value="0.40" {{ ($story['journey_overlay_opacity'] ?? '0.85') == '0.40' ? 'selected' : '' }}>40% Subtle</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1308,26 +1393,111 @@
                             </div>
                         </div>
 
-                        <!-- Background Photo -->
+                        <!-- Background Media Setup (Photo, GIF, Video, YouTube + Transparent Overlay) -->
                         <div class="story-row">
                             <div class="story-label-col">
-                                <div class="story-label-title"><i class="bi bi-image-fill text-dark"></i> Panoramic Backdrop</div>
-                                <div class="story-label-desc">Panoramic image spanning full page width.</div>
+                                <div class="story-label-title"><i class="bi bi-camera-reels-fill text-dark"></i> Panoramic Media & Overlay</div>
+                                <div class="story-label-desc">Choose between Photo / GIF, Video Upload, or YouTube Link with customizable transparent overlay.</div>
                             </div>
                             <div class="story-input-col">
+                                @php
+                                    $bMediaType = $story['banner_media_type'] ?? 'image';
+                                    $bOverlayColor = $story['banner_overlay_color'] ?? '#000000';
+                                    $bOverlayOp = floatval($story['banner_overlay_opacity'] ?? 0.65);
+                                    $bYtId = $story['banner_youtube_id'] ?? '';
+                                    if (empty($bYtId) && !empty($story['banner_youtube_url'])) {
+                                        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $story['banner_youtube_url'], $bm)) {
+                                            $bYtId = $bm[1];
+                                        }
+                                    }
+                                    $bHex = ltrim($bOverlayColor, '#');
+                                    $br = 0; $bg = 0; $bb = 0;
+                                    if (strlen($bHex) >= 6) {
+                                        $br = hexdec(substr($bHex, 0, 2));
+                                        $bg = hexdec(substr($bHex, 2, 2));
+                                        $bb = hexdec(substr($bHex, 4, 2));
+                                    }
+                                @endphp
+
                                 <div class="media-card-box">
-                                    <div class="row align-items-center g-3">
+                                    <div class="row g-3">
+                                        <!-- Live Visual Preview Box -->
                                         <div class="col-md-5 col-12">
-                                            <div class="media-preview-box overflow-hidden" style="height: 120px; background: #000;">
-                                                <img id="preview_banner_image" src="{{ asset($story['banner_image'] ?? 'images/lucknow_heritage.jpg') }}" alt="Panoramic Banner Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                                            <label class="form-label fs-11 fw-bold text-muted mb-1 text-uppercase">Live Panoramic Preview:</label>
+                                            <div class="media-preview-box position-relative overflow-hidden rounded-2 shadow-sm d-flex align-items-center justify-content-center text-center p-3" id="banner_preview_box" style="height: 180px; background: #000; color: #ffffff;">
+                                                <div style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; pointer-events: none;">
+                                                    <iframe id="sim_banner_yt" src="{{ !empty($bYtId) ? 'https://www.youtube.com/embed/'.$bYtId.'?autoplay=1&mute=1&loop=1&playlist='.$bYtId.'&controls=0&showinfo=0&rel=0&modestbranding=1' : '' }}" style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100%; min-width: 177.77vh; transform: translate(-50%, -50%); border: none; display: {{ $bMediaType === 'youtube' ? 'block' : 'none' }};" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+                                                    <video id="sim_banner_vid" autoplay muted loop playsinline src="{{ !empty($story['banner_video']) ? asset($story['banner_video']) : '' }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: {{ $bMediaType === 'video' ? 'block' : 'none' }};"></video>
+                                                    <img id="sim_banner_img" src="{{ asset($story['banner_image'] ?? 'images/lucknow_heritage.jpg') }}" alt="Panoramic Banner Preview" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: {{ !in_array($bMediaType, ['video', 'youtube']) ? 'block' : 'none' }};">
+                                                </div>
+                                                <div id="sim_banner_overlay" style="position: absolute; inset: 0; z-index: 1.5; background: linear-gradient(to bottom, rgba({{ $br }}, {{ $bg }}, {{ $bb }}, {{ max(0, $bOverlayOp - 0.2) }}) 0%, rgba({{ $br }}, {{ $bg }}, {{ $bb }}, {{ $bOverlayOp }}) 100%);"></div>
+                                                <div style="position: relative; z-index: 2;">
+                                                    <div class="fs-15 fw-bold text-white text-uppercase" style="letter-spacing: 2px;">{{ $story['banner_title'] ?? 'LUCKNOW' }}</div>
+                                                    <small class="fs-11 text-white-50 d-block">{{ $story['banner_subtitle'] ?? 'A City of Nawabs • Since 1976' }}</small>
+                                                </div>
                                             </div>
                                             <small class="text-muted fs-11 mt-1 d-block">Current: {{ $story['banner_image'] ?? 'images/lucknow_heritage.jpg' }}</small>
                                         </div>
+
+                                        <!-- Media Controls & Formats -->
                                         <div class="col-md-7 col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">Upload New Panoramic Photo:</label>
-                                            <input type="file" name="story[banner_image_file]" id="input_banner_image_file" class="form-control modern-input form-control-sm mb-2" accept="image/*">
-                                            <input type="hidden" name="story[banner_image]" value="{{ $story['banner_image'] ?? 'images/lucknow_heritage.jpg' }}">
-                                            <small class="text-muted fs-12">Recommended wide format: 1920x600 px.</small>
+                                            <!-- Media Format Selector -->
+                                            <div class="mb-2.5">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1">Media Format:</label>
+                                                <select name="story[banner_media_type]" id="banner_media_type_select" class="form-select form-select-sm modern-select fw-semibold">
+                                                    <option value="image" {{ $bMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / GIF Image</option>
+                                                    <option value="video" {{ $bMediaType === 'video' ? 'selected' : '' }}>🎬 Video File Upload (MP4/WebM)</option>
+                                                    <option value="youtube" {{ $bMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video Link</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Image/GIF Upload -->
+                                            <div class="mb-2.5" id="wrap_banner_image" style="display: {{ $bMediaType === 'image' ? 'block' : 'none' }};">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1">Upload Photo / GIF File:</label>
+                                                <input type="file" name="story[banner_image_file]" id="input_banner_image_file" class="form-control modern-input form-control-sm mb-1" accept="image/*">
+                                                <input type="hidden" name="story[banner_image]" value="{{ $story['banner_image'] ?? 'images/lucknow_heritage.jpg' }}">
+                                                <small class="text-muted fs-11 d-block">Recommended wide 1920x600 px image.</small>
+                                            </div>
+
+                                            <!-- Video Upload -->
+                                            <div class="mb-2.5" id="wrap_banner_video" style="display: {{ $bMediaType === 'video' ? 'block' : 'none' }};">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1">Upload Video File (MP4/WebM):</label>
+                                                <input type="file" name="story[banner_video_file]" id="input_banner_video_file" class="form-control modern-input form-control-sm mb-1" accept="video/mp4,video/webm">
+                                                <input type="hidden" name="story[banner_video]" value="{{ $story['banner_video'] ?? '' }}">
+                                                <small class="text-muted fs-11 d-block">Recommended wide format loop video.</small>
+                                            </div>
+
+                                            <!-- YouTube Link -->
+                                            <div class="mb-2.5" id="wrap_banner_youtube" style="display: {{ $bMediaType === 'youtube' ? 'block' : 'none' }};">
+                                                <label class="form-label fs-12 fw-bold text-dark mb-1">YouTube Video Link / ID:</label>
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text bg-light text-danger"><i class="bi bi-youtube"></i></span>
+                                                    <input type="text" name="story[banner_youtube_url]" id="input_banner_youtube_url" value="{{ old('story.banner_youtube_url', $story['banner_youtube_url'] ?? '') }}" class="form-control modern-input" placeholder="https://www.youtube.com/watch?v=...">
+                                                </div>
+                                                <small class="text-muted fs-11 mt-1 d-block">Plays in the panoramic background automatically.</small>
+                                            </div>
+
+                                            <!-- Overlay Color & Opacity -->
+                                            <div class="row g-2 pt-2 border-top">
+                                                <div class="col-6">
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Tint:</label>
+                                                    <div class="d-flex align-items-center gap-1.5">
+                                                        <input type="color" id="banner_color_picker" class="form-control form-control-color p-0.5" value="{{ $bOverlayColor }}" style="width: 36px; height: 30px;">
+                                                        <input type="text" name="story[banner_overlay_color]" id="input_banner_overlay_color" value="{{ $bOverlayColor }}" class="form-control form-control-sm modern-input font-monospace" placeholder="#000000">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Opacity:</label>
+                                                    <select name="story[banner_overlay_opacity]" id="select_banner_overlay_opacity" class="form-select form-select-sm modern-select">
+                                                        <option value="0.95" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.95' ? 'selected' : '' }}>95% Dark</option>
+                                                        <option value="0.80" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.80' ? 'selected' : '' }}>80% Deep</option>
+                                                        <option value="0.65" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.65' ? 'selected' : '' }}>65% Standard</option>
+                                                        <option value="0.50" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.50' ? 'selected' : '' }}>50% Medium</option>
+                                                        <option value="0.35" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.35' ? 'selected' : '' }}>35% Light</option>
+                                                        <option value="0.20" {{ ($story['banner_overlay_opacity'] ?? '0.65') == '0.20' ? 'selected' : '' }}>20% Subtle</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1615,6 +1785,229 @@
             });
         }
 
+        // Helper function for hex to rgb
+        function parseHexToRgb(hex, defaultRgb = [8, 59, 60]) {
+            hex = (hex || '').replace(/^#/, '');
+            if (hex.length === 3) {
+                return [
+                    parseInt(hex[0] + hex[0], 16),
+                    parseInt(hex[1] + hex[1], 16),
+                    parseInt(hex[2] + hex[2], 16)
+                ];
+            } else if (hex.length >= 6) {
+                return [
+                    parseInt(hex.substring(0, 2), 16),
+                    parseInt(hex.substring(2, 4), 16),
+                    parseInt(hex.substring(4, 6), 16)
+                ];
+            }
+            return defaultRgb;
+        }
+
+        // ================= CHAPTER 2: THE GPO JOURNEY PREVIEW CONTROLS =================
+        const jTypeSelect = document.getElementById('journey_media_type_select');
+        const jWrapImg = document.getElementById('wrap_journey_image');
+        const jWrapVid = document.getElementById('wrap_journey_video');
+        const jWrapYt = document.getElementById('wrap_journey_youtube');
+
+        const simJYt = document.getElementById('sim_journey_yt');
+        const simJVid = document.getElementById('sim_journey_vid');
+        const simJImg = document.getElementById('sim_journey_img');
+        const simJOverlay = document.getElementById('sim_journey_overlay');
+
+        const jColorPicker = document.getElementById('journey_color_picker');
+        const jColorInput = document.getElementById('input_journey_overlay_color');
+        const jOpacitySelect = document.getElementById('select_journey_overlay_opacity');
+        const jFileInput = document.getElementById('input_journey_image_file');
+        const jVideoInput = document.getElementById('input_journey_video_file');
+        const jYtInput = document.getElementById('input_journey_youtube_url');
+
+        function updateJOverlay() {
+            if (!simJOverlay) return;
+            const hex = jColorInput ? jColorInput.value : '#083b3c';
+            const op = jOpacitySelect ? parseFloat(jOpacitySelect.value) : 0.85;
+            const [r, g, b] = parseHexToRgb(hex, [8, 59, 60]);
+            simJOverlay.style.background = `linear-gradient(135deg, rgba(${r}, ${g}, ${b}, ${op}) 0%, rgba(${Math.max(0, r - 10)}, ${Math.max(0, g - 10)}, ${Math.max(0, b - 10)}, ${Math.min(1, op + 0.08)}) 100%)`;
+        }
+
+        function syncJMedia() {
+            const val = jTypeSelect ? jTypeSelect.value : 'image';
+            if (jWrapImg) jWrapImg.style.display = val === 'image' ? 'block' : 'none';
+            if (jWrapVid) jWrapVid.style.display = val === 'video' ? 'block' : 'none';
+            if (jWrapYt) jWrapYt.style.display = val === 'youtube' ? 'block' : 'none';
+
+            if (simJImg) simJImg.style.display = val === 'image' ? 'block' : 'none';
+            if (simJVid) simJVid.style.display = val === 'video' ? 'block' : 'none';
+            if (simJYt) simJYt.style.display = val === 'youtube' ? 'block' : 'none';
+
+            if (val === 'youtube') {
+                updateJYtPreview();
+            } else if (val === 'video' && simJVid) {
+                simJVid.play().catch(() => {});
+            }
+            updateJOverlay();
+        }
+
+        function updateJYtPreview() {
+            if (!jYtInput || !simJYt) return;
+            const val = jYtInput.value.trim();
+            let id = '';
+            const m = val.match(/(?:youtube(?:-nocookie)?\.com/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+            if (m) id = m[1];
+            else if (val.length === 11 && !val.includes('/')) id = val;
+            if (id) {
+                simJYt.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&rel=0&modestbranding=1`;
+            }
+        }
+
+        if (jTypeSelect) jTypeSelect.addEventListener('change', syncJMedia);
+        if (jColorPicker && jColorInput) {
+            jColorPicker.addEventListener('input', function () {
+                jColorInput.value = this.value;
+                updateJOverlay();
+            });
+            jColorInput.addEventListener('input', function () {
+                if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) jColorPicker.value = this.value;
+                updateJOverlay();
+            });
+        }
+        if (jOpacitySelect) jOpacitySelect.addEventListener('change', updateJOverlay);
+        if (jFileInput && simJImg) {
+            jFileInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        simJImg.src = e.target.result;
+                        if (jTypeSelect) { jTypeSelect.value = 'image'; syncJMedia(); }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        if (jVideoInput && simJVid) {
+            jVideoInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const objUrl = URL.createObjectURL(file);
+                    simJVid.src = objUrl;
+                    if (jTypeSelect) { jTypeSelect.value = 'video'; syncJMedia(); }
+                    simJVid.play().catch(() => {});
+                }
+            });
+        }
+        if (jYtInput) {
+            jYtInput.addEventListener('input', function () {
+                updateJYtPreview();
+                if (jTypeSelect && jTypeSelect.value !== 'youtube') {
+                    jTypeSelect.value = 'youtube';
+                    syncJMedia();
+                }
+            });
+        }
+
+        // ================= SECTION 8: PANORAMIC BANNER PREVIEW CONTROLS =================
+        const bTypeSelect = document.getElementById('banner_media_type_select');
+        const bWrapImg = document.getElementById('wrap_banner_image');
+        const bWrapVid = document.getElementById('wrap_banner_video');
+        const bWrapYt = document.getElementById('wrap_banner_youtube');
+
+        const simBYt = document.getElementById('sim_banner_yt');
+        const simBVid = document.getElementById('sim_banner_vid');
+        const simBImg = document.getElementById('sim_banner_img');
+        const simBOverlay = document.getElementById('sim_banner_overlay');
+
+        const bColorPicker = document.getElementById('banner_color_picker');
+        const bColorInput = document.getElementById('input_banner_overlay_color');
+        const bOpacitySelect = document.getElementById('select_banner_overlay_opacity');
+        const bFileInput = document.getElementById('input_banner_image_file');
+        const bVideoInput = document.getElementById('input_banner_video_file');
+        const bYtInput = document.getElementById('input_banner_youtube_url');
+
+        function updateBOverlay() {
+            if (!simBOverlay) return;
+            const hex = bColorInput ? bColorInput.value : '#000000';
+            const op = bOpacitySelect ? parseFloat(bOpacitySelect.value) : 0.65;
+            const [r, g, b] = parseHexToRgb(hex, [0, 0, 0]);
+            simBOverlay.style.background = `linear-gradient(to bottom, rgba(${r}, ${g}, ${b}, ${Math.max(0, op - 0.2)}) 0%, rgba(${r}, ${g}, ${b}, ${op}) 100%)`;
+        }
+
+        function syncBMedia() {
+            const val = bTypeSelect ? bTypeSelect.value : 'image';
+            if (bWrapImg) bWrapImg.style.display = val === 'image' ? 'block' : 'none';
+            if (bWrapVid) bWrapVid.style.display = val === 'video' ? 'block' : 'none';
+            if (bWrapYt) bWrapYt.style.display = val === 'youtube' ? 'block' : 'none';
+
+            if (simBImg) simBImg.style.display = val === 'image' ? 'block' : 'none';
+            if (simBVid) simBVid.style.display = val === 'video' ? 'block' : 'none';
+            if (simBYt) simBYt.style.display = val === 'youtube' ? 'block' : 'none';
+
+            if (val === 'youtube') {
+                updateBYtPreview();
+            } else if (val === 'video' && simBVid) {
+                simBVid.play().catch(() => {});
+            }
+            updateBOverlay();
+        }
+
+        function updateBYtPreview() {
+            if (!bYtInput || !simBYt) return;
+            const val = bYtInput.value.trim();
+            let id = '';
+            const m = val.match(/(?:youtube(?:-nocookie)?\.com/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+            if (m) id = m[1];
+            else if (val.length === 11 && !val.includes('/')) id = val;
+            if (id) {
+                simBYt.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&showinfo=0&rel=0&modestbranding=1`;
+            }
+        }
+
+        if (bTypeSelect) bTypeSelect.addEventListener('change', syncBMedia);
+        if (bColorPicker && bColorInput) {
+            bColorPicker.addEventListener('input', function () {
+                bColorInput.value = this.value;
+                updateBOverlay();
+            });
+            bColorInput.addEventListener('input', function () {
+                if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) bColorPicker.value = this.value;
+                updateBOverlay();
+            });
+        }
+        if (bOpacitySelect) bOpacitySelect.addEventListener('change', updateBOverlay);
+        if (bFileInput && simBImg) {
+            bFileInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        simBImg.src = e.target.result;
+                        if (bTypeSelect) { bTypeSelect.value = 'image'; syncBMedia(); }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        if (bVideoInput && simBVid) {
+            bVideoInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const objUrl = URL.createObjectURL(file);
+                    simBVid.src = objUrl;
+                    if (bTypeSelect) { bTypeSelect.value = 'video'; syncBMedia(); }
+                    simBVid.play().catch(() => {});
+                }
+            });
+        }
+        if (bYtInput) {
+            bYtInput.addEventListener('input', function () {
+                updateBYtPreview();
+                if (bTypeSelect && bTypeSelect.value !== 'youtube') {
+                    bTypeSelect.value = 'youtube';
+                    syncBMedia();
+                }
+            });
+        }
+
         // Other Sections Live Image Previews
         function setupLiveImagePreview(inputId, previewImgId) {
             const input = document.getElementById(inputId);
@@ -1634,8 +2027,6 @@
         }
 
         setupLiveImagePreview('input_began_image_file', 'preview_began_image');
-        setupLiveImagePreview('input_journey_image_file', 'preview_journey_image');
-        setupLiveImagePreview('input_banner_image_file', 'preview_banner_image');
     });
 </script>
 @endpush

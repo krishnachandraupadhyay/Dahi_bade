@@ -50,7 +50,22 @@
             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
               <div class="hero-slide-item">
                 <div class="hero-home-exact-bg">
-                  @if(($slide['media_type'] ?? 'image') === 'video')
+                  @php
+                    $slideMediaType = $slide['media_type'] ?? 'image';
+                    $slideYtId = $slide['youtube_id'] ?? '';
+                    if (empty($slideYtId) && !empty($slide['youtube_url'])) {
+                        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $slide['youtube_url'], $sm)) {
+                            $slideYtId = $sm[1];
+                        }
+                    }
+                  @endphp
+                  @if($slideMediaType === 'youtube' && !empty($slideYtId))
+                    <div style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none;">
+                      <iframe src="https://www.youtube.com/embed/{{ $slideYtId }}?autoplay=1&mute=1&loop=1&playlist={{ $slideYtId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" 
+                              style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100%; min-width: 177.77vh; transform: translate(-50%, -50%); border: none;" 
+                              frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    </div>
+                  @elseif($slideMediaType === 'video')
                     <video autoplay muted loop playsinline>
                       <source src="{{ asset($slide['media'] ?? 'images/dahi_vada.jpg') }}" type="video/mp4">
                     </video>
@@ -528,10 +543,38 @@
             'white'         => 'btn-white-pill',
         ];
         $btnClass = $btnClassMap[$btnStyle] ?? 'btn-amber-pill';
-        $overlayOp = $franchiseCta['overlay_opacity'] ?? '0.90';
+        $mediaType = $franchiseCta['media_type'] ?? 'image';
+        $overlayColor = $franchiseCta['overlay_color'] ?? '#083b3c';
+        $overlayOp = floatval($franchiseCta['overlay_opacity'] ?? 0.90);
+        $ytId = $franchiseCta['youtube_id'] ?? '';
+        if (empty($ytId) && !empty($franchiseCta['youtube_url'])) {
+            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $franchiseCta['youtube_url'], $cm)) {
+                $ytId = $cm[1];
+            }
+        }
+        $hex = ltrim($overlayColor, '#');
+        $cr = 8; $cg = 59; $cb = 60;
+        if (strlen($hex) >= 6) {
+            $cr = hexdec(substr($hex, 0, 2));
+            $cg = hexdec(substr($hex, 2, 2));
+            $cb = hexdec(substr($hex, 4, 2));
+        }
       @endphp
-      <section class="home-franchise-cta-card" style="background-image: linear-gradient(135deg, rgba(8, 59, 60, {{ $overlayOp }}) 0%, rgba(5, 44, 45, {{ $overlayOp }}) 100%), url('{{ $ctaImgSrc }}');">
-        <div class="home-franchise-cta-inner">
+      <section class="home-franchise-cta-card" style="position: relative; overflow: hidden; background: #083b3c;">
+        @if($mediaType === 'youtube' && !empty($ytId))
+          <div style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; pointer-events: none;">
+            <iframe src="https://www.youtube.com/embed/{{ $ytId }}?autoplay=1&mute=1&loop=1&playlist={{ $ytId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" 
+                    style="position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-height: 100%; min-width: 177.77vh; transform: translate(-50%, -50%); border: none;" 
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        @elseif($mediaType === 'video' && !empty($franchiseCta['video']))
+          <video autoplay muted loop playsinline src="{{ asset($franchiseCta['video']) }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;"></video>
+        @else
+          <img src="{{ $ctaImgSrc }}" alt="Franchise Opportunity" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+        @endif
+        <div style="position: absolute; inset: 0; z-index: 1.5; background: linear-gradient(135deg, rgba({{ $cr }}, {{ $cg }}, {{ $cb }}, {{ $overlayOp }}) 0%, rgba({{ max(0, $cr - 3) }}, {{ max(0, $cg - 15) }}, {{ max(0, $cb - 15) }}, {{ $overlayOp }}) 100%);"></div>
+
+        <div class="home-franchise-cta-inner" style="position: relative; z-index: 2;">
           @if(!empty($franchiseCta['heading']))
             <h3>{{ $franchiseCta['heading'] }}</h3>
           @endif

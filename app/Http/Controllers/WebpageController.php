@@ -67,12 +67,20 @@ class WebpageController extends Controller
         if (!isset($slide['media'])) {
             $slide['media'] = $slide['image'] ?? 'images/dahi_vada.jpg';
         }
+        if (!isset($slide['youtube_url'])) {
+            $slide['youtube_url'] = '';
+        }
+        if (!isset($slide['youtube_id'])) {
+            $slide['youtube_id'] = '';
+        }
+        if (!empty($slide['youtube_url']) && empty($slide['youtube_id'])) {
+            if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $slide['youtube_url'], $match)) {
+                $slide['youtube_id'] = $match[1];
+            }
+        }
         if (!isset($slide['media_type'])) {
-            $ext = strtolower(pathinfo($slide['media'], PATHINFO_EXTENSION));
-            if (in_array($ext, ['mp4', 'webm', 'ogg', 'mov'])) {
-                $slide['media_type'] = 'video';
-            } elseif ($ext === 'gif') {
-                $slide['media_type'] = 'gif';
+            if (!empty($slide['youtube_url']) || !empty($slide['youtube_id'])) {
+                $slide['media_type'] = 'youtube';
             } else {
                 $slide['media_type'] = 'image';
             }
@@ -448,6 +456,11 @@ class WebpageController extends Controller
             'button_url' => '/franchise',
             'button_style' => 'amber',
             'image' => 'images/storefront.jpg',
+            'media_type' => 'image',
+            'video' => '',
+            'youtube_url' => '',
+            'youtube_id' => '',
+            'overlay_color' => '#083b3c',
             'overlay_opacity' => '0.90',
         ];
 
@@ -496,11 +509,20 @@ class WebpageController extends Controller
 
         foreach ($inputSlides as $index => $slideData) {
             $mediaType = $slideData['media_type'] ?? 'image';
-            if (!in_array($mediaType, ['image', 'video', 'gif'])) {
+            if (!in_array($mediaType, ['image', 'video', 'gif', 'youtube'])) {
                 $mediaType = 'image';
             }
 
             $mediaPath = $slideData['media'] ?? 'images/dahi_vada.jpg';
+            $youtubeUrl = trim($slideData['youtube_url'] ?? '');
+            $youtubeId = '';
+            if (!empty($youtubeUrl)) {
+                if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $youtubeUrl, $m)) {
+                    $youtubeId = $m[1];
+                } else {
+                    $youtubeId = $youtubeUrl;
+                }
+            }
 
             // Check if a new file was uploaded for this slide
             if ($request->hasFile("slides.{$index}.media_file")) {
@@ -549,6 +571,8 @@ class WebpageController extends Controller
                 'btn2_url' => $slideButtons[1]['url'] ?? '',
                 'media_type' => $mediaType,
                 'media' => $mediaPath,
+                'youtube_url' => $youtubeUrl,
+                'youtube_id' => $youtubeId,
             ];
         }
 
@@ -861,6 +885,21 @@ class WebpageController extends Controller
     {
         $cta = $request->input('franchise_cta', []);
         $imagePath = $cta['image'] ?? 'images/storefront.jpg';
+        $videoPath = $cta['video'] ?? '';
+        $mediaType = $cta['media_type'] ?? 'image';
+        if (!in_array($mediaType, ['image', 'video', 'gif', 'youtube'])) {
+            $mediaType = 'image';
+        }
+
+        $youtubeUrl = trim($cta['youtube_url'] ?? '');
+        $youtubeId = '';
+        if (!empty($youtubeUrl)) {
+            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $youtubeUrl, $m)) {
+                $youtubeId = $m[1];
+            } else {
+                $youtubeId = $youtubeUrl;
+            }
+        }
 
         $uploadDir = public_path('uploads/franchise_cta');
         if (!File::isDirectory($uploadDir)) {
@@ -874,6 +913,20 @@ class WebpageController extends Controller
                 $filename = time() . '_franchise_cta_' . uniqid() . '.' . $ext;
                 $file->move($uploadDir, $filename);
                 $imagePath = 'uploads/franchise_cta/' . $filename;
+                if ($mediaType !== 'video' && $mediaType !== 'youtube') {
+                    $mediaType = ($ext === 'gif') ? 'gif' : 'image';
+                }
+            }
+        }
+
+        if ($request->hasFile('franchise_cta.video_file')) {
+            $file = $request->file('franchise_cta.video_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_franchise_cta_vid_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $videoPath = 'uploads/franchise_cta/' . $filename;
+                $mediaType = 'video';
             }
         }
 
@@ -884,7 +937,12 @@ class WebpageController extends Controller
             'button_text' => trim($cta['button_text'] ?? 'EXPLORE FRANCHISE OPPORTUNITY'),
             'button_url' => trim($cta['button_url'] ?? '/franchise'),
             'button_style' => trim($cta['button_style'] ?? 'amber'),
+            'media_type' => $mediaType,
             'image' => $imagePath,
+            'video' => $videoPath,
+            'youtube_url' => $youtubeUrl,
+            'youtube_id' => $youtubeId,
+            'overlay_color' => trim($cta['overlay_color'] ?? '#083b3c'),
             'overlay_opacity' => trim($cta['overlay_opacity'] ?? '0.90'),
         ];
 
@@ -932,7 +990,13 @@ class WebpageController extends Controller
             'journey_sub' => 'Over the years, GPO Ke Thandey Dahi Bade became associated with a simple food experience:',
             'journey_quote' => 'Come hungry. Have a plate. Leave happy.',
             'journey_desc' => 'The brand’s identity has been shaped by generations of customers who have enjoyed our food, recommended us to others and returned with their families. That customer love is one of the most important chapters of the GPO story.',
+            'journey_media_type' => 'image', // 'image', 'video', 'youtube', 'gif'
             'journey_image' => 'images/storefront.jpg',
+            'journey_video' => '',
+            'journey_youtube_url' => '',
+            'journey_youtube_id' => '',
+            'journey_overlay_color' => '#083b3c',
+            'journey_overlay_opacity' => '0.85',
 
             // Section 4: The Secret Is Simple (4 Pillars)
             'secret_heading' => 'THE SECRET IS SIMPLE',
@@ -997,7 +1061,13 @@ class WebpageController extends Controller
             // Section 8: Full-Width Panoramic Lucknow Banner
             'banner_title' => 'LUCKNOW',
             'banner_subtitle' => 'A City of Nawabs • A Taste of Tradition • Since 1976',
+            'banner_media_type' => 'image', // 'image', 'video', 'youtube', 'gif'
             'banner_image' => 'images/lucknow_heritage.jpg',
+            'banner_video' => '',
+            'banner_youtube_url' => '',
+            'banner_youtube_id' => '',
+            'banner_overlay_color' => '#000000',
+            'banner_overlay_opacity' => '0.65',
         ];
 
         $path = $this->getStoryFilePath();
@@ -1077,7 +1147,7 @@ class WebpageController extends Controller
             }
         }
 
-        // Parse YouTube URL if provided
+        // Parse YouTube URL for Hero Banner if provided
         if (isset($storyInput['hero_youtube_url'])) {
             $ytUrl = trim($storyInput['hero_youtube_url']);
             if (!empty($ytUrl)) {
@@ -1085,6 +1155,50 @@ class WebpageController extends Controller
                     $storyInput['hero_youtube_id'] = $match[1];
                 } else {
                     $storyInput['hero_youtube_id'] = $ytUrl;
+                }
+            }
+        }
+
+        // Handle Video & YouTube for Chapter 2: The GPO Journey
+        if ($request->hasFile('story.journey_video_file')) {
+            $file = $request->file('story.journey_video_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_journey_vid_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $storyInput['journey_video'] = 'uploads/story/' . $filename;
+                $storyInput['journey_media_type'] = 'video';
+            }
+        }
+        if (isset($storyInput['journey_youtube_url'])) {
+            $yt = trim($storyInput['journey_youtube_url']);
+            if (!empty($yt)) {
+                if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $yt, $m)) {
+                    $storyInput['journey_youtube_id'] = $m[1];
+                } else {
+                    $storyInput['journey_youtube_id'] = $yt;
+                }
+            }
+        }
+
+        // Handle Video & YouTube for Section 8: Panoramic Banner
+        if ($request->hasFile('story.banner_video_file')) {
+            $file = $request->file('story.banner_video_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_banner_vid_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $storyInput['banner_video'] = 'uploads/story/' . $filename;
+                $storyInput['banner_media_type'] = 'video';
+            }
+        }
+        if (isset($storyInput['banner_youtube_url'])) {
+            $yt = trim($storyInput['banner_youtube_url']);
+            if (!empty($yt)) {
+                if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $yt, $m)) {
+                    $storyInput['banner_youtube_id'] = $m[1];
+                } else {
+                    $storyInput['banner_youtube_id'] = $yt;
                 }
             }
         }

@@ -21,8 +21,10 @@
         "btn1_url": "\/menu",
         "btn2_text": "EXPLORE OUR MENU",
         "btn2_url": "\/menu",
-        "media_type": "image",
-        "media": "images\/dahi_vada.jpg"
+        "media_type": "youtube",
+        "media": "images\/dahi_vada.jpg",
+        "youtube_url": "https:\/\/youtu.be\/v6ep9QR70iM?si=O5V-lMRGkvDQrX_3",
+        "youtube_id": "v6ep9QR70iM"
     },
     {
         "badge": "Since 1976",
@@ -47,7 +49,9 @@
         "btn2_text": "VISIT OUR OUTLET",
         "btn2_url": "\/contact",
         "media_type": "image",
-        "media": "images\/lucknow_heritage.jpg"
+        "media": "images\/lucknow_heritage.jpg",
+        "youtube_url": "",
+        "youtube_id": ""
     },
     {
         "badge": "Awadhi Culinary Heritage",
@@ -72,6 +76,8 @@
         "btn2_text": "EXPLORE FRANCHISE",
         "btn2_url": "\/franchise",
         "media_type": "image",
-        "media": "images\/chaat.jpg"
+        "media": "images\/chaat.jpg",
+        "youtube_url": "",
+        "youtube_id": ""
     }
 ]
