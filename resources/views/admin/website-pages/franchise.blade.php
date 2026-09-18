@@ -212,34 +212,30 @@
         <!-- ================= 1. HERO SLIDERS PANEL ================= -->
         <div class="franchise-section-panel" id="panel_hero_sliders" style="{{ $activeSection === 'hero_sliders' ? 'display: block;' : 'display: none;' }}">
             <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
+                @php
+                    $franchiseMaxSlides = (int)($globalSettings['sections']['franchise']['hero_sliders']['max_slides'] ?? 3);
+                    $franchiseHeroAllowedMedia = $globalSettings['sections']['franchise']['hero_sliders']['allowed_media'] ?? ['image', 'video', 'gif', 'youtube'];
+                @endphp
                 <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-primary px-2.5 py-1.5 fs-12">Section 1</span>
-                    <h5 class="fw-bold text-dark mb-0 fs-16">Hero Carousel & Expansion Banners (3 Sliders)</h5>
+                    <h5 class="fw-bold text-dark mb-0 fs-16">Hero Carousel & Expansion Banners ({{ $franchiseMaxSlides }} Sliders)</h5>
                 </div>
-                <span class="badge bg-light text-muted border fs-12">Image / Video / GIF / YouTube Multi-Media Enabled</span>
+                <span class="badge bg-light text-muted border fs-12">Max: {{ $franchiseMaxSlides }} Slides • Multi-Media Enabled</span>
             </div>
 
             <form action="{{ route('admin.website-pages.franchise.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="current_section" value="hero_sliders">
 
-                <!-- Tabs for the 3 slides -->
+                <!-- Tabs for the slides -->
                 <ul class="nav nav-pills mb-4 gap-2" id="heroSlidesTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active fw-bold fs-13 py-2 px-3.5 rounded-3" id="slide-0-tab" data-bs-toggle="pill" data-bs-target="#slide-0" type="button" role="tab">
-                            <i class="bi bi-1-circle-fill me-1"></i> Slide 1: Partnership
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link fw-bold fs-13 py-2 px-3.5 rounded-3" id="slide-1-tab" data-bs-toggle="pill" data-bs-target="#slide-1" type="button" role="tab">
-                            <i class="bi bi-2-circle-fill me-1"></i> Slide 2: Expansion
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link fw-bold fs-13 py-2 px-3.5 rounded-3" id="slide-2-tab" data-bs-toggle="pill" data-bs-target="#slide-2" type="button" role="tab">
-                            <i class="bi bi-3-circle-fill me-1"></i> Slide 3: Brand Reputation
-                        </button>
-                    </li>
+                    @for($i = 0; $i < $franchiseMaxSlides; $i++)
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link {{ $i === 0 ? 'active' : '' }} fw-bold fs-13 py-2 px-3.5 rounded-3" id="slide-{{ $i }}-tab" data-bs-toggle="pill" data-bs-target="#slide-{{ $i }}" type="button" role="tab">
+                                <i class="bi bi-{{ min(9, $i + 1) }}-circle-fill me-1"></i> Slide {{ $i + 1 }}
+                            </button>
+                        </li>
+                    @endfor
                 </ul>
 
                 <div class="tab-content" id="heroSlidesTabContent">
@@ -247,7 +243,7 @@
                         $slides = $franchise['hero_sliders'] ?? [];
                     @endphp
 
-                    @for($i = 0; $i < 3; $i++)
+                    @for($i = 0; $i < $franchiseMaxSlides; $i++)
                         @php
                             $slide = $slides[$i] ?? [];
                             $mediaType = $slide['media_type'] ?? 'image';
@@ -298,10 +294,18 @@
                                             <div class="col-lg-3 col-sm-6 col-12">
                                                 <label class="form-label fs-12 fw-bold text-dark mb-1">Media Format:</label>
                                                 <select name="franchise[hero_sliders][{{ $i }}][media_type]" class="form-select modern-select" onchange="toggleSlideMediaType({{ $i }}, this.value)">
-                                                    <option value="image" {{ $mediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / Banner</option>
-                                                    <option value="gif" {{ $mediaType === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
-                                                    <option value="video" {{ $mediaType === 'video' ? 'selected' : '' }}>🎥 MP4 Video File</option>
-                                                    <option value="youtube" {{ $mediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video</option>
+                                                    @if(in_array('image', $franchiseHeroAllowedMedia))
+                                                        <option value="image" {{ $mediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / Banner</option>
+                                                    @endif
+                                                    @if(in_array('gif', $franchiseHeroAllowedMedia))
+                                                        <option value="gif" {{ $mediaType === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
+                                                    @endif
+                                                    @if(in_array('video', $franchiseHeroAllowedMedia))
+                                                        <option value="video" {{ $mediaType === 'video' ? 'selected' : '' }}>🎥 MP4 Video File</option>
+                                                    @endif
+                                                    @if(in_array('youtube', $franchiseHeroAllowedMedia))
+                                                        <option value="youtube" {{ $mediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video</option>
+                                                    @endif
                                                 </select>
                                             </div>
 
@@ -943,11 +947,22 @@
                             <div class="row g-3 mb-3">
                                 <div class="col-lg-3 col-sm-6 col-12">
                                     <label class="form-label fs-12 fw-bold text-dark mb-1">Media Format:</label>
+                                    @php
+                                        $footerCtaAllowedMedia = $globalSettings['sections']['franchise']['footer_cta']['allowed_media'] ?? ['image', 'video', 'gif', 'youtube'];
+                                    @endphp
                                     <select name="franchise[cta_media_type]" class="form-select modern-select" onchange="toggleCtaMediaType(this.value)">
-                                        <option value="image" {{ $ctaMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / Banner</option>
-                                        <option value="gif" {{ $ctaMediaType === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
-                                        <option value="video" {{ $ctaMediaType === 'video' ? 'selected' : '' }}>🎥 MP4 Video File</option>
-                                        <option value="youtube" {{ $ctaMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video</option>
+                                        @if(in_array('image', $footerCtaAllowedMedia))
+                                            <option value="image" {{ $ctaMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / Banner</option>
+                                        @endif
+                                        @if(in_array('gif', $footerCtaAllowedMedia))
+                                            <option value="gif" {{ $ctaMediaType === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
+                                        @endif
+                                        @if(in_array('video', $footerCtaAllowedMedia))
+                                            <option value="video" {{ $ctaMediaType === 'video' ? 'selected' : '' }}>🎥 MP4 Video File</option>
+                                        @endif
+                                        @if(in_array('youtube', $footerCtaAllowedMedia))
+                                            <option value="youtube" {{ $ctaMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video</option>
+                                        @endif
                                     </select>
                                 </div>
 

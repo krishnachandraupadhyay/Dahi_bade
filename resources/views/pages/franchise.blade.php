@@ -49,6 +49,8 @@
                 'overlay_opacity' => '0.75',
             ],
         ];
+        $maxFranchiseSlides = (int)($globalSettings['sections']['franchise']['hero_sliders']['max_slides'] ?? 3);
+        $slides = array_slice($slides, 0, $maxFranchiseSlides);
     @endphp
 
     <!-- FRANCHISE HERO SLIDER (Document Pages 13-14: 3 Sliders) -->

@@ -249,11 +249,22 @@
                             <div class="row g-3 mb-3">
                                 <div class="col-lg-3 col-sm-6 col-12">
                                     <label class="form-label fs-12 fw-bold text-dark mb-1">Media Format:</label>
+                                    @php
+                                        $contactHeroAllowed = $globalSettings['sections']['contact']['hero_banner']['allowed_media'] ?? ['image', 'video', 'gif', 'youtube'];
+                                    @endphp
                                     <select name="contact[hero_media_type]" class="form-select modern-select" onchange="toggleHeroMediaType(this.value)">
-                                        <option value="image" {{ $heroMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / Banner</option>
-                                        <option value="gif" {{ $heroMediaType === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
-                                        <option value="video" {{ $heroMediaType === 'video' ? 'selected' : '' }}>🎥 MP4 Video File</option>
-                                        <option value="youtube" {{ $heroMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video</option>
+                                        @if(in_array('image', $contactHeroAllowed))
+                                            <option value="image" {{ $heroMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / Banner</option>
+                                        @endif
+                                        @if(in_array('gif', $contactHeroAllowed))
+                                            <option value="gif" {{ $heroMediaType === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
+                                        @endif
+                                        @if(in_array('video', $contactHeroAllowed))
+                                            <option value="video" {{ $heroMediaType === 'video' ? 'selected' : '' }}>🎥 MP4 Video File</option>
+                                        @endif
+                                        @if(in_array('youtube', $contactHeroAllowed))
+                                            <option value="youtube" {{ $heroMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video</option>
+                                        @endif
                                     </select>
                                 </div>
 
@@ -764,11 +775,22 @@
                             <div class="row g-3 mb-3">
                                 <div class="col-lg-3 col-sm-6 col-12">
                                     <label class="form-label fs-12 fw-bold text-dark mb-1">Media Format:</label>
+                                    @php
+                                        $findUsAllowed = $globalSettings['sections']['contact']['find_us_banner']['allowed_media'] ?? ['image', 'video', 'gif', 'youtube'];
+                                    @endphp
                                     <select name="contact[find_media_type]" class="form-select modern-select" onchange="toggleFindMediaType(this.value)">
-                                        <option value="image" {{ $findMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / Banner</option>
-                                        <option value="gif" {{ $findMediaType === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
-                                        <option value="video" {{ $findMediaType === 'video' ? 'selected' : '' }}>🎥 MP4 Video File</option>
-                                        <option value="youtube" {{ $findMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video</option>
+                                        @if(in_array('image', $findUsAllowed))
+                                            <option value="image" {{ $findMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / Banner</option>
+                                        @endif
+                                        @if(in_array('gif', $findUsAllowed))
+                                            <option value="gif" {{ $findMediaType === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
+                                        @endif
+                                        @if(in_array('video', $findUsAllowed))
+                                            <option value="video" {{ $findMediaType === 'video' ? 'selected' : '' }}>🎥 MP4 Video File</option>
+                                        @endif
+                                        @if(in_array('youtube', $findUsAllowed))
+                                            <option value="youtube" {{ $findMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video</option>
+                                        @endif
                                     </select>
                                 </div>
 

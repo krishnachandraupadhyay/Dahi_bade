@@ -300,6 +300,10 @@
         <div class="card-body p-4">
             <!-- ================= 1. HERO SECTION PANEL ================= -->
             <div class="home-section-panel" id="panel_hero_section" style="{{ $activeSection === 'hero_section' ? 'display: block;' : 'display: none;' }}">
+                @php
+                    $heroAllowedMedia = $globalSettings['sections']['home']['hero']['allowed_media'] ?? ['image', 'video', 'gif', 'youtube'];
+                    $heroMaxSlides = (int)($globalSettings['sections']['home']['hero']['max_slides'] ?? 4);
+                @endphp
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-primary px-2.5 py-1.5 fs-12">Hero Section</span>
@@ -307,7 +311,7 @@
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1" id="activeSlidesBadge">
-                            <i class="bi bi-sliders me-1"></i> <span id="slideCountText">{{ count($slides) }}</span> Slides Active
+                            <i class="bi bi-sliders me-1"></i> <span id="slideCountText">{{ count($slides) }}</span> / {{ $heroMaxSlides }} Slides Active (Max: {{ $heroMaxSlides }})
                         </span>
                         <button type="button" class="btn btn-sm btn-success d-flex align-items-center gap-1.5 px-3 py-1 rounded-2 shadow-sm fw-semibold" id="btnAddSlideBtn">
                             <i class="bi bi-plus-circle-fill fs-13"></i>
@@ -547,10 +551,18 @@
                                                     <div class="col-md-5 col-sm-12">
                                                         <label class="fs-12 fw-bold text-dark mb-1 d-block">Media Format Type:</label>
                                                         <select name="slides[{{ $index }}][media_type]" class="form-select form-select-sm slide-media-type-select modern-select fw-semibold mb-2.5">
-                                                            <option value="image" {{ ($slide['media_type'] ?? '') === 'image' ? 'selected' : '' }}>🖼️ Static Image (JPG / PNG)</option>
-                                                            <option value="gif" {{ ($slide['media_type'] ?? '') === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
-                                                            <option value="video" {{ ($slide['media_type'] ?? '') === 'video' ? 'selected' : '' }}>🎥 Video (MP4 / WebM)</option>
-                                                            <option value="youtube" {{ ($slide['media_type'] ?? '') === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video Link</option>
+                                                            @if(in_array('image', $heroAllowedMedia))
+                                                                <option value="image" {{ ($slide['media_type'] ?? '') === 'image' ? 'selected' : '' }}>🖼️ Static Image (JPG / PNG)</option>
+                                                            @endif
+                                                            @if(in_array('gif', $heroAllowedMedia))
+                                                                <option value="gif" {{ ($slide['media_type'] ?? '') === 'gif' ? 'selected' : '' }}>🎞️ Animated GIF</option>
+                                                            @endif
+                                                            @if(in_array('video', $heroAllowedMedia))
+                                                                <option value="video" {{ ($slide['media_type'] ?? '') === 'video' ? 'selected' : '' }}>🎥 Video (MP4 / WebM)</option>
+                                                            @endif
+                                                            @if(in_array('youtube', $heroAllowedMedia))
+                                                                <option value="youtube" {{ ($slide['media_type'] ?? '') === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video Link</option>
+                                                            @endif
                                                         </select>
 
                                                         <div class="slide-file-upload-wrap" style="display: {{ ($slide['media_type'] ?? '') === 'youtube' ? 'none' : 'block' }};">
@@ -1186,14 +1198,11 @@
                     <div class="d-flex flex-wrap align-items-center gap-2 pt-3 mt-4 border-top">
                         <button type="submit" class="btn btn-success px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save Why GPO Section Changes</span>
-                        </button>
+                            <span>Save Why GPO Section Changes</span>                        </button>
                         <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
                         </button>
-                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
-                            <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
-                        </a>
+                        
                     </div>
                 </form>
             </div>
@@ -1393,14 +1402,11 @@
                     <div class="d-flex flex-wrap align-items-center gap-2 pt-3 mt-4 border-top">
                         <button type="submit" class="btn btn-danger px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save Star of GPO Changes</span>
+                            <span>Save</span>
                         </button>
                         <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
                         </button>
-                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
-                            <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
-                        </a>
                     </div>
                 </form>
             </div>
@@ -1557,14 +1563,11 @@
                     <div class="d-flex flex-wrap align-items-center gap-2 pt-3 mt-4 border-top">
                         <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save Experience Section Changes</span>
+                            <span>Save</span>
                         </button>
                         <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
                         </button>
-                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
-                            <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
-                        </a>
                     </div>
                 </form>
             </div>
@@ -1820,7 +1823,7 @@
                     <div class="p-3 bg-white border border-light-subtle rounded-3 shadow-sm d-flex flex-wrap align-items-center gap-2.5 mt-2">
                         <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save Visit Us Changes</span>
+                            <span>Save</span>
                         </button>
                         <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
@@ -1942,10 +1945,19 @@
                                     <label class="form-label fs-13 fw-bold text-dark mb-1.5 d-flex align-items-center gap-1.5">
                                         <i class="bi bi-collection-play text-primary"></i> Media Format:
                                     </label>
+                                    @php
+                                        $ctaAllowedMedia = $globalSettings['sections']['home']['franchise_cta']['allowed_media'] ?? ['image', 'video', 'youtube'];
+                                    @endphp
                                     <select name="franchise_cta[media_type]" id="franchise_cta_media_type_select" class="form-select modern-select fw-semibold" style="height: 42px;">
-                                        <option value="image" {{ $ctaMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / GIF Image</option>
-                                        <option value="video" {{ $ctaMediaType === 'video' ? 'selected' : '' }}>🎬 Upload MP4 / WebM Video</option>
-                                        <option value="youtube" {{ $ctaMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video Link</option>
+                                        @if(in_array('image', $ctaAllowedMedia) || in_array('gif', $ctaAllowedMedia))
+                                            <option value="image" {{ $ctaMediaType === 'image' ? 'selected' : '' }}>🖼️ Photo / GIF Image</option>
+                                        @endif
+                                        @if(in_array('video', $ctaAllowedMedia))
+                                            <option value="video" {{ $ctaMediaType === 'video' ? 'selected' : '' }}>🎬 Upload MP4 / WebM Video</option>
+                                        @endif
+                                        @if(in_array('youtube', $ctaAllowedMedia))
+                                            <option value="youtube" {{ $ctaMediaType === 'youtube' ? 'selected' : '' }}>▶️ YouTube Video Link</option>
+                                        @endif
                                     </select>
                                     <small class="text-muted fs-11 mt-1.5 d-block">Select whether this banner shows a photo, custom uploaded video, or background YouTube video.</small>
                                 </div>
@@ -2170,7 +2182,7 @@
                     <div class="p-3 bg-white border border-light-subtle rounded-3 shadow-sm d-flex flex-wrap align-items-center gap-2.5 mt-4">
                         <button type="submit" class="btn btn-primary px-4 py-2.5 fw-semibold shadow-sm d-flex align-items-center gap-2">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save Franchise CTA Banner</span>
+                            <span>Save</span>
                         </button>
                         <button type="reset" class="btn btn-light border px-3 py-2.5 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
@@ -2580,9 +2592,16 @@
         }
 
         // Add New Slide button click
+        const maxHeroSlides = {{ $heroMaxSlides }};
+        const heroAllowedMedia = @json($heroAllowedMedia);
+
         if (addSlideBtn) {
             addSlideBtn.addEventListener('click', function () {
                 const currentCount = panesContainer.querySelectorAll('.slide-tab-pane').length;
+                if (currentCount >= maxHeroSlides) {
+                    alert('Cannot add more slides. Maximum limit of ' + maxHeroSlides + ' slides reached as set in Global Settings.');
+                    return;
+                }
                 const newIndex = currentCount;
 
                 // 1. Create new Tab Nav Item
@@ -2599,6 +2618,12 @@
                 tabsContainer.appendChild(tabLi);
 
                 // 2. Create new Tab Pane
+                let mediaTypeOpts = '';
+                if (heroAllowedMedia.includes('image')) mediaTypeOpts += '<option value="image" selected>🖼️ Static Image (JPG / PNG)</option>';
+                if (heroAllowedMedia.includes('gif')) mediaTypeOpts += '<option value="gif">🎞️ Animated GIF</option>';
+                if (heroAllowedMedia.includes('video')) mediaTypeOpts += '<option value="video">🎥 Video (MP4 / WebM)</option>';
+                if (heroAllowedMedia.includes('youtube')) mediaTypeOpts += '<option value="youtube">▶️ YouTube Video Link</option>';
+
                 const paneDiv = document.createElement('div');
                 paneDiv.className = 'tab-pane fade slide-tab-pane';
                 paneDiv.id = `slide-pane-${newIndex}`;
@@ -2827,10 +2852,7 @@
                                         <div class="col-md-5 col-sm-12">
                                             <label class="fs-12 fw-bold text-dark mb-1 d-block">Media Format Type:</label>
                                             <select name="slides[${newIndex}][media_type]" class="form-select form-select-sm slide-media-type-select modern-select fw-semibold mb-2.5">
-                                                <option value="image" selected>🖼️ Static Image (JPG / PNG)</option>
-                                                <option value="gif">🎞️ Animated GIF</option>
-                                                <option value="video">🎥 Video (MP4 / WebM)</option>
-                                                <option value="youtube">▶️ YouTube Video Link</option>
+                                                ${mediaTypeOpts}
                                             </select>
 
                                             <div class="slide-file-upload-wrap">

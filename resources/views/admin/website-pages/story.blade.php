@@ -446,26 +446,33 @@
                             <div class="story-input-col">
                                 @php
                                     $mType = $story['hero_media_type'] ?? 'image';
+                                    $storyHeroAllowed = $globalSettings['sections']['story']['hero_banner']['allowed_media'] ?? ['image', 'video', 'gif', 'youtube'];
                                 @endphp
                                 <div class="d-flex flex-wrap gap-3">
-                                    <div class="form-check form-check-inline p-2 border rounded-3 bg-light" style="min-width: 140px;">
-                                        <input class="form-check-input ms-1 me-2 hero-media-radio" type="radio" name="story[hero_media_type]" id="media_type_image" value="image" {{ $mType === 'image' ? 'checked' : '' }}>
-                                        <label class="form-check-label fw-bold fs-13 text-dark cursor-pointer" for="media_type_image">
-                                            🖼️ Static Image
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline p-2 border rounded-3 bg-light" style="min-width: 140px;">
-                                        <input class="form-check-input ms-1 me-2 hero-media-radio" type="radio" name="story[hero_media_type]" id="media_type_video" value="video" {{ $mType === 'video' ? 'checked' : '' }}>
-                                        <label class="form-check-label fw-bold fs-13 text-dark cursor-pointer" for="media_type_video">
-                                            🎥 Video Upload
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline p-2 border rounded-3 bg-light" style="min-width: 140px;">
-                                        <input class="form-check-input ms-1 me-2 hero-media-radio" type="radio" name="story[hero_media_type]" id="media_type_youtube" value="youtube" {{ $mType === 'youtube' ? 'checked' : '' }}>
-                                        <label class="form-check-label fw-bold fs-13 text-dark cursor-pointer" for="media_type_youtube">
-                                            ▶️ YouTube Link
-                                        </label>
-                                    </div>
+                                    @if(in_array('image', $storyHeroAllowed) || in_array('gif', $storyHeroAllowed))
+                                        <div class="form-check form-check-inline p-2 border rounded-3 bg-light" style="min-width: 140px;">
+                                            <input class="form-check-input ms-1 me-2 hero-media-radio" type="radio" name="story[hero_media_type]" id="media_type_image" value="image" {{ $mType === 'image' ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-bold fs-13 text-dark cursor-pointer" for="media_type_image">
+                                                🖼️ Static Image / GIF
+                                            </label>
+                                        </div>
+                                    @endif
+                                    @if(in_array('video', $storyHeroAllowed))
+                                        <div class="form-check form-check-inline p-2 border rounded-3 bg-light" style="min-width: 140px;">
+                                            <input class="form-check-input ms-1 me-2 hero-media-radio" type="radio" name="story[hero_media_type]" id="media_type_video" value="video" {{ $mType === 'video' ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-bold fs-13 text-dark cursor-pointer" for="media_type_video">
+                                                🎥 Video Upload
+                                            </label>
+                                        </div>
+                                    @endif
+                                    @if(in_array('youtube', $storyHeroAllowed))
+                                        <div class="form-check form-check-inline p-2 border rounded-3 bg-light" style="min-width: 140px;">
+                                            <input class="form-check-input ms-1 me-2 hero-media-radio" type="radio" name="story[hero_media_type]" id="media_type_youtube" value="youtube" {{ $mType === 'youtube' ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-bold fs-13 text-dark cursor-pointer" for="media_type_youtube">
+                                                ▶️ YouTube Link
+                                            </label>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

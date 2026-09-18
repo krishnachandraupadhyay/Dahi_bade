@@ -34,7 +34,11 @@
 @endsection
 
 @section('content')
-    <!-- HERO SECTION (Bootstrap Carousel with 3 Document Slides) -->
+    @php
+      $maxHeroSlides = (int)($globalSettings['sections']['home']['hero']['max_slides'] ?? 4);
+      $slides = array_slice($slides ?? [], 0, $maxHeroSlides);
+    @endphp
+    <!-- HERO SECTION (Bootstrap Carousel with Dynamic Document Slides) -->
     <section class="hero-home-exact">
       <div id="heroHomeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5500">
         

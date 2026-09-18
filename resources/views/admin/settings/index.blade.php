@@ -79,24 +79,6 @@
         border-bottom-color: #0162e8;
         background: transparent;
     }
-    .nav-pills-page .nav-link {
-        border-radius: 8px;
-        padding: 8px 16px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #475569;
-        border: 1px solid #e2e8f0;
-        background: #f8fafc;
-        margin-right: 8px;
-        margin-bottom: 8px;
-        transition: all 0.2s ease;
-    }
-    .nav-pills-page .nav-link.active {
-        background: #0162e8;
-        color: #ffffff;
-        border-color: #0162e8;
-        box-shadow: 0 2px 6px rgba(1, 98, 232, 0.25);
-    }
     .hero-simulator-box {
         position: relative;
         width: 100%;
@@ -108,6 +90,24 @@
         text-align: center;
         box-shadow: 0 4px 15px rgba(0,0,0,0.12);
         transition: min-height 0.3s ease;
+    }
+    .format-check-card {
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 12px 16px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .format-check-card:hover {
+        border-color: #0162e8;
+        background: #f8fafc;
+    }
+    .format-check-card input:checked ~ .format-info .format-name {
+        color: #0162e8;
     }
 
     @media (max-width: 768px) {
@@ -125,8 +125,10 @@
 
     @php
         $activeTab = request('tab', 'general');
+        $initPage = request('page', 'home');
+        $initSection = request('section', 'hero');
         $gen = $settings['general'] ?? [];
-        $heroPages = $settings['hero_pages'] ?? [];
+        $sectionsTree = $settings['sections'] ?? [];
     @endphp
 
     <!-- Valex Page Header / Breadcrumb -->
@@ -167,8 +169,8 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link {{ $activeTab === 'hero_customizer' ? 'active' : '' }}" id="hero-tab" data-bs-toggle="tab" data-bs-target="#tab-hero" type="button" role="tab" aria-controls="tab-hero" aria-selected="{{ $activeTab === 'hero_customizer' ? 'true' : 'false' }}">
-                        <i class="bi bi-aspect-ratio me-1.5"></i> Page-Wise Hero Customizer (Height, Width & Overlay)
+                    <button class="nav-link {{ $activeTab === 'media_sections' ? 'active' : '' }}" id="media-sections-tab" data-bs-toggle="tab" data-bs-target="#tab-media-sections" type="button" role="tab" aria-controls="tab-media-sections" aria-selected="{{ $activeTab === 'media_sections' ? 'true' : 'false' }}">
+                        <i class="bi bi-images me-1.5"></i> Page & Section Media Permissions (Images, Videos & Max Slides)
                     </button>
                 </li>
             </ul>
@@ -178,43 +180,46 @@
             <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="active_tab" id="active_tab_input" value="{{ $activeTab }}">
+                <input type="hidden" name="selected_page" id="selected_page_input" value="{{ $initPage }}">
+                <input type="hidden" name="selected_section" id="selected_section_input" value="{{ $initSection }}">
 
                 <div class="tab-content" id="settingsTabContent">
 
-                    <!-- ================= TAB 1: WEBSITE IDENTITY & GENERAL ================= -->
+                    <!-- ================= TAB 1: WEBSITE IDENTITY & META ================= -->
                     <div class="tab-pane fade {{ $activeTab === 'general' ? 'show active' : '' }}" id="tab-general" role="tabpanel" aria-labelledby="general-tab">
                         
+                        <!-- Brand Identity Card -->
                         <div class="settings-config-card mb-4">
                             <div class="p-3 bg-light border-bottom d-flex align-items-center justify-content-between">
                                 <div class="fw-bold text-dark fs-14 d-flex align-items-center gap-2">
-                                    <i class="bi bi-app-indicator text-primary"></i> Site Branding & Icons
+                                    <i class="bi bi-building-gear text-primary"></i> Brand Identity & Assets
                                 </div>
-                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Global Branding</span>
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Core Brand</span>
                             </div>
 
                             <!-- 1. Site Title -->
                             <div class="settings-row">
                                 <div class="settings-label-col">
                                     <div class="settings-label-title">
-                                        <i class="bi bi-type-h1 text-primary"></i> Site Title
+                                        <i class="bi bi-window text-primary"></i> Website Title
                                     </div>
-                                    <p class="settings-label-desc">Displayed on browser tabs, search engine snippets, and bookmarks.</p>
+                                    <p class="settings-label-desc">Primary website title shown on browser tab and search engine results.</p>
                                 </div>
                                 <div class="settings-input-col">
-                                    <input type="text" name="general[site_title]" class="form-control modern-input" value="{{ $gen['site_title'] ?? 'Original GPO Ke Thandey Dahi Bade | Lucknow Since 1976' }}" placeholder="e.g. Original GPO Ke Thandey Dahi Bade">
+                                    <input type="text" name="general[site_title]" class="form-control modern-input fw-semibold" value="{{ $gen['site_title'] ?? 'Original GPO Ke Thandey Dahi Bade | Lucknow Since 1976' }}" placeholder="Enter website title">
                                 </div>
                             </div>
 
-                            <!-- 2. Tagline -->
+                            <!-- 2. Site Tagline -->
                             <div class="settings-row">
                                 <div class="settings-label-col">
                                     <div class="settings-label-title">
-                                        <i class="bi bi-quote text-primary"></i> Site Tagline
+                                        <i class="bi bi-quote text-primary"></i> Brand Tagline
                                     </div>
-                                    <p class="settings-label-desc">Slogan or heritage subtitle accompanying the brand.</p>
+                                    <p class="settings-label-desc">Official tagline used in header and social shares.</p>
                                 </div>
                                 <div class="settings-input-col">
-                                    <input type="text" name="general[site_tagline]" class="form-control modern-input" value="{{ $gen['site_tagline'] ?? 'The Original Taste of Lucknow Since 1976' }}" placeholder="e.g. The Original Taste of Lucknow Since 1976">
+                                    <input type="text" name="general[site_tagline]" class="form-control modern-input" value="{{ $gen['site_tagline'] ?? 'The Original Taste of Lucknow Since 1976' }}" placeholder="Enter brand tagline">
                                 </div>
                             </div>
 
@@ -222,18 +227,18 @@
                             <div class="settings-row">
                                 <div class="settings-label-col">
                                     <div class="settings-label-title">
-                                        <i class="bi bi-image text-primary"></i> Favicon Icon (.ico, .png)
+                                        <i class="bi bi-star text-primary"></i> Favicon Icon
                                     </div>
-                                    <p class="settings-label-desc">Small tab icon (recommended: 32x32px or 64x64px PNG/ICO).</p>
+                                    <p class="settings-label-desc">Small 32x32 browser tab icon (.png or .ico).</p>
                                 </div>
                                 <div class="settings-input-col">
                                     <div class="d-flex align-items-center gap-3">
-                                        <div class="border rounded-2 p-1 d-flex align-items-center justify-content-center bg-light" style="width: 44px; height: 44px;">
-                                            <img id="preview_favicon" src="{{ !empty($gen['favicon']) ? asset($gen['favicon']) : asset('favicon.ico') }}" alt="Favicon" style="max-width: 32px; max-height: 32px; object-fit: contain;">
+                                        <div class="border rounded-2 p-2 d-flex align-items-center justify-content-center bg-light" style="width: 50px; height: 50px;">
+                                            <img id="preview_favicon" src="{{ !empty($gen['favicon']) ? asset($gen['favicon']) : 'https://placehold.co/32x32/19302e/ffffff?text=GPO' }}" alt="Favicon" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                                         </div>
                                         <div class="flex-grow-1">
-                                            <input type="file" name="general_files[favicon]" id="input_favicon" class="form-control modern-input" accept=".ico,.png,.svg,.jpg">
-                                            <small class="text-muted fs-11">Current: {{ !empty($gen['favicon']) ? $gen['favicon'] : 'Default favicon.ico' }}</small>
+                                            <input type="file" name="general_files[favicon]" id="input_favicon" class="form-control modern-input" accept="image/x-icon,image/png,image/svg+xml">
+                                            <small class="text-muted fs-11">Upload a 32x32 or 64x64 transparent PNG / ICO file.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -243,9 +248,9 @@
                             <div class="settings-row">
                                 <div class="settings-label-col">
                                     <div class="settings-label-title">
-                                        <i class="bi bi-card-image text-primary"></i> Header Logo (Image)
+                                        <i class="bi bi-image text-primary"></i> Main Header Logo
                                     </div>
-                                    <p class="settings-label-desc">Primary brand logo shown in the top navigation bar (transparent PNG recommended).</p>
+                                    <p class="settings-label-desc">Main logo displayed in the website navigation bar.</p>
                                 </div>
                                 <div class="settings-input-col">
                                     <div class="d-flex align-items-center gap-3">
@@ -370,163 +375,290 @@
                     </div>
 
 
-                    <!-- ================= TAB 2: PAGE-WISE HERO CUSTOMIZER ================= -->
-                    <div class="tab-pane fade {{ $activeTab === 'hero_customizer' ? 'show active' : '' }}" id="tab-hero" role="tabpanel" aria-labelledby="hero-tab">
+                    <!-- ================= TAB 2: PAGE & SECTION MEDIA CUSTOMIZER ================= -->
+                    <div class="tab-pane fade {{ $activeTab === 'media_sections' ? 'show active' : '' }}" id="tab-media-sections" role="tabpanel" aria-labelledby="media-sections-tab">
                         
-                        <!-- Page Selector Pills -->
-                        <div class="d-flex align-items-center flex-wrap mb-4 nav-pills-page" id="heroPagesSelector">
-                            @foreach($heroPages as $pKey => $pData)
-                                <button type="button" class="nav-link {{ $loop->first ? 'active' : '' }}" onclick="switchHeroPage('{{ $pKey }}', this)">
-                                    @if($pKey === 'home')  Home Hero
-                                    @elseif($pKey === 'story') Our Story Hero
-                                    @elseif($pKey === 'menu')  Menu Hero
-                                    @elseif($pKey === 'franchise')  Franchise Hero
-                                    @elseif($pKey === 'contact')  Contact Hero
-                                    @else 📄 {{ ucfirst($pKey) }} Hero
-                                    @endif
-                                </button>
-                            @endforeach
+                        <!-- Top Dropdown Controls: 1. Page Selector, 2. Media Section Selector -->
+                        <div class="p-3 mb-4 bg-light border rounded-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <!-- 1. Page Dropdown -->
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="globalPageSelector" class="fs-13 fw-bold text-dark text-nowrap mb-0">
+                                        <i class="bi bi-file-earmark-text text-primary me-1"></i> Select Page:
+                                    </label>
+                                    <select id="globalPageSelector" class="form-select form-select-sm fw-bold modern-select" style="min-width: 210px;" onchange="onGlobalPageChange(this.value)">
+                                        <option value="home" {{ $initPage === 'home' ? 'selected' : '' }}>🏠 Home Page</option>
+                                        <option value="story" {{ $initPage === 'story' ? 'selected' : '' }}>📖 Our Story Page</option>
+                                        <option value="menu" {{ $initPage === 'menu' ? 'selected' : '' }}>🍲 Menu Page</option>
+                                        <option value="franchise" {{ $initPage === 'franchise' ? 'selected' : '' }}>🤝 Franchise Page</option>
+                                        <option value="contact" {{ $initPage === 'contact' ? 'selected' : '' }}>📞 Contact Us Page</option>
+                                    </select>
+                                </div>
+
+                                <!-- 2. Media Section Dropdown (Filtered only to sections with background media) -->
+                                <div class="d-flex align-items-center gap-2">
+                                    <label for="globalSectionSelector" class="fs-13 fw-bold text-dark text-nowrap mb-0">
+                                        <i class="bi bi-image text-danger me-1"></i> Media Section:
+                                    </label>
+                                    <select id="globalSectionSelector" class="form-select form-select-sm fw-bold modern-select" style="min-width: 320px;" onchange="onGlobalSectionChange(this.value)">
+                                        <!-- Populated via JavaScript dynamically based on selected page -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1.5 fs-12">
+                                    <i class="bi bi-sliders me-1"></i> Admin Governance
+                                </span>
+                            </div>
                         </div>
 
-                        <!-- LIVE INTERACTIVE VISUAL HERO SIMULATOR -->
+                        <!-- LIVE INTERACTIVE VISUAL SIMULATOR -->
                         <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; overflow: hidden;">
                             <div class="card-header bg-white py-2.5 px-3 border-bottom d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-2">
                                     <i class="bi bi-eye-fill text-primary"></i>
-                                    <span class="fw-bold fs-13 text-dark">Live Hero Simulation Preview: <span id="sim_page_title_badge" class="text-primary">Home Page Hero</span></span>
+                                    <span class="fw-bold fs-13 text-dark">Live Simulator: <span id="sim_section_title_badge" class="text-primary">Home Hero Carousel</span></span>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="badge bg-dark fs-11" id="sim_dimensions_badge">Height: 590px | Width: 100%</span>
                                     <span class="badge bg-primary-subtle text-primary border fs-11" id="sim_opacity_badge">Overlay: 85%</span>
+                                    <span class="badge bg-success-subtle text-success border fs-11" id="sim_formats_badge">Formats: 4 Allowed</span>
                                 </div>
                             </div>
                             <div class="card-body p-0 bg-dark position-relative d-flex align-items-center justify-content-center" style="min-height: 280px; overflow: hidden;">
-                                <div id="sim_hero_container" class="hero-simulator-box" style="min-height: 280px; width: 100%;">
-                                    <img id="sim_hero_img" src="{{ asset('images/dahi_vada.jpg') }}" alt="Simulated Hero Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
-                                    <div id="sim_hero_overlay" style="position: absolute; inset: 0; z-index: 1; pointer-events: none; transition: background 0.2s ease;"></div>
+                                <div id="sim_container" class="hero-simulator-box" style="min-height: 280px; width: 100%;">
+                                    <img id="sim_img" src="{{ asset('images/dahi_vada.jpg') }}" alt="Simulated Section Media" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+                                    <div id="sim_overlay" style="position: absolute; inset: 0; z-index: 1; pointer-events: none; transition: background 0.2s ease;"></div>
                                     <div class="position-relative p-4" style="z-index: 2; color: #ffffff;">
-                                        <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill mb-2 fw-bold text-uppercase fs-12" id="sim_text_badge">HERO PREVIEW</span>
-                                        <h3 class="fw-bold mb-1 text-white" id="sim_text_heading" style="text-shadow: 0 2px 6px rgba(0,0,0,0.5);">PAGE HERO SECTION</h3>
-                                        <p class="fs-13 text-white-50 mb-0" id="sim_text_desc">Live dimensions, transparent color, opacity, and gradient style simulation</p>
+                                        <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill mb-2 fw-bold text-uppercase fs-12" id="sim_text_badge">SECTION PREVIEW</span>
+                                        <h3 class="fw-bold mb-1 text-white" id="sim_text_heading" style="text-shadow: 0 2px 6px rgba(0,0,0,0.5);">DYNAMIC SECTION SIMULATOR</h3>
+                                        <p class="fs-13 text-white-50 mb-0" id="sim_text_desc">Simulating dimensions, allowed media formats, transparent color & opacity</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- PAGE CONFIG PANELS -->
-                        @foreach($heroPages as $pKey => $pData)
-                            <div class="page-hero-panel settings-config-card mb-4" id="hero_panel_{{ $pKey }}" style="{{ $loop->first ? 'display: block;' : 'display: none;' }}">
-                                <div class="p-3 bg-light border-bottom d-flex align-items-center justify-content-between">
-                                    <div class="fw-bold text-dark fs-14 d-flex align-items-center gap-2">
-                                        <i class="bi bi-sliders text-primary"></i>
-                                        <span>{{ $pData['title'] ?? ucfirst($pKey) . ' Page Hero' }}</span>
+                        <!-- SECTION CONFIG PANELS (Dynamically shown based on Page & Section Dropdowns) -->
+                        @foreach($sectionsTree as $pageKey => $sections)
+                            @foreach($sections as $secKey => $secData)
+                                @php
+                                    $panelId = "sec_panel_{$pageKey}_{$secKey}";
+                                    $isCarousel = $secData['is_carousel'] ?? false;
+                                    $allowedMedia = $secData['allowed_media'] ?? ['image', 'video', 'gif', 'youtube'];
+                                    $maxSlides = $secData['max_slides'] ?? 3;
+                                    $height = $secData['height'] ?? '500px';
+                                    $maxWidth = $secData['max_width'] ?? '100%';
+                                    $overlayColor = $secData['overlay_color'] ?? '#083b3c';
+                                    $overlayOpacity = $secData['overlay_opacity'] ?? '0.75';
+                                    $overlayStyle = $secData['overlay_style'] ?? 'solid';
+                                @endphp
+                                <div class="section-config-panel settings-config-card mb-4" id="{{ $panelId }}" style="display: none;">
+                                    <div class="p-3 bg-light border-bottom d-flex align-items-center justify-content-between">
+                                        <div class="fw-bold text-dark fs-14 d-flex align-items-center gap-2">
+                                            <i class="bi bi-sliders text-primary"></i>
+                                            <span>{{ $secData['name'] ?? ucfirst($secKey) }}</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-info-subtle text-info border border-info-subtle fs-11">Page: {{ strtoupper($pageKey) }}</span>
+                                            <span class="badge bg-secondary-subtle text-secondary border fs-11">Section: {{ $secKey }}</span>
+                                            @if($isCarousel)
+                                                <span class="badge bg-warning text-dark fs-11 fw-bold"><i class="bi bi-collection-play me-1"></i> Carousel Slider</span>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <span class="badge bg-primary px-2.5 py-1 fs-11 text-white">Page: {{ strtoupper($pKey) }}</span>
-                                </div>
 
-                                <!-- 1. Height -->
-                                <div class="settings-row">
-                                    <div class="settings-label-col">
-                                        <div class="settings-label-title">
-                                            <i class="bi bi-arrows-vertical text-primary"></i> Hero Height
-                                        </div>
-                                        <p class="settings-label-desc">Control exact or responsive height (e.g. 590px, 460px, 100vh, 420px).</p>
-                                    </div>
-                                    <div class="settings-input-col">
-                                        <div class="input-group" style="max-width: 380px;">
-                                            <span class="input-group-text bg-light text-muted border-end-0 fs-13"><i class="bi bi-arrows-expand-vertical"></i></span>
-                                            <input type="text" name="hero_pages[{{ $pKey }}][height]" id="input_hero_height_{{ $pKey }}" class="form-control modern-input hero-height-input" data-page="{{ $pKey }}" value="{{ $pData['height'] ?? '500px' }}" placeholder="e.g. 590px, 100vh">
-                                        </div>
-                                        <div class="d-flex align-items-center gap-1.5 mt-2 flex-wrap">
-                                            <small class="text-muted me-1 fs-12">Quick Presets:</small>
-                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pKey }}', '100vh')">Full Screen (100vh)</button>
-                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pKey }}', '650px')">650px</button>
-                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pKey }}', '590px')">590px (Standard)</button>
-                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pKey }}', '480px')">480px (Compact)</button>
-                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pKey }}', '400px')">400px (Slim)</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 2. Max Width -->
-                                <div class="settings-row">
-                                    <div class="settings-label-col">
-                                        <div class="settings-label-title">
-                                            <i class="bi bi-arrows-collapse text-primary"></i> Hero Container Max-Width
-                                        </div>
-                                        <p class="settings-label-desc">Control banner content width (100% for full-bleed, or boxed like 1400px, 1200px).</p>
-                                    </div>
-                                    <div class="settings-input-col">
-                                        <div class="input-group" style="max-width: 380px;">
-                                            <span class="input-group-text bg-light text-muted border-end-0 fs-13"><i class="bi bi-arrows-expand"></i></span>
-                                            <input type="text" name="hero_pages[{{ $pKey }}][max_width]" id="input_hero_max_width_{{ $pKey }}" class="form-control modern-input hero-width-input" data-page="{{ $pKey }}" value="{{ $pData['max_width'] ?? '100%' }}" placeholder="e.g. 100%, 1400px">
-                                        </div>
-                                        <div class="d-flex align-items-center gap-1.5 mt-2 flex-wrap">
-                                            <small class="text-muted me-1 fs-12">Quick Presets:</small>
-                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetWidth('{{ $pKey }}', '100%')">100% (Full Bleed)</button>
-                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetWidth('{{ $pKey }}', '1400px')">1400px</button>
-                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetWidth('{{ $pKey }}', '1240px')">1240px (Boxed)</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 3. Overlay Color & Opacity -->
-                                <div class="settings-row">
-                                    <div class="settings-label-col">
-                                        <div class="settings-label-title">
-                                            <i class="bi bi-palette-fill text-primary"></i> Transparent Overlay Color
-                                        </div>
-                                        <p class="settings-label-desc">Color tint and opacity applied on top of the background media.</p>
-                                    </div>
-                                    <div class="settings-input-col">
-                                        <div class="d-flex align-items-center gap-2 mb-3">
-                                            <input type="color" id="picker_{{ $pKey }}" class="form-control form-control-color border-0 p-0 rounded-2 hero-color-picker" data-page="{{ $pKey }}" value="{{ $pData['overlay_color'] ?? '#000000' }}" style="width: 44px; height: 38px; cursor: pointer;">
-                                            <div class="input-group" style="max-width: 170px;">
-                                                <span class="input-group-text bg-light text-muted fs-13">#</span>
-                                                <input type="text" name="hero_pages[{{ $pKey }}][overlay_color]" id="input_color_{{ $pKey }}" class="form-control modern-input hero-color-input" data-page="{{ $pKey }}" value="{{ $pData['overlay_color'] ?? '#000000' }}" maxlength="7">
+                                    <!-- 1. ADMIN PERMISSION: Allowed Media Types -->
+                                    <div class="settings-row">
+                                        <div class="settings-label-col">
+                                            <div class="settings-label-title text-primary">
+                                                <i class="bi bi-shield-check"></i> Allowed Media Formats
                                             </div>
-                                            <div class="d-flex align-items-center gap-1.5 flex-wrap ms-2">
-                                                <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #19302e;" title="GPO Spruce #19302e" onclick="applyPresetColor('{{ $pKey }}', '#19302e')"></button>
-                                                <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #083b3c;" title="Deep Emerald #083b3c" onclick="applyPresetColor('{{ $pKey }}', '#083b3c')"></button>
-                                                <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #000000;" title="True Black #000000" onclick="applyPresetColor('{{ $pKey }}', '#000000')"></button>
-                                                <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #1e293b;" title="Navy Slate #1e293b" onclick="applyPresetColor('{{ $pKey }}', '#1e293b')"></button>
-                                                <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #3b1d11;" title="Heritage Brown #3b1d11" onclick="applyPresetColor('{{ $pKey }}', '#3b1d11')"></button>
-                                            </div>
+                                            <p class="settings-label-desc">Choose which background media options the editor is permitted to use on this page/section. If unchecked, it will be hidden from the page editor form.</p>
                                         </div>
+                                        <div class="settings-input-col">
+                                            <div class="row g-2 mb-2">
+                                                <!-- Image -->
+                                                <div class="col-md-3 col-sm-6 col-12">
+                                                    <label class="format-check-card h-100">
+                                                        <input type="checkbox" name="sections[{{ $pageKey }}][{{ $secKey }}][allowed_media][]" value="image" class="form-check-input mt-0 sec-media-check" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" {{ in_array('image', $allowedMedia) ? 'checked' : '' }}>
+                                                        <div class="format-info">
+                                                            <div class="format-name fw-bold fs-13">🖼️ Photo / Image</div>
+                                                            <small class="text-muted fs-11 d-block">JPG, PNG, WebP</small>
+                                                        </div>
+                                                    </label>
+                                                </div>
 
-                                        <!-- Opacity Slider -->
-                                        <div class="p-3 bg-light rounded-3 border" style="max-width: 500px;">
-                                            <div class="d-flex align-items-center justify-content-between mb-1.5">
-                                                <label class="fs-12 fw-bold text-dark mb-0">Overlay Opacity / Transparency:</label>
-                                                <span class="badge bg-primary px-2 py-1 fs-11" id="badge_opacity_{{ $pKey }}">{{ round(floatval($pData['overlay_opacity'] ?? 0.75) * 100) }}%</span>
+                                                <!-- Video -->
+                                                <div class="col-md-3 col-sm-6 col-12">
+                                                    <label class="format-check-card h-100">
+                                                        <input type="checkbox" name="sections[{{ $pageKey }}][{{ $secKey }}][allowed_media][]" value="video" class="form-check-input mt-0 sec-media-check" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" {{ in_array('video', $allowedMedia) ? 'checked' : '' }}>
+                                                        <div class="format-info">
+                                                            <div class="format-name fw-bold fs-13">🎥 MP4 Video File</div>
+                                                            <small class="text-muted fs-11 d-block">Local MP4 upload</small>
+                                                        </div>
+                                                    </label>
+                                                </div>
+
+                                                <!-- GIF -->
+                                                <div class="col-md-3 col-sm-6 col-12">
+                                                    <label class="format-check-card h-100">
+                                                        <input type="checkbox" name="sections[{{ $pageKey }}][{{ $secKey }}][allowed_media][]" value="gif" class="form-check-input mt-0 sec-media-check" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" {{ in_array('gif', $allowedMedia) ? 'checked' : '' }}>
+                                                        <div class="format-info">
+                                                            <div class="format-name fw-bold fs-13">🎞️ Animated GIF</div>
+                                                            <small class="text-muted fs-11 d-block">Looping animated GIF</small>
+                                                        </div>
+                                                    </label>
+                                                </div>
+
+                                                <!-- YouTube -->
+                                                <div class="col-md-3 col-sm-6 col-12">
+                                                    <label class="format-check-card h-100">
+                                                        <input type="checkbox" name="sections[{{ $pageKey }}][{{ $secKey }}][allowed_media][]" value="youtube" class="form-check-input mt-0 sec-media-check" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" {{ in_array('youtube', $allowedMedia) ? 'checked' : '' }}>
+                                                        <div class="format-info">
+                                                            <div class="format-name fw-bold fs-13">▶️ YouTube Link</div>
+                                                            <small class="text-muted fs-11 d-block">Background embed</small>
+                                                        </div>
+                                                    </label>
+                                                </div>
                                             </div>
-                                            <input type="range" name="hero_pages[{{ $pKey }}][overlay_opacity]" id="slider_opacity_{{ $pKey }}" class="form-range hero-opacity-slider" data-page="{{ $pKey }}" min="0.00" max="1.00" step="0.05" value="{{ $pData['overlay_opacity'] ?? '0.75' }}">
-                                            <div class="d-flex justify-content-between fs-11 text-muted">
-                                                <span>0% (Fully Transparent)</span>
-                                                <span>50%</span>
-                                                <span>100% (Fully Opaque Solid)</span>
+                                            <div class="form-text fs-11 text-muted">
+                                                <i class="bi bi-info-circle me-1"></i> If you only select "Photo / Image", the video, gif and youtube options will not be shown to the user on this page's editor.
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- 4. Overlay Style -->
-                                <div class="settings-row">
-                                    <div class="settings-label-col">
-                                        <div class="settings-label-title">
-                                            <i class="bi bi-layers-half text-primary"></i> Overlay Style
+                                    <!-- 2. MAX CAROUSEL SLIDES (Only for Carousel sections) -->
+                                    @if($isCarousel)
+                                        <div class="settings-row bg-warning-subtle bg-opacity-25">
+                                            <div class="settings-label-col">
+                                                <div class="settings-label-title text-dark">
+                                                    <i class="bi bi-collection-play-fill text-warning"></i> Max Carousel Slides
+                                                </div>
+                                                <p class="settings-label-desc">Control how many images/slides scroll in this hero section (e.g. set 4 to allow 4 slides).</p>
+                                            </div>
+                                            <div class="settings-input-col">
+                                                <div class="d-flex align-items-center gap-3" style="max-width: 400px;">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text bg-white fw-bold fs-13"><i class="bi bi-hash"></i> Max Slides:</span>
+                                                        <input type="number" name="sections[{{ $pageKey }}][{{ $secKey }}][max_slides]" id="input_max_slides_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input fw-bold text-center fs-15" value="{{ $maxSlides }}" min="1" max="10">
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-1.5 mt-2 flex-wrap">
+                                                    <small class="text-muted me-1 fs-12">Quick Presets:</small>
+                                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', 2)">2 Slides</button>
+                                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', 3)">3 Slides (Default)</button>
+                                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', 4)">4 Slides</button>
+                                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', 5)">5 Slides</button>
+                                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetSlides('{{ $pageKey }}', '{{ $secKey }}', 6)">6 Slides</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <p class="settings-label-desc">Choose between a uniform solid transparency or modern gradient blend.</p>
+                                    @endif
+
+                                    <!-- 3. Section Height -->
+                                    <div class="settings-row">
+                                        <div class="settings-label-col">
+                                            <div class="settings-label-title">
+                                                <i class="bi bi-arrows-vertical text-primary"></i> Section Height
+                                            </div>
+                                            <p class="settings-label-desc">Control exact or responsive height (e.g. 590px, 480px, 100vh).</p>
+                                        </div>
+                                        <div class="settings-input-col">
+                                            <div class="input-group" style="max-width: 380px;">
+                                                <span class="input-group-text bg-light text-muted border-end-0 fs-13"><i class="bi bi-arrows-expand-vertical"></i></span>
+                                                <input type="text" name="sections[{{ $pageKey }}][{{ $secKey }}][height]" id="input_height_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input sec-height-input" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $height }}" placeholder="e.g. 590px, 100vh">
+                                            </div>
+                                            <div class="d-flex align-items-center gap-1.5 mt-2 flex-wrap">
+                                                <small class="text-muted me-1 fs-12">Quick Presets:</small>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '100vh')">Full Screen (100vh)</button>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '650px')">650px</button>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '590px')">590px</button>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '480px')">480px</button>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetHeight('{{ $pageKey }}', '{{ $secKey }}', '380px')">380px</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="settings-input-col">
-                                        <select name="hero_pages[{{ $pKey }}][overlay_style]" id="select_style_{{ $pKey }}" class="form-select modern-select hero-style-select" data-page="{{ $pKey }}" style="max-width: 320px;">
-                                            <option value="solid" {{ ($pData['overlay_style'] ?? 'solid') === 'solid' ? 'selected' : '' }}>Solid Transparent Color</option>
-                                            <option value="gradient" {{ ($pData['overlay_style'] ?? 'solid') === 'gradient' ? 'selected' : '' }}>Smooth Directional Gradient Blend</option>
-                                        </select>
+
+                                    <!-- 4. Max Width -->
+                                    <div class="settings-row">
+                                        <div class="settings-label-col">
+                                            <div class="settings-label-title">
+                                                <i class="bi bi-arrows-collapse text-primary"></i> Container Max-Width
+                                            </div>
+                                            <p class="settings-label-desc">Full bleed width (100%) or boxed container layout (e.g. 1240px, 1400px).</p>
+                                        </div>
+                                        <div class="settings-input-col">
+                                            <div class="input-group" style="max-width: 380px;">
+                                                <span class="input-group-text bg-light text-muted border-end-0 fs-13"><i class="bi bi-arrows-expand"></i></span>
+                                                <input type="text" name="sections[{{ $pageKey }}][{{ $secKey }}][max_width]" id="input_width_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input sec-width-input" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $maxWidth }}" placeholder="e.g. 100%, 1240px">
+                                            </div>
+                                            <div class="d-flex align-items-center gap-1.5 mt-2 flex-wrap">
+                                                <small class="text-muted me-1 fs-12">Quick Presets:</small>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetWidth('{{ $pageKey }}', '{{ $secKey }}', '100%')">100% (Full Width)</button>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetWidth('{{ $pageKey }}', '{{ $secKey }}', '1400px')">1400px</button>
+                                                <button type="button" class="btn btn-xs btn-outline-secondary py-0.5 px-2 fs-11 rounded" onclick="applyPresetWidth('{{ $pageKey }}', '{{ $secKey }}', '1240px')">1240px (Boxed)</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 5. Transparent Overlay Color & Opacity -->
+                                    <div class="settings-row">
+                                        <div class="settings-label-col">
+                                            <div class="settings-label-title">
+                                                <i class="bi bi-palette-fill text-primary"></i> Transparent Overlay Tint
+                                            </div>
+                                            <p class="settings-label-desc">Color tint and opacity darkness over the media.</p>
+                                        </div>
+                                        <div class="settings-input-col">
+                                            <div class="d-flex align-items-center gap-2 mb-3">
+                                                <input type="color" id="picker_{{ $pageKey }}_{{ $secKey }}" class="form-control form-control-color border-0 p-0 rounded-2 sec-color-picker" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $overlayColor }}" style="width: 44px; height: 38px; cursor: pointer;">
+                                                <div class="input-group" style="max-width: 170px;">
+                                                    <span class="input-group-text bg-light text-muted fs-13">#</span>
+                                                    <input type="text" name="sections[{{ $pageKey }}][{{ $secKey }}][overlay_color]" id="input_color_{{ $pageKey }}_{{ $secKey }}" class="form-control modern-input sec-color-input" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" value="{{ $overlayColor }}" maxlength="7">
+                                                </div>
+                                                <div class="d-flex align-items-center gap-1.5 flex-wrap ms-2">
+                                                    <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #19302e;" title="GPO Spruce #19302e" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#19302e')"></button>
+                                                    <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #083b3c;" title="Deep Teal #083b3c" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#083b3c')"></button>
+                                                    <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #000000;" title="True Black #000000" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#000000')"></button>
+                                                    <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #1e293b;" title="Navy Slate #1e293b" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#1e293b')"></button>
+                                                    <button type="button" class="btn btn-sm rounded-circle p-0 border" style="width: 26px; height: 26px; background-color: #3b1d11;" title="Heritage Brown #3b1d11" onclick="applyPresetColor('{{ $pageKey }}', '{{ $secKey }}', '#3b1d11')"></button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Opacity Slider -->
+                                            <div class="p-3 bg-light rounded-3 border" style="max-width: 500px;">
+                                                <div class="d-flex align-items-center justify-content-between mb-1.5">
+                                                    <label class="fs-12 fw-bold text-dark mb-0">Overlay Darkness / Opacity:</label>
+                                                    <span class="badge bg-primary px-2 py-1 fs-11" id="badge_opacity_{{ $pageKey }}_{{ $secKey }}">{{ round(floatval($overlayOpacity) * 100) }}%</span>
+                                                </div>
+                                                <input type="range" name="sections[{{ $pageKey }}][{{ $secKey }}][overlay_opacity]" id="slider_opacity_{{ $pageKey }}_{{ $secKey }}" class="form-range sec-opacity-slider" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" min="0.00" max="1.00" step="0.05" value="{{ $overlayOpacity }}">
+                                                <div class="d-flex justify-content-between fs-11 text-muted">
+                                                    <span>0% (Transparent)</span>
+                                                    <span>50%</span>
+                                                    <span>100% (Solid Tint)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 6. Overlay Style -->
+                                    <div class="settings-row">
+                                        <div class="settings-label-col">
+                                            <div class="settings-label-title">
+                                                <i class="bi bi-layers-half text-primary"></i> Overlay Style
+                                            </div>
+                                            <p class="settings-label-desc">Choose between uniform solid transparency or modern gradient blend.</p>
+                                        </div>
+                                        <div class="settings-input-col">
+                                            <select name="sections[{{ $pageKey }}][{{ $secKey }}][overlay_style]" id="select_style_{{ $pageKey }}_{{ $secKey }}" class="form-select modern-select sec-style-select" data-page="{{ $pageKey }}" data-sec="{{ $secKey }}" style="max-width: 320px;">
+                                                <option value="solid" {{ $overlayStyle === 'solid' ? 'selected' : '' }}>Solid Transparent Color</option>
+                                                <option value="gradient" {{ $overlayStyle === 'gradient' ? 'selected' : '' }}>Smooth Directional Gradient Blend</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-
-                            </div>
+                            @endforeach
                         @endforeach
 
                     </div>
@@ -538,7 +670,7 @@
                     <div class="d-flex align-items-center gap-2">
                         <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save</span>
+                            <span>Save Global Settings</span>
                         </button>
                         <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
@@ -556,74 +688,170 @@
 
 @push('scripts')
 <script>
-    // Page data dictionary for simulator
-    const pageSimData = {
-        home: {
-            title: "Home Page Hero",
+    // Dictionary mapping Pages to ONLY the sections where background media (image, video, gif, youtube) is used
+    const pageMediaSectionsMap = {
+        home: [
+            { id: "hero", name: "🎠 Hero Carousel & Sliders" },
+            { id: "star_dish", name: "⭐ Signature Dahi Bada Showcase" },
+            { id: "visit_us", name: "🏪 Come Taste the Original (Storefront)" },
+            { id: "franchise_cta", name: "🏢 Franchise Opportunity Banner" }
+        ],
+        story: [
+            { id: "hero_banner", name: "📜 Our Story Hero Banner" },
+            { id: "where_it_began", name: "🏛️ Chapter 1: Where It All Began (1976)" },
+            { id: "gpo_journey", name: "🚂 Chapter 2: The GPO Journey" },
+            { id: "panoramic_banner", name: "🌆 Panoramic Lucknow Heritage Banner" }
+        ],
+        menu: [
+            { id: "hero_banner", name: "🍲 Menu & Specialities Hero Banner" }
+        ],
+        franchise: [
+            { id: "hero_sliders", name: "🎠 Franchise Hero Carousel & Sliders" },
+            { id: "footer_cta", name: "📢 Bottom Expansion Banner (Final CTA)" }
+        ],
+        contact: [
+            { id: "hero_banner", name: "📞 Contact Hero Banner & Intro" },
+            { id: "find_us_banner", name: "📍 Find Us In Lucknow Bottom Banner" }
+        ]
+    };
+
+    // Simulated content dictionary for section preview
+    const sectionPreviewData = {
+        "home_hero": {
+            title: "Home Hero Carousel",
             image: "{{ asset('images/dahi_vada.jpg') }}",
             badge: "HOME HERO",
             heading: "THE ORIGINAL TASTE OF LUCKNOW",
             desc: "Serving authentic Hazratganj Thandey Dahi Bade since 1976."
         },
-        story: {
-            title: "Our Story Hero",
+        "home_star_dish": {
+            title: "Signature Dahi Bada Showcase",
+            image: "{{ asset('images/dahi_vada.jpg') }}",
+            badge: "STAR DISH",
+            heading: "CRAFTED TO PERFECTION",
+            desc: "Iconic Lucknow lentil dumplings in chilled earthen curd."
+        },
+        "home_visit_us": {
+            title: "Come Taste the Original / Storefront",
+            image: "{{ asset('images/storefront.jpg') }}",
+            badge: "VISIT OUTLET",
+            heading: "VISIT HAZRATGANJ OUTLET",
+            desc: "Shop No. 1, Awadh Bazaar, Mahatma Gandhi Marg, Lucknow."
+        },
+        "home_franchise_cta": {
+            title: "Franchise Opportunity Banner",
+            image: "{{ asset('images/storefront.jpg') }}",
+            badge: "EXPANSION",
+            heading: "BRING GPO TO YOUR CITY",
+            desc: "Join hands with a 45+ year legacy brand."
+        },
+        "story_hero_banner": {
+            title: "Our Story Hero Banner",
             image: "{{ asset('images/lucknow_heritage.jpg') }}",
             badge: "OUR HERITAGE",
             heading: "A LEGACY SERVED WITH LOVE",
             desc: "From a humble cycle cart near GPO to Lucknow's most cherished delicacy."
         },
-        menu: {
-            title: "Menu & Specialities Hero",
+        "story_where_it_began": {
+            title: "Chapter 1: Where It All Began",
+            image: "{{ asset('images/lucknow_heritage.jpg') }}",
+            badge: "SINCE 1976",
+            heading: "THE HUMBLE BEGINNING",
+            desc: "Rooted in the timeless street food culture of Lucknow."
+        },
+        "story_gpo_journey": {
+            title: "Chapter 2: The GPO Journey",
+            image: "{{ asset('images/franchise.jpg') }}",
+            badge: "EVOLUTION",
+            heading: "TRADITION MEETS EXCELLENCE",
+            desc: "Expanding the legacy with modern standards while honoring authentic recipes."
+        },
+        "story_panoramic_banner": {
+            title: "Panoramic Lucknow Heritage Banner",
+            image: "{{ asset('images/lucknow_heritage.jpg') }}",
+            badge: "LUCKNOW",
+            heading: "CITY OF NAWABS • TASTE OF TRADITION",
+            desc: "Since 1976 • Iconic Flavours of Hazratganj"
+        },
+        "menu_hero_banner": {
+            title: "Menu & Specialities Hero Banner",
             image: "{{ asset('images/dahi_bada_bowl.jpg') }}",
-            badge: "OUR DELICACIES",
-            heading: "FRESH, AUTHENTIC & TIMELESS",
-            desc: "Prepared fresh daily using natural earthen pot curd and hand-ground spices."
+            badge: "OUR SPECIALITIES",
+            heading: "AUTHENTIC MENU OFFERINGS",
+            desc: "Handcrafted fresh daily with pure curd and aromatic spice blends."
         },
-        franchise: {
-            title: "Franchise Partnership Hero",
-            image: "{{ asset('images/storefront.jpg') }}",
-            badge: "EXPANSION",
-            heading: "BRING THE ORIGINAL TO YOUR CITY",
-            desc: "Join hands with a 45+ year legacy brand with proven profitability."
+        "franchise_hero_sliders": {
+            title: "Franchise Hero Carousel",
+            image: "{{ asset('images/franchise.jpg') }}",
+            badge: "PARTNERSHIP",
+            heading: "EXPAND WITH ORIGINAL GPO",
+            desc: "Become a franchise partner with an established legacy brand."
         },
-        contact: {
-            title: "Contact & Visit Us Hero",
-            image: "{{ asset('images/outlet.jpg') }}",
-            badge: "LOCATE US",
-            heading: "VISIT OUR ICONIC OUTLET",
-            desc: "Located in Awadh Bazaar, Hazratganj, in the historic heart of Lucknow."
+        "franchise_footer_cta": {
+            title: "Bottom Expansion Banner (Final CTA)",
+            image: "{{ asset('images/franchise.jpg') }}",
+            badge: "APPLY NOW",
+            heading: "BUILD A BRAND PEOPLE REMEMBER",
+            desc: "Deliver an authentic taste loved by generations."
+        },
+        "contact_hero_banner": {
+            title: "Contact Hero Banner & Intro",
+            image: "{{ asset('images/lucknow_heritage.jpg') }}",
+            badge: "CONTACT US",
+            heading: "WE ARE ALWAYS HAPPY TO HEAR FROM YOU",
+            desc: "Visit • Taste • Connect"
+        },
+        "contact_find_us_banner": {
+            title: "Find Us In Lucknow Bottom Banner",
+            image: "{{ asset('images/lucknow_heritage.jpg') }}",
+            badge: "HAZRATGANJ",
+            heading: "FIND US IN LUCKNOW",
+            desc: "Visit GPO • Taste the Original • Make a Memory"
         }
     };
 
-    let currentActivePage = 'home';
+    let activePage = "{{ $initPage }}";
+    let activeSection = "{{ $initSection }}";
 
-    // Switch Page Hero Panel
-    window.switchHeroPage = function(pageKey, btn) {
-        currentActivePage = pageKey;
-        // Update nav pills
-        document.querySelectorAll('#heroPagesSelector .nav-link').forEach(b => b.classList.remove('active'));
-        if (btn) btn.classList.add('active');
+    // Called when the Page Dropdown changes
+    window.onGlobalPageChange = function(pageKey) {
+        activePage = pageKey;
+        document.getElementById('selected_page_input').value = pageKey;
 
-        // Show panel
-        document.querySelectorAll('.page-hero-panel').forEach(p => p.style.display = 'none');
-        const activePanel = document.getElementById('hero_panel_' + pageKey);
-        if (activePanel) activePanel.style.display = 'block';
+        // Populate the Section Dropdown with only the media sections of this page
+        const secSelect = document.getElementById('globalSectionSelector');
+        secSelect.innerHTML = '';
+        const sections = pageMediaSectionsMap[pageKey] || [];
+        sections.forEach((sec, idx) => {
+            const opt = document.createElement('option');
+            opt.value = sec.id;
+            opt.textContent = sec.name;
+            if (idx === 0) opt.selected = true;
+            secSelect.appendChild(opt);
+        });
 
-        // Update Simulator Content
-        const sim = pageSimData[pageKey] || pageSimData.home;
-        const titleBadge = document.getElementById('sim_page_title_badge');
-        const simImg = document.getElementById('sim_hero_img');
-        const simBadge = document.getElementById('sim_text_badge');
-        const simHeading = document.getElementById('sim_text_heading');
-        const simDesc = document.getElementById('sim_text_desc');
+        // Set active section to the first section of this page
+        if (sections.length > 0) {
+            onGlobalSectionChange(sections[0].id);
+        }
+    };
 
-        if (titleBadge) titleBadge.textContent = sim.title;
-        if (simImg) simImg.src = sim.image;
-        if (simBadge) simBadge.textContent = sim.badge;
-        if (simHeading) simHeading.textContent = sim.heading;
-        if (simDesc) simDesc.textContent = sim.desc;
+    // Called when the Section Dropdown changes
+    window.onGlobalSectionChange = function(secKey) {
+        activeSection = secKey;
+        document.getElementById('selected_section_input').value = secKey;
 
-        updateLiveSimulator(pageKey);
+        // Hide all section panels
+        document.querySelectorAll('.section-config-panel').forEach(p => p.style.display = 'none');
+
+        // Show matching panel
+        const targetPanelId = 'sec_panel_' + activePage + '_' + secKey;
+        const panel = document.getElementById(targetPanelId);
+        if (panel) {
+            panel.style.display = 'block';
+        }
+
+        updateLiveSimulator();
     };
 
     function hexToRgb(hex) {
@@ -645,84 +873,111 @@
         return { r: 0, g: 0, b: 0 };
     }
 
-    // Update Live Simulator
-    window.updateLiveSimulator = function(pageKey) {
-        pageKey = pageKey || currentActivePage;
-        const hInput = document.getElementById('input_hero_height_' + pageKey);
-        const wInput = document.getElementById('input_hero_max_width_' + pageKey);
-        const cInput = document.getElementById('input_color_' + pageKey);
-        const sInput = document.getElementById('slider_opacity_' + pageKey);
-        const styleInput = document.getElementById('select_style_' + pageKey);
+    // Update Live Simulator for the currently selected page & section
+    window.updateLiveSimulator = function() {
+        const pairKey = activePage + '_' + activeSection;
+        const simData = sectionPreviewData[pairKey] || {
+            title: activePage.toUpperCase() + ' - ' + activeSection,
+            image: "{{ asset('images/dahi_vada.jpg') }}",
+            badge: "SECTION",
+            heading: "PREVIEW SECTION",
+            desc: "Custom height, width, transparent overlay, and allowed media formats."
+        };
 
-        const simContainer = document.getElementById('sim_hero_container');
-        const simOverlay = document.getElementById('sim_hero_overlay');
-        const dimBadge = document.getElementById('sim_dimensions_badge');
-        const opBadge = document.getElementById('sim_opacity_badge');
-        const pageBadge = document.getElementById('badge_opacity_' + pageKey);
+        // Inputs for active section
+        const hInput = document.getElementById('input_height_' + activePage + '_' + activeSection);
+        const wInput = document.getElementById('input_width_' + activePage + '_' + activeSection);
+        const cInput = document.getElementById('input_color_' + activePage + '_' + activeSection);
+        const sInput = document.getElementById('slider_opacity_' + activePage + '_' + activeSection);
+        const styleInput = document.getElementById('select_style_' + activePage + '_' + activeSection);
 
-        const heightVal = hInput ? hInput.value.trim() : '500px';
+        const heightVal = hInput ? hInput.value.trim() : '480px';
         const widthVal = wInput ? wInput.value.trim() : '100%';
-        const colorVal = cInput ? cInput.value.trim() : '#000000';
+        const colorVal = cInput ? cInput.value.trim() : '#083b3c';
         const opacityVal = sInput ? parseFloat(sInput.value) : 0.75;
         const styleVal = styleInput ? styleInput.value : 'solid';
 
-        if (pageBadge) {
-            pageBadge.textContent = Math.round(opacityVal * 100) + '%';
-        }
-        if (opBadge) {
-            opBadge.textContent = 'Overlay: ' + Math.round(opacityVal * 100) + '%';
-        }
-        if (dimBadge) {
-            dimBadge.textContent = 'Height: ' + heightVal + ' | Width: ' + widthVal;
-        }
+        // Allowed media count
+        const checkedFormats = document.querySelectorAll('#sec_panel_' + activePage + '_' + activeSection + ' .sec-media-check:checked');
+        const allowedCount = checkedFormats.length;
 
-        // Apply to Simulator box
-        if (simContainer) {
+        // Simulator Badges
+        const titleBadge = document.getElementById('sim_section_title_badge');
+        const dimBadge = document.getElementById('sim_dimensions_badge');
+        const opBadge = document.getElementById('sim_opacity_badge');
+        const formatBadge = document.getElementById('sim_formats_badge');
+
+        if (titleBadge) titleBadge.textContent = simData.title;
+        if (dimBadge) dimBadge.textContent = 'Height: ' + heightVal + ' | Width: ' + widthVal;
+        if (opBadge) opBadge.textContent = 'Overlay: ' + Math.round(opacityVal * 100) + '%';
+        if (formatBadge) formatBadge.textContent = 'Formats: ' + allowedCount + ' Allowed';
+
+        // Text Badge in simulator
+        const sImg = document.getElementById('sim_img');
+        const sBadge = document.getElementById('sim_text_badge');
+        const sHeading = document.getElementById('sim_text_heading');
+        const sDesc = document.getElementById('sim_text_desc');
+        const sContainer = document.getElementById('sim_container');
+        const sOverlay = document.getElementById('sim_overlay');
+
+        if (sImg) sImg.src = simData.image;
+        if (sBadge) sBadge.textContent = simData.badge;
+        if (sHeading) sHeading.textContent = simData.heading;
+        if (sDesc) sDesc.textContent = simData.desc;
+
+        // Apply box styles
+        if (sContainer) {
             let numericHeight = parseInt(heightVal);
             if (isNaN(numericHeight) || numericHeight <= 0) numericHeight = 280;
-            // Cap preview height for pleasant viewing
-            simContainer.style.minHeight = Math.min(420, Math.max(220, numericHeight * 0.7)) + 'px';
-            simContainer.style.maxWidth = widthVal === '100%' ? '100%' : widthVal;
+            sContainer.style.minHeight = Math.min(420, Math.max(220, numericHeight * 0.7)) + 'px';
+            sContainer.style.maxWidth = widthVal === '100%' ? '100%' : widthVal;
         }
 
-        if (simOverlay) {
+        if (sOverlay) {
             const rgb = hexToRgb(colorVal);
             if (styleVal === 'gradient') {
                 const topO = Math.min(1.0, opacityVal + 0.12);
                 const botO = Math.min(1.0, opacityVal + 0.18);
-                simOverlay.style.background = `linear-gradient(135deg, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${topO}) 0%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacityVal}) 50%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${botO}) 100%)`;
+                sOverlay.style.background = `linear-gradient(135deg, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${topO}) 0%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacityVal}) 50%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${botO}) 100%)`;
             } else {
-                simOverlay.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacityVal})`;
+                sOverlay.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacityVal})`;
             }
         }
     };
 
     // Preset helper functions
-    window.applyPresetHeight = function(pageKey, height) {
-        const input = document.getElementById('input_hero_height_' + pageKey);
+    window.applyPresetHeight = function(pageKey, secKey, height) {
+        const input = document.getElementById('input_height_' + pageKey + '_' + secKey);
         if (input) {
             input.value = height;
-            updateLiveSimulator(pageKey);
+            updateLiveSimulator();
         }
     };
 
-    window.applyPresetWidth = function(pageKey, width) {
-        const input = document.getElementById('input_hero_max_width_' + pageKey);
+    window.applyPresetWidth = function(pageKey, secKey, width) {
+        const input = document.getElementById('input_width_' + pageKey + '_' + secKey);
         if (input) {
             input.value = width;
-            updateLiveSimulator(pageKey);
+            updateLiveSimulator();
         }
     };
 
-    window.applyPresetColor = function(pageKey, color) {
-        const cInput = document.getElementById('input_color_' + pageKey);
-        const pInput = document.getElementById('picker_' + pageKey);
+    window.applyPresetColor = function(pageKey, secKey, color) {
+        const cInput = document.getElementById('input_color_' + pageKey + '_' + secKey);
+        const pInput = document.getElementById('picker_' + pageKey + '_' + secKey);
         if (cInput) cInput.value = color;
         if (pInput) pInput.value = color;
-        updateLiveSimulator(pageKey);
+        updateLiveSimulator();
     };
 
-    // Event listeners
+    window.applyPresetSlides = function(pageKey, secKey, slides) {
+        const input = document.getElementById('input_max_slides_' + pageKey + '_' + secKey);
+        if (input) {
+            input.value = slides;
+        }
+    };
+
+    // Init script
     document.addEventListener('DOMContentLoaded', function () {
         // Tab switching persistence
         const tabBtns = document.querySelectorAll('#settingsTab button[data-bs-toggle="tab"]');
@@ -730,92 +985,89 @@
         tabBtns.forEach(btn => {
             btn.addEventListener('shown.bs.tab', function (e) {
                 const target = e.target.getAttribute('data-bs-target');
-                if (target === '#tab-hero') {
-                    if (activeTabInput) activeTabInput.value = 'hero_customizer';
-                    updateLiveSimulator(currentActivePage);
+                if (target === '#tab-media-sections') {
+                    if (activeTabInput) activeTabInput.value = 'media_sections';
+                    updateLiveSimulator();
                 } else {
                     if (activeTabInput) activeTabInput.value = 'general';
                 }
             });
         });
 
-        // Live image previews
-        function bindImagePreview(inputId, imgId) {
-            const input = document.getElementById(inputId);
-            const img = document.getElementById(imgId);
-            if (input && img) {
-                input.addEventListener('change', function () {
-                    const file = this.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            img.src = e.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
+        // Initialize Page and Section dropdowns
+        const pSel = document.getElementById('globalPageSelector');
+        if (pSel) {
+            onGlobalPageChange(pSel.value);
+            // If section was provided in URL, pick it
+            const sSel = document.getElementById('globalSectionSelector');
+            if (sSel && "{{ $initSection }}") {
+                sSel.value = "{{ $initSection }}";
+                onGlobalSectionChange("{{ $initSection }}");
             }
         }
-        bindImagePreview('input_favicon', 'preview_favicon');
-        bindImagePreview('input_header_logo', 'preview_header_logo');
-        bindImagePreview('input_footer_logo', 'preview_footer_logo');
 
         // Color Pickers sync
-        document.querySelectorAll('.hero-color-picker').forEach(picker => {
+        document.querySelectorAll('.sec-color-picker').forEach(picker => {
             picker.addEventListener('input', function () {
                 const page = this.getAttribute('data-page');
-                const textInput = document.getElementById('input_color_' + page);
+                const sec = this.getAttribute('data-sec');
+                const textInput = document.getElementById('input_color_' + page + '_' + sec);
                 if (textInput) textInput.value = this.value;
-                updateLiveSimulator(page);
+                updateLiveSimulator();
             });
         });
 
         // Color text inputs sync
-        document.querySelectorAll('.hero-color-input').forEach(input => {
+        document.querySelectorAll('.sec-color-input').forEach(input => {
             input.addEventListener('input', function () {
                 const page = this.getAttribute('data-page');
-                const picker = document.getElementById('picker_' + page);
+                const sec = this.getAttribute('data-sec');
+                const picker = document.getElementById('picker_' + page + '_' + sec);
                 if (picker && /^#[0-9A-Fa-f]{6}$/.test(this.value)) {
                     picker.value = this.value;
                 }
-                updateLiveSimulator(page);
+                updateLiveSimulator();
             });
         });
 
         // Opacity sliders
-        document.querySelectorAll('.hero-opacity-slider').forEach(slider => {
+        document.querySelectorAll('.sec-opacity-slider').forEach(slider => {
             slider.addEventListener('input', function () {
                 const page = this.getAttribute('data-page');
-                updateLiveSimulator(page);
+                const sec = this.getAttribute('data-sec');
+                const badge = document.getElementById('badge_opacity_' + page + '_' + sec);
+                if (badge) badge.textContent = Math.round(parseFloat(this.value) * 100) + '%';
+                updateLiveSimulator();
             });
         });
 
         // Style selects
-        document.querySelectorAll('.hero-style-select').forEach(sel => {
+        document.querySelectorAll('.sec-style-select').forEach(sel => {
             sel.addEventListener('change', function () {
-                const page = this.getAttribute('data-page');
-                updateLiveSimulator(page);
+                updateLiveSimulator();
             });
         });
 
         // Height inputs
-        document.querySelectorAll('.hero-height-input').forEach(inp => {
+        document.querySelectorAll('.sec-height-input').forEach(inp => {
             inp.addEventListener('input', function () {
-                const page = this.getAttribute('data-page');
-                updateLiveSimulator(page);
+                updateLiveSimulator();
             });
         });
 
         // Width inputs
-        document.querySelectorAll('.hero-width-input').forEach(inp => {
+        document.querySelectorAll('.sec-width-input').forEach(inp => {
             inp.addEventListener('input', function () {
-                const page = this.getAttribute('data-page');
-                updateLiveSimulator(page);
+                updateLiveSimulator();
             });
         });
 
-        // Initial simulator render
-        updateLiveSimulator('home');
+        // Media checkboxes update simulator
+        document.querySelectorAll('.sec-media-check').forEach(chk => {
+            chk.addEventListener('change', function () {
+                updateLiveSimulator();
+            });
+        });
     });
 </script>
 @endpush
