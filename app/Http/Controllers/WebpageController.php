@@ -37,6 +37,11 @@ class WebpageController extends Controller
         return storage_path('app/website_content/home_experience.json');
     }
 
+    private function getVisitUsFilePath()
+    {
+        return storage_path('app/website_content/home_visit_us.json');
+    }
+
     private function normalizeSlide($slide)
     {
         if (!isset($slide['media'])) {
@@ -379,6 +384,40 @@ class WebpageController extends Controller
         ];
     }
 
+    public function getVisitUsData()
+    {
+        $defaultData = [
+            'badge' => 'VISIT US',
+            'heading' => 'COME TASTE THE ORIGINAL',
+            'subheading_lead' => 'Your Next Plate of Dahi Bade Is Waiting.',
+            'subheading_desc' => 'Visit our Hazratganj outlet and experience the Original GPO Ke Thandey Dahi Bade.',
+            'image' => 'images/storefront.jpg',
+            'image_alt' => 'Hazratganj Outlet Original GPO',
+            'address_label' => 'ADDRESS:',
+            'address' => "Shop No. 1, Awadh Bazaar, Mahatma Gandhi Marg, Near K.D. Singh Babu Stadium, Hazratganj, Lucknow, Uttar Pradesh – 226001",
+            'phone_label' => 'CALL:',
+            'phone' => '+91 91406 31433',
+            'email_label' => 'EMAIL:',
+            'email' => 'support@gpokethandeydahibade.com',
+            'timings_label' => 'TIMINGS:',
+            'timings' => 'Monday – Sunday | 1:00 PM – 9:00 PM',
+            'btn1_text' => 'GET DIRECTIONS',
+            'btn1_url' => 'https://maps.google.com/?q=Hazratganj+Lucknow+Awadh+Bazaar',
+            'btn2_text' => 'ORDER NOW',
+            'btn2_url' => '/menu',
+        ];
+
+        $path = $this->getVisitUsFilePath();
+        if (File::exists($path)) {
+            $content = json_decode(File::get($path), true);
+            if (is_array($content) && !empty($content)) {
+                return array_merge($defaultData, $content);
+            }
+        }
+
+        return $defaultData;
+    }
+
     public function index()
     {
         return view('admin.website-pages.index');
@@ -392,7 +431,8 @@ class WebpageController extends Controller
         $whyGpo = $this->getWhyGpoData();
         $starDish = $this->getStarDishData();
         $experience = $this->getExperienceData();
-        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish', 'experience'));
+        $visitUs = $this->getVisitUsData();
+        return view('admin.website-pages.home', compact('slides', 'highlights', 'welcome', 'whyGpo', 'starDish', 'experience', 'visitUs'));
     }
 
     public function updateHero(Request $request)
@@ -718,5 +758,57 @@ class WebpageController extends Controller
 
         return redirect()->route('admin.website-pages.home', ['section' => 'gpo_experience'])
             ->with('success', 'The GPO Experience (Culture & Features) successfully updated!');
+    }
+
+    public function updateVisitUs(Request $request)
+    {
+        $visitUs = $request->input('visit_us', []);
+        $imagePath = $visitUs['image'] ?? 'images/storefront.jpg';
+
+        $uploadDir = public_path('uploads/visit_us');
+        if (!File::isDirectory($uploadDir)) {
+            File::makeDirectory($uploadDir, 0755, true, true);
+        }
+
+        if ($request->hasFile('visit_us.image_file')) {
+            $file = $request->file('visit_us.image_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_visit_us_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $imagePath = 'uploads/visit_us/' . $filename;
+            }
+        }
+
+        $savedData = [
+            'badge' => trim($visitUs['badge'] ?? 'VISIT US'),
+            'heading' => trim($visitUs['heading'] ?? 'COME TASTE THE ORIGINAL'),
+            'subheading_lead' => trim($visitUs['subheading_lead'] ?? 'Your Next Plate of Dahi Bade Is Waiting.'),
+            'subheading_desc' => trim($visitUs['subheading_desc'] ?? 'Visit our Hazratganj outlet and experience the Original GPO Ke Thandey Dahi Bade.'),
+            'image' => $imagePath,
+            'image_alt' => trim($visitUs['image_alt'] ?? 'Hazratganj Outlet Original GPO'),
+            'address_label' => trim($visitUs['address_label'] ?? 'ADDRESS:'),
+            'address' => trim($visitUs['address'] ?? ''),
+            'phone_label' => trim($visitUs['phone_label'] ?? 'CALL:'),
+            'phone' => trim($visitUs['phone'] ?? ''),
+            'email_label' => trim($visitUs['email_label'] ?? 'EMAIL:'),
+            'email' => trim($visitUs['email'] ?? ''),
+            'timings_label' => trim($visitUs['timings_label'] ?? 'TIMINGS:'),
+            'timings' => trim($visitUs['timings'] ?? ''),
+            'btn1_text' => trim($visitUs['btn1_text'] ?? 'GET DIRECTIONS'),
+            'btn1_url' => trim($visitUs['btn1_url'] ?? 'https://maps.google.com/?q=Hazratganj+Lucknow+Awadh+Bazaar'),
+            'btn2_text' => trim($visitUs['btn2_text'] ?? 'ORDER NOW'),
+            'btn2_url' => trim($visitUs['btn2_url'] ?? '/menu'),
+        ];
+
+        $dir = dirname($this->getVisitUsFilePath());
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true, true);
+        }
+
+        File::put($this->getVisitUsFilePath(), json_encode($savedData, JSON_PRETTY_PRINT));
+
+        return redirect()->route('admin.website-pages.home', ['section' => 'visit_us'])
+            ->with('success', 'Visit Us & Store Information successfully updated!');
     }
 }

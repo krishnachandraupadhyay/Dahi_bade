@@ -447,40 +447,69 @@
       </section>
 
       <!-- SECTION 07 — VISIT US (Document Pages 5-6) -->
+      @php
+        $visitImg = $visitUs['image'] ?? 'images/storefront.jpg';
+        $visitImgSrc = str_starts_with($visitImg, 'http') ? $visitImg : asset($visitImg);
+        $phoneVal = $visitUs['phone'] ?? '+91 91406 31433';
+        $phoneClean = preg_replace('/[^0-9\+]/', '', $phoneVal);
+      @endphp
       <section class="home-visit-us-section">
         <div class="home-visit-media">
-          <img src="{{ asset('images/storefront.jpg') }}" alt="Hazratganj Outlet Original GPO">
+          <img src="{{ $visitImgSrc }}" alt="{{ $visitUs['image_alt'] ?? 'Hazratganj Outlet Original GPO' }}">
         </div>
         <div class="home-visit-details">
-          <h4>VISIT US</h4>
-          <h3>COME TASTE THE ORIGINAL</h3>
-          <p class="sub-lead"><strong>Your Next Plate of Dahi Bade Is Waiting.</strong><br>Visit our Hazratganj outlet and experience the Original GPO Ke Thandey Dahi Bade.</p>
+          @if(!empty($visitUs['badge']))
+            <h4>{{ $visitUs['badge'] }}</h4>
+          @endif
+          @if(!empty($visitUs['heading']))
+            <h3>{{ $visitUs['heading'] }}</h3>
+          @endif
+          @if(!empty($visitUs['subheading_lead']) || !empty($visitUs['subheading_desc']))
+            <p class="sub-lead">
+              @if(!empty($visitUs['subheading_lead']))
+                <strong>{{ $visitUs['subheading_lead'] }}</strong><br>
+              @endif
+              {{ $visitUs['subheading_desc'] ?? '' }}
+            </p>
+          @endif
           
           <div class="visit-info-list">
-            <div class="visit-info-row">
-              <div class="visit-info-icon">📍</div>
-              <div>
-                <strong>ADDRESS:</strong><br>
-                Shop No. 1, Awadh Bazaar, Mahatma Gandhi Marg, Near K.D. Singh Babu Stadium, Hazratganj, Lucknow, Uttar Pradesh – 226001
+            @if(!empty($visitUs['address']))
+              <div class="visit-info-row">
+                <div class="visit-info-icon">📍</div>
+                <div>
+                  <strong>{{ $visitUs['address_label'] ?? 'ADDRESS:' }}</strong><br>
+                  {!! nl2br(e($visitUs['address'])) !!}
+                </div>
               </div>
-            </div>
-            <div class="visit-info-row">
-              <div class="visit-info-icon">📞</div>
-              <div><strong>CALL:</strong> <a href="tel:+919140631433" style="color: var(--c-teal-deep); font-weight: 600;">+91 91406 31433</a></div>
-            </div>
-            <div class="visit-info-row">
-              <div class="visit-info-icon">✉️</div>
-              <div><strong>EMAIL:</strong> <a href="mailto:support@gpokethandeydahibade.com" style="color: var(--c-teal-deep); font-weight: 600;">support@gpokethandeydahibade.com</a></div>
-            </div>
-            <div class="visit-info-row">
-              <div class="visit-info-icon">⏰</div>
-              <div><strong>TIMINGS:</strong> Monday – Sunday | 1:00 PM – 9:00 PM</div>
-            </div>
+            @endif
+            @if(!empty($visitUs['phone']))
+              <div class="visit-info-row">
+                <div class="visit-info-icon">📞</div>
+                <div><strong>{{ $visitUs['phone_label'] ?? 'CALL:' }}</strong> <a href="tel:{{ $phoneClean }}" style="color: var(--c-teal-deep); font-weight: 600;">{{ $visitUs['phone'] }}</a></div>
+              </div>
+            @endif
+            @if(!empty($visitUs['email']))
+              <div class="visit-info-row">
+                <div class="visit-info-icon">✉️</div>
+                <div><strong>{{ $visitUs['email_label'] ?? 'EMAIL:' }}</strong> <a href="mailto:{{ $visitUs['email'] }}" style="color: var(--c-teal-deep); font-weight: 600;">{{ $visitUs['email'] }}</a></div>
+              </div>
+            @endif
+            @if(!empty($visitUs['timings']))
+              <div class="visit-info-row">
+                <div class="visit-info-icon">⏰</div>
+                <div><strong>{{ $visitUs['timings_label'] ?? 'TIMINGS:' }}</strong> {{ $visitUs['timings'] }}</div>
+              </div>
+            @endif
           </div>
 
           <div class="visit-btns-row">
-            <a href="https://maps.google.com/?q=Hazratganj+Lucknow+Awadh+Bazaar" target="_blank" class="btn-terracotta-pill">GET DIRECTIONS</a>
-            <a href="{{ route('menu') }}" class="btn-amber-pill">ORDER NOW</a>
+            @if(!empty($visitUs['btn1_text']))
+              <a href="{{ $visitUs['btn1_url'] ?? '#' }}" target="_blank" class="btn-terracotta-pill">{{ $visitUs['btn1_text'] }}</a>
+            @endif
+            @if(!empty($visitUs['btn2_text']))
+              <a href="{{ $visitUs['btn2_url'] ?? route('menu') }}" class="btn-amber-pill">{{ $visitUs['btn2_text'] }}</a>
+            @endif
           </div>
         </div>
       </section>

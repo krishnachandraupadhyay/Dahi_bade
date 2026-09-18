@@ -1539,17 +1539,248 @@
 
             <!-- ================= 9. VISIT US PANEL ================= -->
             <div class="home-section-panel" id="panel_visit_us" style="display: none;">
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle">
+                <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle gap-2">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-info px-2.5 py-1.5 fs-12">Section 9</span>
-                        <h6 class="fw-bold text-dark mb-0 fs-15">Visit Us & Store Information</h6>
+                        <span class="badge bg-info px-2.5 py-1.5 fs-12 fw-bold text-white">Section 9</span>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 fs-16">Visit Us & Store Information</h6>
+                            <small class="text-muted fs-12">Edit storefront outlet photo, headings, address, phone, email, timings, and map action buttons.</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-12"></i> View Live Website
+                        </a>
                     </div>
                 </div>
-                <div class="p-4 text-center text-muted border border-dashed rounded-3 bg-light-subtle">
-                    <i class="bi bi-geo-alt-fill fs-32 text-info mb-2 d-block"></i>
-                    <h6 class="fw-bold text-dark mb-1">Store & Location Section</h6>
-                    <p class="fs-13 text-muted mb-0">Manage store address, operational timings, phone, email, and map location here.</p>
-                </div>
+
+                @php
+                    $visitImage = $visitUs['image'] ?? 'images/storefront.jpg';
+                    $visitImageSrc = str_starts_with($visitImage, 'http') ? $visitImage : asset($visitImage);
+                @endphp
+
+                <form action="{{ route('admin.website-pages.home.visit_us.update') }}" method="POST" enctype="multipart/form-data" id="visitUsSectionForm">
+                    @csrf
+
+                    <div class="row g-4">
+                        <!-- Left Column: Storefront Media & Live Preview Box -->
+                        <div class="col-lg-5 col-12">
+                            <!-- Photo Card -->
+                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-image-fill text-info fs-15"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Storefront Outlet Photo</h6>
+                                    </div>
+                                    <span class="badge bg-light text-muted border fs-11">Store Photo</span>
+                                </div>
+                                <div class="card-body p-3.5">
+                                    <!-- Photo Preview Box -->
+                                    <div class="mb-3 text-center">
+                                        <div class="rounded-3 border overflow-hidden position-relative shadow-sm" style="max-height: 220px; background: #f8fafc;">
+                                            <img src="{{ $visitImageSrc }}" alt="{{ $visitUs['image_alt'] ?? 'Storefront' }}" id="visit_us_preview_img" style="width: 100%; height: 210px; object-fit: cover; display: block;">
+                                        </div>
+                                    </div>
+
+                                    <!-- Upload Input -->
+                                    <div class="mb-3">
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                            Upload New Photo:
+                                        </label>
+                                        <input type="file" name="visit_us[image_file]" class="form-control form-control-sm modern-input mb-1.5" id="visit_us_file_input" accept="image/*">
+                                        <input type="hidden" name="visit_us[image]" id="visit_us_hidden_image" value="{{ $visitUs['image'] ?? 'images/storefront.jpg' }}">
+                                        <small class="text-muted fs-11 d-block">Recommended size: 800x600px or 4:3 ratio JPG/PNG/WebP</small>
+                                    </div>
+
+                                    <!-- Image Alt Text -->
+                                    <div class="mb-0">
+                                        <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                            Image Alt Tag (SEO):
+                                        </label>
+                                        <input type="text" name="visit_us[image_alt]" value="{{ old('visit_us.image_alt', $visitUs['image_alt'] ?? 'Hazratganj Outlet Original GPO') }}" class="form-control form-control-sm modern-input" placeholder="e.g. Hazratganj Outlet Original GPO">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Helpful Tips Card -->
+                            <div class="card border border-info-subtle bg-info-subtle shadow-sm" style="border-radius: 12px;">
+                                <div class="card-body p-3.5">
+                                    <h6 class="fs-13 fw-bold text-info-emphasis mb-2 d-flex align-items-center gap-1.5">
+                                        <i class="bi bi-info-circle-fill"></i> Location Info Highlight
+                                    </h6>
+                                    <p class="fs-12 text-muted mb-0 lh-base">
+                                        This section guides customers directly to your physical outlet in Lucknow. Accurate timing, direct dial phone, and exact Google Maps link help drive physical footfall.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Titles, Address, Contact Info & Action Buttons -->
+                        <div class="col-lg-7 col-12">
+                            <!-- 1. Header & Badges Card -->
+                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-type-h1 text-info fs-15"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Headings & Subtitles</h6>
+                                    </div>
+                                    <span class="badge bg-light text-muted border fs-11">Header Block</span>
+                                </div>
+                                <div class="card-body p-3.5">
+                                    <div class="row g-3">
+                                        <div class="col-md-4 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                Badge Text:
+                                            </label>
+                                            <input type="text" name="visit_us[badge]" value="{{ old('visit_us.badge', $visitUs['badge'] ?? 'VISIT US') }}" class="form-control form-control-sm modern-input fw-bold" placeholder="e.g. VISIT US">
+                                        </div>
+                                        <div class="col-md-8 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                Main Section Heading:
+                                            </label>
+                                            <input type="text" name="visit_us[heading]" value="{{ old('visit_us.heading', $visitUs['heading'] ?? 'COME TASTE THE ORIGINAL') }}" class="form-control form-control-sm modern-input fw-bold" placeholder="e.g. COME TASTE THE ORIGINAL">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                Subheading Lead (Bold):
+                                            </label>
+                                            <input type="text" name="visit_us[subheading_lead]" value="{{ old('visit_us.subheading_lead', $visitUs['subheading_lead'] ?? 'Your Next Plate of Dahi Bade Is Waiting.') }}" class="form-control form-control-sm modern-input" placeholder="e.g. Your Next Plate of Dahi Bade Is Waiting.">
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                Subheading Description:
+                                            </label>
+                                            <input type="text" name="visit_us[subheading_desc]" value="{{ old('visit_us.subheading_desc', $visitUs['subheading_desc'] ?? 'Visit our Hazratganj outlet and experience the Original GPO Ke Thandey Dahi Bade.') }}" class="form-control form-control-sm modern-input" placeholder="e.g. Visit our Hazratganj outlet...">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. Store Location & Contact Information Card -->
+                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-geo-alt-fill text-danger fs-15"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Store Location & Contact Details</h6>
+                                    </div>
+                                    <span class="badge bg-light text-muted border fs-11">Contact Info</span>
+                                </div>
+                                <div class="card-body p-3.5">
+                                    <div class="row g-3">
+                                        <!-- Address -->
+                                        <div class="col-12">
+                                            <div class="row g-2">
+                                                <div class="col-md-3 col-12">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                        📍 Address Label:
+                                                    </label>
+                                                    <input type="text" name="visit_us[address_label]" value="{{ old('visit_us.address_label', $visitUs['address_label'] ?? 'ADDRESS:') }}" class="form-control form-control-sm modern-input" placeholder="e.g. ADDRESS:">
+                                                </div>
+                                                <div class="col-md-9 col-12">
+                                                    <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                        Full Outlet Address:
+                                                    </label>
+                                                    <textarea name="visit_us[address]" rows="2" class="form-control form-control-sm modern-input" placeholder="Enter complete outlet address...">{{ old('visit_us.address', $visitUs['address'] ?? '') }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Phone -->
+                                        <div class="col-md-6 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                📞 Phone Number (Calling):
+                                            </label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" name="visit_us[phone_label]" value="{{ old('visit_us.phone_label', $visitUs['phone_label'] ?? 'CALL:') }}" class="form-control modern-input" style="max-width: 80px;" placeholder="CALL:">
+                                                <input type="text" name="visit_us[phone]" value="{{ old('visit_us.phone', $visitUs['phone'] ?? '+91 91406 31433') }}" class="form-control modern-input fw-semibold" placeholder="+91 91406 31433">
+                                            </div>
+                                        </div>
+
+                                        <!-- Email -->
+                                        <div class="col-md-6 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                ✉️ Email Address:
+                                            </label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" name="visit_us[email_label]" value="{{ old('visit_us.email_label', $visitUs['email_label'] ?? 'EMAIL:') }}" class="form-control modern-input" style="max-width: 85px;" placeholder="EMAIL:">
+                                                <input type="email" name="visit_us[email]" value="{{ old('visit_us.email', $visitUs['email'] ?? 'support@gpokethandeydahibade.com') }}" class="form-control modern-input" placeholder="support@gpokethandeydahibade.com">
+                                            </div>
+                                        </div>
+
+                                        <!-- Timings -->
+                                        <div class="col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">
+                                                ⏰ Operational Timings:
+                                            </label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" name="visit_us[timings_label]" value="{{ old('visit_us.timings_label', $visitUs['timings_label'] ?? 'TIMINGS:') }}" class="form-control modern-input" style="max-width: 95px;" placeholder="TIMINGS:">
+                                                <input type="text" name="visit_us[timings]" value="{{ old('visit_us.timings', $visitUs['timings'] ?? 'Monday – Sunday | 1:00 PM – 9:00 PM') }}" class="form-control modern-input" placeholder="Monday – Sunday | 1:00 PM – 9:00 PM">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 3. Action Buttons Card -->
+                            <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; background: #ffffff;">
+                                <div class="card-header bg-white py-3 px-3.5 border-bottom d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-link-45deg text-success fs-16"></i>
+                                        <h6 class="fs-13 fw-bold text-dark mb-0">Action Buttons (Directions & Order)</h6>
+                                    </div>
+                                    <span class="badge bg-light text-muted border fs-11">Call-To-Actions</span>
+                                </div>
+                                <div class="card-body p-3.5">
+                                    <div class="row g-3">
+                                        <!-- Button 1: Get Directions -->
+                                        <div class="col-md-6 col-12">
+                                            <div class="p-2.5 rounded-3 border bg-light-subtle">
+                                                <span class="badge bg-danger mb-2">Button 1 (Terracotta Pill)</span>
+                                                <div class="mb-2">
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Button Text:</label>
+                                                    <input type="text" name="visit_us[btn1_text]" value="{{ old('visit_us.btn1_text', $visitUs['btn1_text'] ?? 'GET DIRECTIONS') }}" class="form-control form-control-sm modern-input fw-semibold" placeholder="GET DIRECTIONS">
+                                                </div>
+                                                <div>
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Google Maps URL:</label>
+                                                    <input type="text" name="visit_us[btn1_url]" value="{{ old('visit_us.btn1_url', $visitUs['btn1_url'] ?? 'https://maps.google.com/?q=Hazratganj+Lucknow+Awadh+Bazaar') }}" class="form-control form-control-sm modern-input" placeholder="https://maps.google.com/...">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Button 2: Order Now -->
+                                        <div class="col-md-6 col-12">
+                                            <div class="p-2.5 rounded-3 border bg-light-subtle">
+                                                <span class="badge bg-warning text-dark mb-2">Button 2 (Amber Pill)</span>
+                                                <div class="mb-2">
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Button Text:</label>
+                                                    <input type="text" name="visit_us[btn2_text]" value="{{ old('visit_us.btn2_text', $visitUs['btn2_text'] ?? 'ORDER NOW') }}" class="form-control form-control-sm modern-input fw-semibold" placeholder="ORDER NOW">
+                                                </div>
+                                                <div>
+                                                    <label class="form-label fs-11 fw-bold text-dark mb-1">Target Page URL / Route:</label>
+                                                    <input type="text" name="visit_us[btn2_url]" value="{{ old('visit_us.btn2_url', $visitUs['btn2_url'] ?? '/menu') }}" class="form-control form-control-sm modern-input" placeholder="/menu">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Bar -->
+                    <div class="p-3 bg-white border border-light-subtle rounded-3 shadow-sm d-flex flex-wrap align-items-center gap-2.5 mt-2">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2">
+                            <i class="bi bi-cloud-check-fill fs-16"></i>
+                            <span>Save Visit Us Changes</span>
+                        </button>
+                        <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                        </button>
+                        <a href="{{ route('home') }}" target="_blank" class="btn btn-outline-secondary px-3 py-2 ms-auto d-flex align-items-center gap-1.5">
+                            <i class="bi bi-box-arrow-up-right fs-14"></i> Preview Live Website
+                        </a>
+                    </div>
+                </form>
             </div>
 
             <!-- ================= 10. FRANCHISE CTA PANEL ================= -->
@@ -2860,6 +3091,19 @@
                 const titleInput = colDiv.querySelector('.exp-title-input');
                 if (titleInput) {
                     titleInput.focus();
+                }
+        // Visit Us Live Image Preview
+        const visitFileInput = document.getElementById('visit_us_file_input');
+        const visitPreviewImg = document.getElementById('visit_us_preview_img');
+        if (visitFileInput && visitPreviewImg) {
+            visitFileInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        visitPreviewImg.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
                 }
             });
         }
