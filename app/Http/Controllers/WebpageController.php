@@ -907,7 +907,15 @@ class WebpageController extends Controller
             'hero_heading' => 'A LEGACY SERVED WITH LOVE',
             'hero_sub' => 'Since 1976 | Lucknow',
             'hero_description' => 'From a humble beginning near the GPO in Hazratganj to becoming a recognised name for Dahi Bade, our journey is built on tradition, taste and the love of our customers.',
+            'hero_media_type' => 'image', // 'image', 'video', 'youtube'
             'hero_image' => 'images/lucknow_heritage.jpg',
+            'hero_video' => '',
+            'hero_youtube_url' => '',
+            'hero_youtube_id' => '',
+            'hero_overlay_color' => '#000000',
+            'hero_overlay_opacity' => '0.70',
+            'hero_overlay_style' => 'solid', // 'solid', 'gradient'
+            'hero_height' => '440px',
 
             // Section 2: Chapter 1 - Where It All Began
             'began_heading' => 'WHERE IT ALL BEGAN',
@@ -1019,7 +1027,7 @@ class WebpageController extends Controller
             File::makeDirectory($uploadDir, 0755, true, true);
         }
 
-        // Handle Image Uploads
+        // Handle Image & Video Uploads
         $imageFields = [
             'hero_image_file' => 'hero_image',
             'began_image_file' => 'began_image',
@@ -1034,6 +1042,49 @@ class WebpageController extends Controller
                     $filename = time() . "_{$targetKey}_" . uniqid() . '.' . strtolower($file->getClientOriginalExtension());
                     $file->move($uploadDir, $filename);
                     $storyInput[$targetKey] = 'uploads/story/' . $filename;
+                }
+            }
+        }
+
+        // Handle Video File Upload for Hero Banner
+        if ($request->hasFile('story.hero_video_file')) {
+            $file = $request->file('story.hero_video_file');
+            if ($file->isValid()) {
+                $filename = time() . '_hero_vid_' . uniqid() . '.' . strtolower($file->getClientOriginalExtension());
+                $file->move($uploadDir, $filename);
+                $storyInput['hero_video'] = 'uploads/story/' . $filename;
+                $storyInput['hero_media_type'] = 'video';
+            }
+        }
+
+        // Handle Generic Hero Media File Upload (Image or Video)
+        if ($request->hasFile('story.hero_media_file')) {
+            $file = $request->file('story.hero_media_file');
+            if ($file->isValid()) {
+                $ext = strtolower($file->getClientOriginalExtension());
+                $filename = time() . '_hero_media_' . uniqid() . '.' . $ext;
+                $file->move($uploadDir, $filename);
+                $filePath = 'uploads/story/' . $filename;
+                if (in_array($ext, ['mp4', 'webm', 'ogg', 'mov', 'm4v'])) {
+                    $storyInput['hero_video'] = $filePath;
+                    $storyInput['hero_media_type'] = 'video';
+                } else {
+                    $storyInput['hero_image'] = $filePath;
+                    if (($storyInput['hero_media_type'] ?? '') !== 'video' && ($storyInput['hero_media_type'] ?? '') !== 'youtube') {
+                        $storyInput['hero_media_type'] = 'image';
+                    }
+                }
+            }
+        }
+
+        // Parse YouTube URL if provided
+        if (isset($storyInput['hero_youtube_url'])) {
+            $ytUrl = trim($storyInput['hero_youtube_url']);
+            if (!empty($ytUrl)) {
+                if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $ytUrl, $match)) {
+                    $storyInput['hero_youtube_id'] = $match[1];
+                } else {
+                    $storyInput['hero_youtube_id'] = $ytUrl;
                 }
             }
         }

@@ -1,0 +1,110 @@
+{
+    "hero_badge": "OUR STORY",
+    "hero_heading": "A LEGACY SERVED WITH LOVE",
+    "hero_sub": "Since 1976 | Lucknow",
+    "hero_description": "From a humble beginning near the GPO in Hazratganj to becoming a recognised name for Dahi Bade, our journey is built on tradition, taste and the love of our customers.",
+    "hero_media_type": "youtube",
+    "hero_image": "images\/lucknow_heritage.jpg",
+    "hero_video": null,
+    "hero_youtube_url": "https:\/\/youtu.be\/4HGscgVGh7s?si=bzqD_Fwc3PS4UFGn",
+    "hero_youtube_id": "4HGscgVGh7s",
+    "hero_overlay_color": "#000000",
+    "hero_overlay_opacity": "0.70",
+    "hero_overlay_style": "solid",
+    "hero_height": "440px",
+    "began_heading": "WHERE IT ALL BEGAN",
+    "began_tagline": "A Simple Beginning. An Unforgettable Taste.",
+    "began_image": "uploads\/story\/1789724115_began_image_6aad05d347b39.jpg",
+    "began_text_1": "The story of GPO Ke Thandey Dahi Bade began in 1976, when Sant Ram Gupta ji started serving Dahi Bade near the General Post Office in Hazratganj, Lucknow.",
+    "began_text_2": "There was no complicated formula. Just a commitment to making delicious food and serving it with care.",
+    "began_text_3": "The unique combination of soft Dahi Bade, chilled dahi and balanced flavours gradually attracted customers from across Lucknow.",
+    "began_text_4": "And slowly, a small food destination became a name people remembered.",
+    "journey_badge": "THE GPO JOURNEY",
+    "journey_heading": "FROM A HUMBLE FOOD DESTINATION TO A LUCKNOW FAVOURITE",
+    "journey_sub": "Over the years, GPO Ke Thandey Dahi Bade became associated with a simple food experience:",
+    "journey_quote": "Come hungry. Have a plate. Leave happy.",
+    "journey_desc": "The brand\u2019s identity has been shaped by generations of customers who have enjoyed our food, recommended us to others and returned with their families. That customer love is one of the most important chapters of the GPO story.",
+    "journey_image": "images\/storefront.jpg",
+    "secret_heading": "THE SECRET IS SIMPLE",
+    "secret_tagline": "GOOD FOOD DOESN\u2019T NEED TO BE COMPLICATED.",
+    "secret_desc": "At GPO, we believe that the best food comes from respecting the basics.",
+    "pillars": [
+        {
+            "icon": "\ud83c\udf31",
+            "title": "QUALITY INGREDIENTS",
+            "desc": "We focus on freshness and quality in the ingredients used in our preparations."
+        },
+        {
+            "icon": "\ud83c\udffa",
+            "title": "TRADITIONAL FLAVOURS",
+            "desc": "Our food remains connected to the familiar flavours that customers have loved over the years."
+        },
+        {
+            "icon": "\ud83e\udd63",
+            "title": "CAREFUL PREPARATION",
+            "desc": "Every dish is prepared with attention to taste, presentation and consistency."
+        },
+        {
+            "icon": "\u2764\ufe0f",
+            "title": "CUSTOMER FIRST",
+            "desc": "Our ultimate goal is simple \u2014 give every customer a reason to come back."
+        }
+    ],
+    "why_thandey_heading": "WHY \u201cTHANDEY\u201d DAHI BADE?",
+    "why_thandey_tagline": "THE EXPERIENCE IS IN THE NAME.",
+    "why_thandey_p1": "Our signature Dahi Bade are known for their refreshing chilled character.",
+    "why_thandey_p2": "Soft lentil dumplings are complemented by creamy chilled dahi and a balanced blend of flavours and spices.",
+    "why_thandey_p3": "It is this combination that creates the distinctive GPO experience.",
+    "why_thandey_badges": [
+        "CREAMY.",
+        "CHILLED.",
+        "TANGY.",
+        "FLAVOURFUL."
+    ],
+    "values_heading": "OUR VALUES",
+    "values_desc": "The timeless principles that guide everything we prepare and serve.",
+    "values": [
+        {
+            "number": "01",
+            "title": "AUTHENTICITY",
+            "desc": "We respect the food traditions and flavours that built our identity."
+        },
+        {
+            "number": "02",
+            "title": "QUALITY",
+            "desc": "We believe quality is essential to creating food people trust."
+        },
+        {
+            "number": "03",
+            "title": "CONSISTENCY",
+            "desc": "Customers should receive the GPO experience they expect every time."
+        },
+        {
+            "number": "04",
+            "title": "HYGIENE",
+            "desc": "We maintain attention to cleanliness and food preparation standards."
+        },
+        {
+            "number": "05",
+            "title": "INNOVATION",
+            "desc": "While respecting our roots, we continue to embrace modern ways of serving customers."
+        },
+        {
+            "number": "06",
+            "title": "LEGACY",
+            "desc": "Our past gives us our identity. Our future gives us our responsibility."
+        }
+    ],
+    "tradition_heading": "TRADITION MEETS TODAY",
+    "tradition_desc": "GPO Ke Thandey Dahi Bade carries a heritage rooted in Lucknow while embracing the convenience expected by today\u2019s customers. From digital ordering to modern customer service and organised operations, we are taking a much-loved food experience forward without losing sight of where it began.",
+    "tradition_punch": "THE TASTE MAY BE TIMELESS. THE EXPERIENCE KEEPS EVOLVING.",
+    "cta_heading": "EXPERIENCE THE STORY FOR YOURSELF",
+    "cta_sub": "Taste the Original GPO Ke Thandey Dahi Bade.",
+    "cta_btn1_text": "VISIT US",
+    "cta_btn1_url": "\/contact",
+    "cta_btn2_text": "ORDER NOW",
+    "cta_btn2_url": "\/menu",
+    "banner_title": "LUCKNOW",
+    "banner_subtitle": "A City of Nawabs \u2022 A Taste of Tradition \u2022 Since 1976",
+    "banner_image": "images\/lucknow_heritage.jpg"
+}

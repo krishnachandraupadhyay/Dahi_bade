@@ -196,7 +196,7 @@
                         <h6 class="fw-bold text-dark mb-0 fs-15">Hero Banner & Heritage Introduction</h6>
                     </div>
                     <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1">
-                        <i class="bi bi-image me-1"></i> Full Page Hero Header
+                        <i class="bi bi-camera-reels me-1"></i> Background Media & Transparent Overlay
                     </span>
                 </div>
 
@@ -204,11 +204,314 @@
                     @csrf
                     <input type="hidden" name="current_section" value="hero_banner">
 
+                    <!-- TOP: LIVE SIMULATOR BANNER PREVIEW -->
+                    <div class="card border border-light-subtle shadow-sm mb-4" style="border-radius: 12px; overflow: hidden;">
+                        <div class="card-header bg-white py-2.5 px-3 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-eye-fill text-primary"></i>
+                                <span class="fw-bold fs-13 text-dark">Live Interactive Visual Preview</span>
+                            </div>
+                            <span class="badge bg-light text-muted border fs-11">Real-time Simulation</span>
+                        </div>
+                        <div class="card-body p-0 position-relative bg-dark overflow-hidden" id="hero_sim_viewport" style="min-height: 240px; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff;">
+                            <!-- Simulated Media -->
+                            <img id="sim_hero_img" src="{{ asset($story['hero_image'] ?? 'images/lucknow_heritage.jpg') }}" alt="Simulated Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; display: {{ ($story['hero_media_type'] ?? 'image') === 'image' ? 'block' : 'none' }};">
+                            
+                            <video id="sim_hero_video" src="{{ !empty($story['hero_video']) ? asset($story['hero_video']) : '' }}" autoplay muted loop playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; display: {{ ($story['hero_media_type'] ?? 'image') === 'video' ? 'block' : 'none' }};"></video>
+                            
+                            <div id="sim_hero_yt_box" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; display: {{ ($story['hero_media_type'] ?? 'image') === 'youtube' ? 'flex' : 'none' }}; align-items: center; justify-content: center; background: #0a0a0a;">
+                                <div class="text-center p-3">
+                                    <i class="bi bi-youtube text-danger" style="font-size: 38px;"></i>
+                                    <div class="fs-12 text-light mt-1">YouTube Video Background Active</div>
+                                    <small class="text-muted fs-11 font-monospace" id="sim_hero_yt_label">{{ $story['hero_youtube_url'] ?? 'YouTube Link' }}</small>
+                                </div>
+                            </div>
+
+                            <!-- Simulated Transparent Color Overlay -->
+                            @php
+                                $cCol = $story['hero_overlay_color'] ?? '#000000';
+                                $cOp = floatval($story['hero_overlay_opacity'] ?? 0.70);
+                                $cStyle = $story['hero_overlay_style'] ?? 'solid';
+                                $hHex = ltrim($cCol, '#');
+                                if (strlen($hHex) == 3) {
+                                    $sr = hexdec(substr($hHex, 0, 1) . substr($hHex, 0, 1));
+                                    $sg = hexdec(substr($hHex, 1, 1) . substr($hHex, 1, 1));
+                                    $sb = hexdec(substr($hHex, 2, 1) . substr($hHex, 2, 1));
+                                } elseif (strlen($hHex) >= 6) {
+                                    $sr = hexdec(substr($hHex, 0, 2));
+                                    $sg = hexdec(substr($hHex, 2, 2));
+                                    $sb = hexdec(substr($hHex, 4, 2));
+                                } else {
+                                    $sr = 0; $sg = 0; $sb = 0;
+                                }
+                                if ($cStyle === 'gradient') {
+                                    $topO = min(1.0, $cOp + 0.15);
+                                    $botO = min(1.0, $cOp + 0.20);
+                                    $initialOverlay = "linear-gradient(180deg, rgba({$sr}, {$sg}, {$sb}, {$topO}) 0%, rgba({$sr}, {$sg}, {$sb}, {$cOp}) 50%, rgba({$sr}, {$sg}, {$sb}, {$botO}) 100%)";
+                                } else {
+                                    $initialOverlay = "rgba({$sr}, {$sg}, {$sb}, {$cOp})";
+                                }
+                            @endphp
+                            <div id="sim_hero_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: {{ $initialOverlay }}; z-index: 1; transition: background 0.15s ease;"></div>
+
+                            <!-- Simulated Text Content -->
+                            <div style="position: relative; z-index: 2; padding: 30px 20px; max-width: 720px;">
+                                <span class="badge rounded-pill mb-2 px-3 py-1" id="sim_text_badge" style="background: rgba(236, 198, 125, 0.25); border: 1px solid rgba(236, 198, 125, 0.6); color: #ecc67d; font-size: 11px; letter-spacing: 1.5px;">
+                                    {{ $story['hero_badge'] ?? 'OUR STORY' }}
+                                </span>
+                                <h4 class="fw-bold mb-1 text-white" id="sim_text_heading" style="font-family: serif; letter-spacing: 0.5px; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">
+                                    {{ $story['hero_heading'] ?? 'A LEGACY SERVED WITH LOVE' }}
+                                </h4>
+                                <div class="fs-12 mb-2" id="sim_text_sub" style="color: #ecc67d; font-style: italic; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+                                    {{ $story['hero_sub'] ?? 'Since 1976 | Lucknow' }}
+                                </div>
+                                <p class="fs-12 mb-0 text-white-50" id="sim_text_desc" style="line-height: 1.5; text-shadow: 0 1px 3px rgba(0,0,0,0.6);">
+                                    {{ $story['hero_description'] ?? 'From a humble beginning near the GPO in Hazratganj to becoming a recognised name for Dahi Bade...' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 1. TRANSPARENT COLOR OVERLAY CONTROLS (User Requested!) -->
                     <div class="story-config-card mb-4">
                         <div class="story-config-header">
                             <div class="d-flex align-items-center gap-2">
-                                <i class="bi bi-bookmark-star-fill text-warning fs-15"></i>
-                                <span class="fw-bold text-dark fs-14">Banner Texts & Typography</span>
+                                <i class="bi bi-paint-bucket text-primary fs-15"></i>
+                                <span class="fw-bold text-dark fs-14">Transparent Color & Darkness Overlay</span>
+                            </div>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-11">Contrast & Readability</span>
+                        </div>
+
+                        <!-- Overlay Color Selection & Presets -->
+                        <div class="story-row">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-palette-fill text-primary"></i> Overlay Tint Color</div>
+                                <div class="story-label-desc">Choose a transparent tint color to place over the background photo/video.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="d-flex flex-wrap align-items-center gap-2 mb-2.5">
+                                    <button type="button" class="btn btn-sm btn-outline-dark overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#000000" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #000; display: inline-block;"></span>
+                                        <span>Midnight Black</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#083b3c" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #083b3c; display: inline-block;"></span>
+                                        <span>Brand Spruce Teal</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#3a1313" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #3a1313; display: inline-block;"></span>
+                                        <span>Vintage Burgundy</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#231714" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #231714; display: inline-block;"></span>
+                                        <span>Warm Cocoa</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary overlay-preset-btn px-2.5 py-1 d-flex align-items-center gap-1.5" data-color="#0c1929" style="font-size: 12px;">
+                                        <span class="rounded-circle" style="width: 12px; height: 12px; background: #0c1929; display: inline-block;"></span>
+                                        <span>Navy Midnight</span>
+                                    </button>
+                                </div>
+                                <div class="row g-2 align-items-center">
+                                    <div class="col-md-5 col-12">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text bg-light text-muted">Custom Hex:</span>
+                                            <input type="color" id="hero_color_picker" class="form-control form-control-color p-1" value="{{ $story['hero_overlay_color'] ?? '#000000' }}" style="width: 44px; height: 33px;">
+                                            <input type="text" name="story[hero_overlay_color]" id="hero_overlay_color_input" value="{{ old('story.hero_overlay_color', $story['hero_overlay_color'] ?? '#000000') }}" class="form-control modern-input font-monospace fw-semibold" placeholder="#000000">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-12">
+                                        <small class="text-muted fs-11"><i class="bi bi-info-circle me-1"></i> Pick a preset or enter any custom HEX color code.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Overlay Darkness / Opacity Selection -->
+                        <div class="story-row">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-transparency text-primary"></i> Overlay Transparency</div>
+                                <div class="story-label-desc">Control darkness & transparency level. Recommended: 65% - 75% for readable text.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-6 col-12">
+                                        @php
+                                            $curOp = strval($story['hero_overlay_opacity'] ?? '0.70');
+                                        @endphp
+                                        <select name="story[hero_overlay_opacity]" id="hero_opacity_select" class="form-select form-select-sm modern-select fw-semibold">
+                                            <option value="0.00" {{ $curOp === '0.00' ? 'selected' : '' }}>0% (No Overlay / 100% Transparent)</option>
+                                            <option value="0.25" {{ $curOp === '0.25' ? 'selected' : '' }}>25% (Light Transparent Tint)</option>
+                                            <option value="0.40" {{ $curOp === '0.40' ? 'selected' : '' }}>40% (Soft Tint)</option>
+                                            <option value="0.55" {{ $curOp === '0.55' ? 'selected' : '' }}>55% (Medium Tint)</option>
+                                            <option value="0.70" {{ $curOp === '0.70' ? 'selected' : '' }}>70% (Standard / High Readability)</option>
+                                            <option value="0.80" {{ $curOp === '0.80' ? 'selected' : '' }}>80% (Dark Contrast)</option>
+                                            <option value="0.90" {{ $curOp === '0.90' ? 'selected' : '' }}>90% (Extra Dark Contrast)</option>
+                                            <option value="0.95" {{ $curOp === '0.95' ? 'selected' : '' }}>95% (Near Opaque Blackout)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input type="range" class="form-range" id="hero_opacity_slider" min="0" max="1" step="0.05" value="{{ $curOp }}">
+                                            <span class="badge bg-dark px-2 py-1 fs-11 fw-bold" id="opacity_display_badge">{{ round(floatval($curOp) * 100) }}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Overlay Style & Sizing -->
+                        <div class="story-row">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-sliders text-primary"></i> Overlay Style & Height</div>
+                                <div class="story-label-desc">Choose solid tint or soft gradient, and overall banner vertical height.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="row g-3">
+                                    <div class="col-md-6 col-12">
+                                        <label class="form-label fs-11 fw-bold text-dark mb-1">Overlay Style:</label>
+                                        @php
+                                            $curStyle = $story['hero_overlay_style'] ?? 'solid';
+                                        @endphp
+                                        <select name="story[hero_overlay_style]" id="hero_overlay_style_select" class="form-select form-select-sm modern-select">
+                                            <option value="solid" {{ $curStyle === 'solid' ? 'selected' : '' }}>Solid Transparent Tint</option>
+                                            <option value="gradient" {{ $curStyle === 'gradient' ? 'selected' : '' }}>Soft Vertical Gradient (Vignette)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <label class="form-label fs-11 fw-bold text-dark mb-1">Banner Height:</label>
+                                        @php
+                                            $curH = $story['hero_height'] ?? '440px';
+                                        @endphp
+                                        <select name="story[hero_height]" id="hero_height_select" class="form-select form-select-sm modern-select">
+                                            <option value="380px" {{ $curH === '380px' ? 'selected' : '' }}>380px (Compact)</option>
+                                            <option value="440px" {{ $curH === '440px' ? 'selected' : '' }}>440px (Standard / Recommended)</option>
+                                            <option value="520px" {{ $curH === '520px' ? 'selected' : '' }}>520px (Spacious)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. BACKGROUND MEDIA: IMAGE / VIDEO / YOUTUBE (User Requested!) -->
+                    <div class="story-config-card mb-4">
+                        <div class="story-config-header">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-camera-reels-fill text-danger fs-15"></i>
+                                <span class="fw-bold text-dark fs-14">Background Media (Image / Video / YouTube)</span>
+                            </div>
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-11">Multiple Media Types</span>
+                        </div>
+
+                        <!-- Media Format Type Selector -->
+                        <div class="story-row">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-film text-primary"></i> Media Format Type</div>
+                                <div class="story-label-desc">Choose between a static image, uploaded video, or a YouTube video link.</div>
+                            </div>
+                            <div class="story-input-col">
+                                @php
+                                    $mType = $story['hero_media_type'] ?? 'image';
+                                @endphp
+                                <div class="d-flex flex-wrap gap-3">
+                                    <div class="form-check form-check-inline p-2 border rounded-3 bg-light" style="min-width: 140px;">
+                                        <input class="form-check-input ms-1 me-2 hero-media-radio" type="radio" name="story[hero_media_type]" id="media_type_image" value="image" {{ $mType === 'image' ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-bold fs-13 text-dark cursor-pointer" for="media_type_image">
+                                            🖼️ Static Image
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline p-2 border rounded-3 bg-light" style="min-width: 140px;">
+                                        <input class="form-check-input ms-1 me-2 hero-media-radio" type="radio" name="story[hero_media_type]" id="media_type_video" value="video" {{ $mType === 'video' ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-bold fs-13 text-dark cursor-pointer" for="media_type_video">
+                                            🎥 Video Upload
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline p-2 border rounded-3 bg-light" style="min-width: 140px;">
+                                        <input class="form-check-input ms-1 me-2 hero-media-radio" type="radio" name="story[hero_media_type]" id="media_type_youtube" value="youtube" {{ $mType === 'youtube' ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-bold fs-13 text-dark cursor-pointer" for="media_type_youtube">
+                                            ▶️ YouTube Link
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CASE A: Static Image Input -->
+                        <div class="story-row media-field-group" id="group_media_image" style="display: {{ $mType === 'image' ? 'flex' : 'none' }};">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-image text-primary"></i> Upload Image</div>
+                                <div class="story-label-desc">JPG, PNG, or WebP photo for banner backdrop.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="media-card-box">
+                                    <div class="row align-items-center g-3">
+                                        <div class="col-md-5 col-12">
+                                            <div class="media-preview-box overflow-hidden" style="height: 110px; background: #0b1f1a;">
+                                                <img id="preview_hero_image" src="{{ asset($story['hero_image'] ?? 'images/lucknow_heritage.jpg') }}" alt="Hero Image Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                                            </div>
+                                            <small class="text-muted fs-11 mt-1 d-block text-truncate">Current: {{ $story['hero_image'] ?? 'images/lucknow_heritage.jpg' }}</small>
+                                        </div>
+                                        <div class="col-md-7 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">Select New Image File:</label>
+                                            <input type="file" name="story[hero_image_file]" id="input_hero_image_file" class="form-control modern-input form-control-sm mb-1.5" accept="image/*">
+                                            <input type="hidden" name="story[hero_image]" id="hidden_hero_image" value="{{ $story['hero_image'] ?? 'images/lucknow_heritage.jpg' }}">
+                                            <small class="text-muted fs-11">Recommended: 1920x800 px landscape image.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CASE B: Video File Upload -->
+                        <div class="story-row media-field-group" id="group_media_video" style="display: {{ $mType === 'video' ? 'flex' : 'none' }};">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-camera-video text-primary"></i> Upload Video File</div>
+                                <div class="story-label-desc">MP4 or WebM video. Will autoplay muted in loop in background.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="media-card-box">
+                                    <div class="row align-items-center g-3">
+                                        <div class="col-md-5 col-12">
+                                            <div class="media-preview-box overflow-hidden bg-black" style="height: 110px;">
+                                                <video id="preview_hero_video" src="{{ !empty($story['hero_video']) ? asset($story['hero_video']) : '' }}" controls style="width: 100%; height: 100%; object-fit: cover;"></video>
+                                            </div>
+                                            <small class="text-muted fs-11 mt-1 d-block text-truncate">Current: {{ $story['hero_video'] ?? 'None uploaded' }}</small>
+                                        </div>
+                                        <div class="col-md-7 col-12">
+                                            <label class="form-label fs-12 fw-bold text-dark mb-1">Upload Video File (MP4/WebM):</label>
+                                            <input type="file" name="story[hero_video_file]" id="input_hero_video_file" class="form-control modern-input form-control-sm mb-1.5" accept="video/mp4,video/webm">
+                                            <input type="hidden" name="story[hero_video]" id="hidden_hero_video" value="{{ $story['hero_video'] ?? '' }}">
+                                            <small class="text-muted fs-11">Tip: Keep video under 15MB for fast loading.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CASE C: YouTube Video Link -->
+                        <div class="story-row media-field-group" id="group_media_youtube" style="display: {{ $mType === 'youtube' ? 'flex' : 'none' }};">
+                            <div class="story-label-col">
+                                <div class="story-label-title"><i class="bi bi-youtube text-danger"></i> YouTube Video Link</div>
+                                <div class="story-label-desc">Paste standard YouTube video link or embed link.</div>
+                            </div>
+                            <div class="story-input-col">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text bg-danger text-white"><i class="bi bi-youtube"></i></span>
+                                    <input type="text" name="story[hero_youtube_url]" id="input_hero_youtube_url" value="{{ old('story.hero_youtube_url', $story['hero_youtube_url'] ?? '') }}" class="form-control modern-input" placeholder="e.g. https://www.youtube.com/watch?v=XXXXXX or https://youtu.be/XXXXXX">
+                                </div>
+                                <small class="text-muted fs-11 d-block">
+                                    <i class="bi bi-check2-circle text-success me-1"></i> Video will automatically loop in mute in background with no youtube UI controls distracting visitors.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. BANNER TEXTS & TYPOGRAPHY -->
+                    <div class="story-config-card mb-4">
+                        <div class="story-config-header">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-fonts text-warning fs-15"></i>
+                                <span class="fw-bold text-dark fs-14">Banner Headline, Tag & Description</span>
                             </div>
                         </div>
 
@@ -223,13 +526,13 @@
                                     <div class="col-md-6 col-12">
                                         <div class="input-group">
                                             <span class="input-group-text input-group-text-modern">Badge Tag</span>
-                                            <input type="text" name="story[hero_badge]" value="{{ old('story.hero_badge', $story['hero_badge'] ?? 'OUR STORY') }}" class="form-control modern-input fw-semibold" placeholder="OUR STORY">
+                                            <input type="text" name="story[hero_badge]" id="input_hero_badge" value="{{ old('story.hero_badge', $story['hero_badge'] ?? 'OUR STORY') }}" class="form-control modern-input fw-semibold" placeholder="OUR STORY">
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
                                         <div class="input-group">
                                             <span class="input-group-text input-group-text-modern">Origin Subtitle</span>
-                                            <input type="text" name="story[hero_sub]" value="{{ old('story.hero_sub', $story['hero_sub'] ?? 'Since 1976 | Lucknow') }}" class="form-control modern-input" placeholder="Since 1976 | Lucknow">
+                                            <input type="text" name="story[hero_sub]" id="input_hero_sub" value="{{ old('story.hero_sub', $story['hero_sub'] ?? 'Since 1976 | Lucknow') }}" class="form-control modern-input" placeholder="Since 1976 | Lucknow">
                                         </div>
                                     </div>
                                 </div>
@@ -240,10 +543,10 @@
                         <div class="story-row">
                             <div class="story-label-col">
                                 <div class="story-label-title"><i class="bi bi-type-h1 text-primary"></i> Main Heading</div>
-                                <div class="story-label-desc">The prominent golden headline on the banner.</div>
+                                <div class="story-label-desc">The prominent headline on the banner.</div>
                             </div>
                             <div class="story-input-col">
-                                <input type="text" name="story[hero_heading]" value="{{ old('story.hero_heading', $story['hero_heading'] ?? 'A LEGACY SERVED WITH LOVE') }}" class="form-control modern-input fw-bold fs-14" placeholder="A LEGACY SERVED WITH LOVE">
+                                <input type="text" name="story[hero_heading]" id="input_hero_heading" value="{{ old('story.hero_heading', $story['hero_heading'] ?? 'A LEGACY SERVED WITH LOVE') }}" class="form-control modern-input fw-bold fs-14" placeholder="A LEGACY SERVED WITH LOVE">
                             </div>
                         </div>
 
@@ -254,33 +557,7 @@
                                 <div class="story-label-desc">Introductory summary of the heritage and journey.</div>
                             </div>
                             <div class="story-input-col">
-                                <textarea name="story[hero_description]" rows="3" class="form-control modern-textarea" placeholder="From a humble beginning near the GPO...">{{ old('story.hero_description', $story['hero_description'] ?? '') }}</textarea>
-                            </div>
-                        </div>
-
-                        <!-- Background Photo -->
-                        <div class="story-row">
-                            <div class="story-label-col">
-                                <div class="story-label-title"><i class="bi bi-image-fill text-primary"></i> Background Image</div>
-                                <div class="story-label-desc">Header backdrop photo (Hazratganj Heritage).</div>
-                            </div>
-                            <div class="story-input-col">
-                                <div class="media-card-box">
-                                    <div class="row align-items-center g-3">
-                                        <div class="col-md-5 col-12">
-                                            <div class="media-preview-box overflow-hidden" style="height: 120px; background: #0b1f1a;">
-                                                <img id="preview_hero_image" src="{{ asset($story['hero_image'] ?? 'images/lucknow_heritage.jpg') }}" alt="Hero Banner Preview" style="width: 100%; height: 100%; object-fit: cover;">
-                                            </div>
-                                            <small class="text-muted fs-11 mt-1 d-block">Current: {{ $story['hero_image'] ?? 'images/lucknow_heritage.jpg' }}</small>
-                                        </div>
-                                        <div class="col-md-7 col-12">
-                                            <label class="form-label fs-12 fw-bold text-dark mb-1">Upload New Background Image:</label>
-                                            <input type="file" name="story[hero_image_file]" id="input_hero_image_file" class="form-control modern-input form-control-sm mb-2" accept="image/*">
-                                            <input type="hidden" name="story[hero_image]" value="{{ $story['hero_image'] ?? 'images/lucknow_heritage.jpg' }}">
-                                            <small class="text-muted fs-12">Recommended: 1920x800 px, high-resolution JPG or WebP.</small>
-                                        </div>
-                                    </div>
-                                </div>
+                                <textarea name="story[hero_description]" id="input_hero_description" rows="3" class="form-control modern-textarea" placeholder="From a humble beginning near the GPO...">{{ old('story.hero_description', $story['hero_description'] ?? '') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -289,7 +566,7 @@
                     <div class="p-3 bg-white border border-light-subtle rounded-3 shadow-sm d-flex flex-wrap align-items-center gap-2.5">
                         <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2">
                             <i class="bi bi-cloud-check-fill fs-16"></i>
-                            <span>Save Hero Banner</span>
+                            <span>Save Hero Banner & Media</span>
                         </button>
                         <button type="reset" class="btn btn-light border px-3 py-2 text-muted">
                             <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
@@ -1102,7 +1379,187 @@
             switchStorySection();
         }
 
-        // Live image previews
+        // ================= HERO BANNER MEDIA & OVERLAY INTERACTIVE SIMULATOR =================
+        const mediaRadios = document.querySelectorAll('.hero-media-radio');
+        const mediaGroups = {
+            image: document.getElementById('group_media_image'),
+            video: document.getElementById('group_media_video'),
+            youtube: document.getElementById('group_media_youtube')
+        };
+        const simElements = {
+            img: document.getElementById('sim_hero_img'),
+            video: document.getElementById('sim_hero_video'),
+            yt: document.getElementById('sim_hero_yt_box')
+        };
+        const simOverlay = document.getElementById('sim_hero_overlay');
+        const colorInput = document.getElementById('hero_overlay_color_input');
+        const colorPicker = document.getElementById('hero_color_picker');
+        const opacitySelect = document.getElementById('hero_opacity_select');
+        const opacitySlider = document.getElementById('hero_opacity_slider');
+        const opacityBadge = document.getElementById('opacity_display_badge');
+        const styleSelect = document.getElementById('hero_overlay_style_select');
+
+        // Switch Media Type UI & Simulator
+        function setMediaType(type) {
+            Object.keys(mediaGroups).forEach(k => {
+                if (mediaGroups[k]) {
+                    mediaGroups[k].style.display = (k === type) ? 'flex' : 'none';
+                }
+            });
+            if (simElements.img) simElements.img.style.display = (type === 'image') ? 'block' : 'none';
+            if (simElements.video) simElements.video.style.display = (type === 'video') ? 'block' : 'none';
+            if (simElements.yt) simElements.yt.style.display = (type === 'youtube') ? 'flex' : 'none';
+        }
+
+        mediaRadios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (this.checked) {
+                    setMediaType(this.value);
+                }
+            });
+        });
+
+        // Convert Hex to RGB
+        function hexToRgb(hex) {
+            hex = (hex || '#000000').replace('#', '').trim();
+            if (hex.length === 3) {
+                return {
+                    r: parseInt(hex[0] + hex[0], 16),
+                    g: parseInt(hex[1] + hex[1], 16),
+                    b: parseInt(hex[2] + hex[2], 16)
+                };
+            }
+            if (hex.length >= 6) {
+                return {
+                    r: parseInt(hex.substring(0, 2), 16),
+                    g: parseInt(hex.substring(2, 4), 16),
+                    b: parseInt(hex.substring(4, 6), 16)
+                };
+            }
+            return { r: 0, g: 0, b: 0 };
+        }
+
+        // Live Update Simulator Overlay
+        function updateSimOverlay() {
+            if (!simOverlay) return;
+            const hex = colorInput ? colorInput.value : '#000000';
+            const op = opacitySlider ? parseFloat(opacitySlider.value) : 0.70;
+            const style = styleSelect ? styleSelect.value : 'solid';
+            const rgb = hexToRgb(hex);
+
+            if (style === 'gradient') {
+                const topO = Math.min(1.0, op + 0.15);
+                const botO = Math.min(1.0, op + 0.20);
+                simOverlay.style.background = `linear-gradient(180deg, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${topO}) 0%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${op}) 50%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${botO}) 100%)`;
+            } else {
+                simOverlay.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${op})`;
+            }
+
+            if (opacityBadge) {
+                opacityBadge.textContent = Math.round(op * 100) + '%';
+            }
+        }
+
+        // Color Presets
+        document.querySelectorAll('.overlay-preset-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const col = this.getAttribute('data-color');
+                if (colorInput) colorInput.value = col;
+                if (colorPicker) colorPicker.value = col;
+                updateSimOverlay();
+            });
+        });
+
+        if (colorPicker) {
+            colorPicker.addEventListener('input', function () {
+                if (colorInput) colorInput.value = this.value;
+                updateSimOverlay();
+            });
+        }
+        if (colorInput) {
+            colorInput.addEventListener('input', function () {
+                if (colorPicker && /^#[0-9A-F]{6}$/i.test(this.value)) {
+                    colorPicker.value = this.value;
+                }
+                updateSimOverlay();
+            });
+        }
+
+        // Opacity Slider & Select Sync
+        if (opacitySlider) {
+            opacitySlider.addEventListener('input', function () {
+                if (opacitySelect) opacitySelect.value = parseFloat(this.value).toFixed(2);
+                updateSimOverlay();
+            });
+        }
+        if (opacitySelect) {
+            opacitySelect.addEventListener('change', function () {
+                if (opacitySlider) opacitySlider.value = this.value;
+                updateSimOverlay();
+            });
+        }
+        if (styleSelect) {
+            styleSelect.addEventListener('change', updateSimOverlay);
+        }
+
+        // Live Text Content Sync to Simulator
+        function bindTextSync(inputId, targetId, fallback) {
+            const input = document.getElementById(inputId);
+            const target = document.getElementById(targetId);
+            if (input && target) {
+                input.addEventListener('input', function () {
+                    target.textContent = this.value.trim() || fallback;
+                });
+            }
+        }
+        bindTextSync('input_hero_badge', 'sim_text_badge', 'OUR STORY');
+        bindTextSync('input_hero_heading', 'sim_text_heading', 'A LEGACY SERVED WITH LOVE');
+        bindTextSync('input_hero_sub', 'sim_text_sub', 'Since 1976 | Lucknow');
+        bindTextSync('input_hero_description', 'sim_text_desc', 'From a humble beginning near the GPO...');
+
+        const ytInput = document.getElementById('input_hero_youtube_url');
+        const ytLabel = document.getElementById('sim_hero_yt_label');
+        if (ytInput && ytLabel) {
+            ytInput.addEventListener('input', function () {
+                ytLabel.textContent = this.value.trim() || 'YouTube Link';
+            });
+        }
+
+        // Video File Live Preview in Simulator & Box
+        const heroVideoInput = document.getElementById('input_hero_video_file');
+        const heroVideoPreview = document.getElementById('preview_hero_video');
+        if (heroVideoInput) {
+            heroVideoInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const videoUrl = URL.createObjectURL(file);
+                    if (heroVideoPreview) heroVideoPreview.src = videoUrl;
+                    if (simElements.video) {
+                        simElements.video.src = videoUrl;
+                        simElements.video.play();
+                    }
+                }
+            });
+        }
+
+        // Image File Live Preview in Simulator & Box
+        const heroImgInput = document.getElementById('input_hero_image_file');
+        const heroImgPreview = document.getElementById('preview_hero_image');
+        if (heroImgInput) {
+            heroImgInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        if (heroImgPreview) heroImgPreview.src = e.target.result;
+                        if (simElements.img) simElements.img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Other Sections Live Image Previews
         function setupLiveImagePreview(inputId, previewImgId) {
             const input = document.getElementById(inputId);
             const preview = document.getElementById(previewImgId);
@@ -1120,7 +1577,6 @@
             }
         }
 
-        setupLiveImagePreview('input_hero_image_file', 'preview_hero_image');
         setupLiveImagePreview('input_began_image_file', 'preview_began_image');
         setupLiveImagePreview('input_journey_image_file', 'preview_journey_image');
         setupLiveImagePreview('input_banner_image_file', 'preview_banner_image');

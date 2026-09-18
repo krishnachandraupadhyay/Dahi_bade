@@ -4,18 +4,153 @@
 @section('body_class', 'theme-parchment')
 
 @section('content')
+    <style>
+      .story-hero-exact {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #ffffff;
+      }
+      .story-hero-exact .media-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+      }
+      .story-hero-video-wrap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .story-hero-video-wrap iframe {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100vw;
+        height: 56.25vw;
+        min-height: 100%;
+        min-width: 177.77%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .story-hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
+      }
+      .story-hero-exact .content {
+        position: relative;
+        z-index: 2;
+        padding: 40px 20px;
+        max-width: 880px;
+        margin: 0 auto;
+      }
+      .story-hero-badge-pill {
+        display: inline-block;
+        font-family: var(--font-serif);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #ecc67d;
+        background: rgba(236, 198, 125, 0.18);
+        border: 1px solid rgba(236, 198, 125, 0.5);
+        padding: 5px 18px;
+        border-radius: 9999px;
+        margin-bottom: 12px;
+        backdrop-filter: blur(4px);
+      }
+    </style>
+
+    @php
+      $mediaType = $story['hero_media_type'] ?? 'image';
+      $overlayColor = $story['hero_overlay_color'] ?? '#000000';
+      $overlayOpacity = floatval($story['hero_overlay_opacity'] ?? 0.70);
+      $overlayStyle = $story['hero_overlay_style'] ?? 'solid';
+      $heroHeight = $story['hero_height'] ?? '440px';
+
+      // Parse YouTube ID if youtube mode
+      $youtubeId = $story['hero_youtube_id'] ?? '';
+      if (empty($youtubeId) && !empty($story['hero_youtube_url'])) {
+          if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $story['hero_youtube_url'], $matches)) {
+              $youtubeId = $matches[1];
+          } else {
+              $youtubeId = trim($story['hero_youtube_url']);
+          }
+      }
+
+      // Convert Hex to RGB for alpha transparency
+      $hex = ltrim($overlayColor, '#');
+      if (strlen($hex) == 3) {
+          $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
+          $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
+          $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
+      } elseif (strlen($hex) >= 6) {
+          $r = hexdec(substr($hex, 0, 2));
+          $g = hexdec(substr($hex, 2, 2));
+          $b = hexdec(substr($hex, 4, 2));
+      } else {
+          $r = 0; $g = 0; $b = 0;
+      }
+
+      if ($overlayStyle === 'gradient') {
+          $topOp = min(1.0, $overlayOpacity + 0.15);
+          $botOp = min(1.0, $overlayOpacity + 0.20);
+          $overlayBg = "linear-gradient(180deg, rgba({$r}, {$g}, {$b}, {$topOp}) 0%, rgba({$r}, {$g}, {$b}, {$overlayOpacity}) 50%, rgba({$r}, {$g}, {$b}, {$botOp}) 100%)";
+      } else {
+          $overlayBg = "rgba({$r}, {$g}, {$b}, {$overlayOpacity})";
+      }
+    @endphp
+
     <!-- INNER PAGE BANNER (Document Page 6) -->
-    <section class="story-hero-exact">
-      <img src="{{ asset($story['hero_image'] ?? 'images/lucknow_heritage.jpg') }}" alt="Hazratganj Old Heritage Lucknow" class="bg">
+    <section class="story-hero-exact" style="min-height: {{ $heroHeight }};">
+      <!-- Media Layer: Image, Local Video, or YouTube Embed -->
+      @if($mediaType === 'youtube' && !empty($youtubeId))
+        <div class="story-hero-video-wrap">
+          <iframe src="https://www.youtube.com/embed/{{ $youtubeId }}?autoplay=1&mute=1&loop=1&playlist={{ $youtubeId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" 
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      @elseif($mediaType === 'video' && !empty($story['hero_video']))
+        <video class="media-bg" autoplay muted loop playsinline src="{{ asset($story['hero_video']) }}"></video>
+      @else
+        <img src="{{ asset($story['hero_image'] ?? 'images/lucknow_heritage.jpg') }}" alt="Hazratganj Old Heritage Lucknow" class="media-bg">
+      @endif
+
+      <!-- Transparent Color Overlay Layer -->
+      <div class="story-hero-overlay" style="background: {{ $overlayBg }};"></div>
+
+      <!-- Foreground Content Layer -->
       <div class="content">
-        <h1>{{ $story['hero_badge'] ?? 'OUR STORY' }}</h1>
-        <h2 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--c-gold-amber); margin: 8px 0 12px; letter-spacing: 1px;">
+        @if(!empty($story['hero_badge']))
+          <div>
+            <span class="story-hero-badge-pill">{{ $story['hero_badge'] }}</span>
+          </div>
+        @endif
+
+        <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 4.5vw, 3.2rem); color: #ffffff; margin: 6px 0 10px; font-weight: 800; letter-spacing: 1px; text-shadow: 0 2px 12px rgba(0,0,0,0.6);">
           {{ $story['hero_heading'] ?? 'A LEGACY SERVED WITH LOVE' }}
-        </h2>
-        <span style="display: inline-block; font-family: var(--font-serif); font-size: 0.95rem; color: rgba(255,255,255,0.9); margin-bottom: 12px;">
+        </h1>
+
+        <div style="font-family: var(--font-serif); font-size: 1.15rem; color: #ecc67d; margin-bottom: 12px; letter-spacing: 0.8px; font-weight: 600; text-shadow: 0 1px 6px rgba(0,0,0,0.5);">
           {{ $story['hero_sub'] ?? 'Since 1976 | Lucknow' }}
-        </span>
-        <p style="max-width: 720px; margin: 0 auto; font-size: 1rem; color: rgba(255,255,255,0.92); line-height: 1.6;">
+        </div>
+
+        <p style="max-width: 740px; margin: 0 auto; font-size: 1.05rem; color: rgba(255,255,255,0.96); line-height: 1.7; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
           {{ $story['hero_description'] ?? 'From a humble beginning near the GPO in Hazratganj to becoming a recognised name for Dahi Bade, our journey is built on tradition, taste and the love of our customers.' }}
         </p>
       </div>
