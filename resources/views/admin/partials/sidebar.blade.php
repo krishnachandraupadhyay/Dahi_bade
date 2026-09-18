@@ -65,73 +65,13 @@
                                 </a>
                             </li>
 
-                            <!-- Subcategory: Home (Collapsible) -->
+                            <!-- Home Page -->
                             <li class="nav-item">
-                                <a class="nav-link home-subnav-toggle d-flex align-items-center justify-content-between text-white {{ $isHomeActive ? 'active' : '' }}" 
-                                   data-bs-toggle="collapse" 
-                                   href="#sidebarHomePage" 
-                                   role="button" 
-                                   aria-expanded="{{ $isHomeActive ? 'true' : 'false' }}" 
-                                   aria-controls="sidebarHomePage">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <i class="bi bi-house-door-fill fs-13 text-warning"></i>
-                                        <span class="fw-semibold">Home</span>
-                                    </div>
-                                    <i class="bi bi-chevron-down fs-10 menu-arrow"></i>
+                                <a class="nav-link d-flex align-items-center gap-2 {{ request()->routeIs('admin.website-pages.home*') ? 'active' : '' }}" 
+                                   href="{{ route('admin.website-pages.home') }}">
+                                    <i class="bi bi-house-door-fill fs-12 text-warning"></i>
+                                    <span>Home</span>
                                 </a>
-
-                                <!-- Subcategory of Home: Sections list (All Home items) -->
-                                <div class="collapse {{ $isHomeActive ? 'show' : '' }}" id="sidebarHomePage">
-                                    <div class="home-sections-container">
-                                        <a href="{{ route('admin.website-pages.home', ['section' => 'hero_section']) }}" 
-                                           class="home-section-link {{ $isHomeActive && $currentSection === 'hero_section' ? 'active' : '' }}">
-                                            <i class="bi bi-images text-info"></i>
-                                            <span>Hero Banner Slider</span>
-                                        </a>
-
-                                        <a href="{{ route('admin.website-pages.home', ['section' => 'highlights_strip']) }}" 
-                                           class="home-section-link {{ $isHomeActive && $currentSection === 'highlights_strip' ? 'active' : '' }}">
-                                            <i class="bi bi-collection-play-fill text-warning"></i>
-                                            <span>Highlights Strip</span>
-                                        </a>
-
-                                        <a href="{{ route('admin.website-pages.home', ['section' => 'welcome_section']) }}" 
-                                           class="home-section-link {{ $isHomeActive && $currentSection === 'welcome_section' ? 'active' : '' }}">
-                                            <i class="bi bi-award-fill text-warning"></i>
-                                            <span>Welcome To GPO</span>
-                                        </a>
-
-                                        <a href="{{ route('admin.website-pages.home', ['section' => 'why_gpo']) }}" 
-                                           class="home-section-link {{ $isHomeActive && $currentSection === 'why_gpo' ? 'active' : '' }}">
-                                            <i class="bi bi-check2-circle text-success"></i>
-                                            <span>Why People Love GPO</span>
-                                        </a>
-
-                                        <a href="{{ route('admin.website-pages.home', ['section' => 'signature_dish']) }}" 
-                                           class="home-section-link {{ $isHomeActive && $currentSection === 'signature_dish' ? 'active' : '' }}">
-                                            <i class="bi bi-star-fill text-danger"></i>
-                                            <span>Star of GPO</span>
-                                        </a>
-
-                                        <a href="{{ route('admin.website-pages.home', ['section' => 'gpo_experience']) }}" 
-                                           class="home-section-link {{ $isHomeActive && $currentSection === 'gpo_experience' ? 'active' : '' }}">
-                                            <i class="bi bi-stars text-primary"></i>
-                                            <span>The GPO Experience</span>
-                                        </a>
-
-                                        <a href="{{ route('admin.website-pages.home', ['section' => 'visit_us']) }}" 
-                                           class="home-section-link {{ $isHomeActive && $currentSection === 'visit_us' ? 'active' : '' }}">
-                                            <i class="bi bi-geo-alt-fill text-info"></i>
-                                            <span>Visit Us & Store Info</span>
-                                        </a>
-
-                                        <a href="{{ route('admin.website-pages.home', ['section' => 'franchise_cta']) }}" 
-                                           class="home-section-link {{ $isHomeActive && $currentSection === 'franchise_cta' ? 'active' : '' }}">
-                                            <i class="bi bi-shop-window text-success"></i>
-                                            <span>Franchise CTA</span>
-                                        </a>
-                                    </div>
-                                </div>
                             </li>
 
                             <!-- Our Story -->
