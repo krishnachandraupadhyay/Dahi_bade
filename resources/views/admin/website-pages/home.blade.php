@@ -1823,7 +1823,7 @@
                                     <!-- Live Simulated Banner Preview -->
                                     <div class="mb-3">
                                         <label class="form-label fs-11 fw-bold text-muted mb-1 text-uppercase">Live Visual Preview:</label>
-                                        <div class="rounded-3 border overflow-hidden position-relative shadow-sm p-4 text-center d-flex flex-column justify-content-center align-items-center" id="franchise_cta_preview_box" style="min-height: 180px; background-image: linear-gradient(135deg, rgba(8, 59, 60, 0.88) 0%, rgba(5, 44, 45, 0.85) 100%), url('{{ $ctaImageSrc }}'); background-size: cover; background-position: center; color: #ffffff;">
+                                        <div class="rounded-3 border overflow-hidden position-relative shadow-sm p-4 text-center d-flex flex-column justify-content-center align-items-center" id="franchise_cta_preview_box" style="min-height: 180px; background-image: linear-gradient(135deg, rgba(8, 59, 60, {{ $franchiseCta['overlay_opacity'] ?? '0.90' }}) 0%, rgba(5, 44, 45, {{ $franchiseCta['overlay_opacity'] ?? '0.90' }}) 100%), url('{{ $ctaImageSrc }}'); background-size: cover; background-position: center; color: #ffffff;">
                                             <h6 class="fw-bold fs-14 mb-1 text-white" id="preview_cta_heading" style="letter-spacing: 0.5px;">{{ $franchiseCta['heading'] ?? 'BRING THE GPO EXPERIENCE TO YOUR CITY' }}</h6>
                                             <small class="fs-11 fst-italic mb-2" id="preview_cta_subheading" style="color: #ecc67d;">{{ $franchiseCta['subheading'] ?? 'Be Part of a Legacy That Started in 1976.' }}</small>
                                             <span class="badge rounded-pill px-3 py-1.5 fs-11 fw-bold mt-1" id="preview_cta_btn" style="background: #ecc67d; color: #1f2723;">
@@ -1847,11 +1847,16 @@
                                         <label class="form-label fs-12 fw-bold text-dark mb-1">
                                             Teal Overlay Opacity (Darkness):
                                         </label>
-                                        <select name="franchise_cta[overlay_opacity]" class="form-select form-select-sm modern-input fs-12">
+                                        <select name="franchise_cta[overlay_opacity]" id="franchise_cta_opacity_select" class="form-select form-select-sm modern-input fs-12">
+                                            <option value="0.95" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.95' ? 'selected' : '' }}>95% (Extra Dark / Maximum Contrast)</option>
                                             <option value="0.92" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.92' ? 'selected' : '' }}>92% (High Contrast / Darker)</option>
                                             <option value="0.90" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.90' ? 'selected' : '' }}>90% (Standard / Recommended)</option>
-                                            <option value="0.85" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.85' ? 'selected' : '' }}>85% (Medium Visibility)</option>
+                                            <option value="0.85" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.85' ? 'selected' : '' }}>85% (Balanced Dark / Medium Visibility)</option>
+                                            <option value="0.80" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.80' ? 'selected' : '' }}>80% (Moderate Darkness)</option>
                                             <option value="0.75" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.75' ? 'selected' : '' }}>75% (Lighter Background)</option>
+                                            <option value="0.65" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.65' ? 'selected' : '' }}>65% (High Photo Visibility)</option>
+                                            <option value="0.50" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.50' ? 'selected' : '' }}>50% (Subtle Tint / Vivid Photo)</option>
+                                            <option value="0.35" {{ ($franchiseCta['overlay_opacity'] ?? '0.90') == '0.35' ? 'selected' : '' }}>35% (Light Tint / Photo Focused)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -3266,19 +3271,40 @@
                 }
             });
         }
-        // Franchise CTA Live Image Preview
+        // Franchise CTA Live Image & Opacity Preview
         const ctaFileInput = document.getElementById('franchise_cta_file_input');
         const ctaPreviewBox = document.getElementById('franchise_cta_preview_box');
-        if (ctaFileInput && ctaPreviewBox) {
+        const ctaOpacitySelect = document.getElementById('franchise_cta_opacity_select');
+
+        function updateCtaPreviewBackground(newImgUrl) {
+            if (!ctaPreviewBox) return;
+            const op = ctaOpacitySelect ? ctaOpacitySelect.value : '0.90';
+            if (newImgUrl) {
+                ctaPreviewBox.style.backgroundImage = `linear-gradient(135deg, rgba(8, 59, 60, ${op}) 0%, rgba(5, 44, 45, ${op}) 100%), url('${newImgUrl}')`;
+            } else {
+                const currentBg = ctaPreviewBox.style.backgroundImage;
+                const match = currentBg.match(/url\(['"]?(.*?)['"]?\)/);
+                const url = match ? match[1] : '';
+                ctaPreviewBox.style.backgroundImage = `linear-gradient(135deg, rgba(8, 59, 60, ${op}) 0%, rgba(5, 44, 45, ${op}) 100%), url('${url}')`;
+            }
+        }
+
+        if (ctaFileInput) {
             ctaFileInput.addEventListener('change', function () {
                 const file = this.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        ctaPreviewBox.style.backgroundImage = `linear-gradient(135deg, rgba(8, 59, 60, 0.88) 0%, rgba(5, 44, 45, 0.85) 100%), url('${e.target.result}')`;
+                        updateCtaPreviewBackground(e.target.result);
                     };
                     reader.readAsDataURL(file);
                 }
+            });
+        }
+
+        if (ctaOpacitySelect) {
+            ctaOpacitySelect.addEventListener('change', function () {
+                updateCtaPreviewBackground();
             });
         }
 
