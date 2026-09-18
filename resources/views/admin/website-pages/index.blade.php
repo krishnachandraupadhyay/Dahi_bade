@@ -46,7 +46,7 @@
                         <tr>
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-2.5">
-                                    <div class="rounded-2 bg-primary-transparent text-primary d-inline-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                    <div class="rounded-2 bg-primary-transparent text-primary d-flex flex-shrink-0 align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                         <i class="bi bi-house-door-fill"></i>
                                     </div>
                                     <div>
@@ -74,7 +74,7 @@
                         <tr>
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-2.5">
-                                    <div class="rounded-2 bg-info-transparent text-info d-inline-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                    <div class="rounded-2 bg-info-transparent text-info d-flex flex-shrink-0 align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                         <i class="bi bi-journal-text"></i>
                                     </div>
                                     <div>
@@ -96,7 +96,7 @@
                         <tr>
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-2.5">
-                                    <div class="rounded-2 bg-warning-transparent text-warning d-inline-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                    <div class="rounded-2 bg-warning-transparent text-warning d-flex flex-shrink-0 align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                         <i class="bi bi-card-checklist"></i>
                                     </div>
                                     <div>
@@ -118,7 +118,7 @@
                         <tr>
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-2.5">
-                                    <div class="rounded-2 bg-danger-transparent text-danger d-inline-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                    <div class="rounded-2 bg-danger-transparent text-danger d-flex flex-shrink-0 align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                         <i class="bi bi-shop"></i>
                                     </div>
                                     <div>
@@ -140,7 +140,7 @@
                         <tr>
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-2.5">
-                                    <div class="rounded-2 bg-secondary-transparent text-secondary d-inline-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                    <div class="rounded-2 bg-secondary-transparent text-secondary d-flex flex-shrink-0 align-items-center justify-content-center" style="width: 34px; height: 34px;">
                                         <i class="bi bi-envelope-at"></i>
                                     </div>
                                     <div>

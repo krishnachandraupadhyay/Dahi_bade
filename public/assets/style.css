@@ -939,11 +939,18 @@ a {
   margin-bottom: 18px;
 }
 
-/* Why People Love GPO (5 Badges) */
+/* Why People Love GPO (Feature Cards Grid) */
 .why-love-section {
   text-align: center;
-  padding: 15px 0 0;
-  margin-bottom: 28px;
+  padding: 20px 0 10px;
+  margin-bottom: 40px;
+}
+
+.why-love-badge-icon {
+  color: #6a9b85;
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+  line-height: 1;
 }
 
 .why-love-section h3 {
@@ -951,12 +958,78 @@ a {
   font-size: 2.3rem;
   color: var(--c-teal-deep);
   margin-bottom: 6px;
+  letter-spacing: 0.3px;
 }
 
 .why-love-section p.sub {
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   color: var(--c-text-muted);
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.why-gpo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  text-align: left;
+}
+
+@media (max-width: 991px) {
+  .why-gpo-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .why-gpo-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.why-gpo-card {
+  background: #ffffff;
+  padding: 28px 26px;
+  border-radius: var(--radius-md, 14px);
+  border: 1px solid rgba(8, 59, 60, 0.08);
+  box-shadow: 0 4px 16px rgba(8, 59, 60, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.why-gpo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(8, 59, 60, 0.1);
+  border-color: rgba(201, 108, 75, 0.25);
+}
+
+.why-gpo-card-header {
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(8, 59, 60, 0.06);
+  padding-bottom: 10px;
+}
+
+.why-gpo-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.why-gpo-card-desc {
+  font-size: 0.92rem;
+  color: var(--c-text-muted, #556968);
+  line-height: 1.6;
+  margin: 0;
 }
 
 .five-badges-row {

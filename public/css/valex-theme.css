@@ -523,6 +523,14 @@ html, body, #layout-wrapper, .main-content {
     color: #05c3fb !important;
 }
 
+/* Decimal Spacing Utilities for Bootstrap 5 */
+.gap-1\.5 { gap: 0.375rem !important; }
+.gap-2\.5 { gap: 0.625rem !important; }
+.p-2\.5 { padding: 0.625rem !important; }
+.px-2\.5 { padding-left: 0.625rem !important; padding-right: 0.625rem !important; }
+.py-1\.5 { padding-top: 0.375rem !important; padding-bottom: 0.375rem !important; }
+.py-2\.5 { padding-top: 0.625rem !important; padding-bottom: 0.625rem !important; }
+
 .bg-purple-transparent {
     background-color: rgba(108, 95, 252, 0.12) !important;
     color: #6c5ffc !important;

@@ -239,24 +239,24 @@
     <!-- Home Page Card with Header Dropdown -->
     <div class="card border-0 shadow-sm" style="border-radius: 12px; background: #ffffff;">
         <!-- Card Topbar -->
-        <div class="card-header bg-transparent py-3 px-4 d-flex flex-wrap align-items-center justify-content-between gap-3 border-bottom border-light-subtle">
+        <div class="card-header bg-white py-3 px-4 d-flex flex-wrap align-items-center justify-content-between gap-3 border-bottom border-light-subtle">
             <!-- Left Side: Home Page Title -->
-            <div class="d-flex align-items-center gap-2.5">
-                <div class="rounded-2 bg-primary-transparent text-primary d-inline-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                    <i class="bi bi-house-door-fill fs-16"></i>
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-3 bg-primary-transparent text-primary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; font-size: 18px;">
+                    <i class="bi bi-house-door-fill"></i>
                 </div>
                 <div>
-                    <h5 class="fw-bold text-dark mb-0 fs-16">Home Page</h5>
-                    <small class="text-muted fs-12">Manage sections and hero content of the homepage</small>
+                    <h5 class="fw-bold text-dark mb-0 fs-16" style="line-height: 1.25;">Home Page</h5>
+                    <small class="text-muted fs-12 d-block" style="margin-top: 2px;">Manage sections and hero content of the homepage</small>
                 </div>
             </div>
 
             <!-- Right Side: Section Dropdown -->
-            <div class="d-flex align-items-center gap-2">
-                <label for="homeSectionSelector" class="fs-13 text-muted mb-0 fw-semibold text-nowrap">
-                    <i class="bi bi-layers me-1 text-primary"></i> Select Section:
+            <div class="d-flex align-items-center gap-2.5">
+                <label for="homeSectionSelector" class="fs-13 text-muted mb-0 fw-semibold text-nowrap d-flex align-items-center gap-1.5">
+                    <i class="bi bi-layers text-primary fs-14"></i> <span>Select Section:</span>
                 </label>
-                <select id="homeSectionSelector" class="form-select form-select-sm fw-medium shadow-none" style="min-width: 280px; font-size: 13px; border-color: #cbd5e1;">
+                <select id="homeSectionSelector" class="form-select form-select-sm fw-medium shadow-none" style="min-width: 290px; font-size: 13px; border-color: #cbd5e1; border-radius: 8px; padding: 6px 12px;">
                     <option value="hero_section" selected>🌟 Hero Section (Main Banner & Carousel)</option>
                     <option value="highlights_strip">📌 Highlights Strip (3 Feature Cards)</option>
                     <option value="welcome_section">📖 Welcome Section (Founders & Legacy)</option>

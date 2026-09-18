@@ -237,7 +237,7 @@
       <!-- SECTION 02 — WHY GPO? (Document Pages 2-3: 6 Exact Items) -->
       <section class="why-love-section">
         @if(!empty($whyGpo['badge_icon']))
-          <div style="color: #6a9b85; font-size: 1.2rem; margin-bottom: 4px;">{{ $whyGpo['badge_icon'] }}</div>
+          <div class="why-love-badge-icon">{{ $whyGpo['badge_icon'] }}</div>
         @endif
         @if(!empty($whyGpo['heading']))
           <h3>{{ $whyGpo['heading'] }}</h3>
@@ -246,17 +246,19 @@
           <p class="sub">{{ $whyGpo['subheading'] }}</p>
         @endif
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; text-align: left;">
+        <div class="why-gpo-grid">
           @foreach($whyGpo['items'] ?? [] as $item)
             @php
               $isTerracotta = ($item['style'] ?? 'teal') === 'terracotta';
               $titleColor = $isTerracotta ? 'var(--c-terracotta-coral)' : 'var(--c-teal-deep)';
             @endphp
-            <div style="background: #ffffff; padding: 26px 22px; border-radius: var(--radius-md); border: 1px solid rgba(8,59,60,0.08); box-shadow: 0 4px 14px rgba(8,59,60,0.05); display: flex; flex-column: column; justify-content: flex-start;">
-              <div style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; color: {{ $titleColor }}; margin-bottom: 6px;">
-                {{ $item['title'] ?? '' }}
+            <div class="why-gpo-card">
+              <div class="why-gpo-card-header">
+                <h4 class="why-gpo-card-title" style="color: {{ $titleColor }};">
+                  {{ $item['title'] ?? '' }}
+                </h4>
               </div>
-              <p style="font-size: 0.88rem; color: var(--c-text-muted); line-height: 1.5; margin-bottom: 0;">
+              <p class="why-gpo-card-desc">
                 {{ $item['description'] ?? '' }}
               </p>
             </div>

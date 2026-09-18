@@ -939,11 +939,18 @@ a {
   margin-bottom: 18px;
 }
 
-/* Why People Love GPO (5 Badges) */
+/* Why People Love GPO (Feature Cards Grid) */
 .why-love-section {
   text-align: center;
-  padding: 15px 0 0;
-  margin-bottom: 28px;
+  padding: 20px 0 10px;
+  margin-bottom: 40px;
+}
+
+.why-love-badge-icon {
+  color: #6a9b85;
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+  line-height: 1;
 }
 
 .why-love-section h3 {
@@ -951,12 +958,78 @@ a {
   font-size: 2.3rem;
   color: var(--c-teal-deep);
   margin-bottom: 6px;
+  letter-spacing: 0.3px;
 }
 
 .why-love-section p.sub {
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   color: var(--c-text-muted);
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.why-gpo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  text-align: left;
+}
+
+@media (max-width: 991px) {
+  .why-gpo-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .why-gpo-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.why-gpo-card {
+  background: #ffffff;
+  padding: 28px 26px;
+  border-radius: var(--radius-md, 14px);
+  border: 1px solid rgba(8, 59, 60, 0.08);
+  box-shadow: 0 4px 16px rgba(8, 59, 60, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.why-gpo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(8, 59, 60, 0.1);
+  border-color: rgba(201, 108, 75, 0.25);
+}
+
+.why-gpo-card-header {
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(8, 59, 60, 0.06);
+  padding-bottom: 10px;
+}
+
+.why-gpo-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.why-gpo-card-desc {
+  font-size: 0.92rem;
+  color: var(--c-text-muted, #556968);
+  line-height: 1.6;
+  margin: 0;
 }
 
 .five-badges-row {
@@ -1062,7 +1135,7 @@ a {
 
 /* Our Favourites Section */
 .our-favourites-exact {
-  margin-bottom: 95px;
+  margin-bottom: 50px;
 }
 
 .our-favourites-exact .sec-head {
@@ -1088,21 +1161,21 @@ a {
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: 0 4px 14px rgba(8, 59, 60, 0.08);
+  border: 1px solid rgba(8, 59, 60, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   display: flex;
   flex-direction: column;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .mini-dish-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(8, 59, 60, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(8, 59, 60, 0.14);
 }
 
 .mini-dish-thumb {
-  height: 205px;
+  height: 125px;
   overflow: hidden;
-  background: #000000;
+  background: #e8f3ef;
 }
 
 .mini-dish-thumb img {
@@ -1117,41 +1190,59 @@ a {
 }
 
 .mini-dish-info {
-  padding: 18px 12px 20px;
+  padding: 14px 14px 16px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 4px;
-  min-height: 80px;
+  justify-content: space-between;
+  flex-grow: 1;
 }
 
 .mini-dish-info h5 {
+  font-family: var(--font-serif);
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--c-teal-deep);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  line-height: 1.3;
 }
 
-.mini-dish-info span {
-  font-family: var(--font-serif);
-  font-size: 1.05rem;
-  color: var(--c-terracotta-spice);
+.mini-dish-info p {
+  line-height: 1.35;
+}
+
+.btn-cinnamon-pill {
+  display: inline-block;
+  background: var(--c-terracotta-coral);
+  color: #ffffff;
+  font-size: 0.88rem;
   font-weight: 700;
+  letter-spacing: 1px;
+  padding: 12px 32px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(201, 108, 75, 0.28);
+  transition: all 0.25s ease;
+}
+
+.btn-cinnamon-pill:hover {
+  background: #b55a36;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(201, 108, 75, 0.38);
 }
 
 /* ==========================================================================
    THE GPO EXPERIENCE SECTION (Exact Replica of Reference Design)
    ========================================================================== */
 .gpo-experience-section {
-  margin-top: 15px;
-  margin-bottom: 95px;
+  margin-top: 5px;
+  margin-bottom: 50px;
 }
 
 .gpo-exp-heading-wrap {
   position: relative;
   text-align: center;
-  margin-bottom: 40px;
-  padding: 0 40px;
+  margin-bottom: 22px;
+  padding: 0 35px;
 }
 
 .leaf-accent-left {
@@ -1164,33 +1255,39 @@ a {
   align-items: center;
 }
 
+.leaf-accent-left svg {
+  width: 28px;
+  height: 28px;
+}
+
 .gpo-exp-titles h3 {
   font-family: var(--font-serif);
-  font-size: 2.3rem;
+  font-size: 2.05rem;
   color: var(--c-teal-deep);
   letter-spacing: 0.5px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .gpo-exp-titles p {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 2.5px;
+  letter-spacing: 2.2px;
   text-transform: uppercase;
   color: var(--c-text-muted);
+  margin-bottom: 0;
 }
 
 /* 4 Clean Feature Columns in Seamless Row with Dividers (No Floating White Cards) */
 .gpo-exp-strip {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin-bottom: 50px;
-  padding: 10px 0 25px;
+  margin-bottom: 30px;
+  padding: 4px 0 16px;
   border-bottom: 1px solid rgba(8, 59, 60, 0.08);
 }
 
 .gpo-exp-col {
-  padding: 12px 24px;
+  padding: 6px 18px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -1209,8 +1306,9 @@ a {
 }
 
 .gpo-exp-icon {
-  width: 54px;
-  height: 54px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.25rem;
   border-radius: 50%;
   background: rgba(8, 59, 60, 0.05);
   border: 1px solid rgba(8, 59, 60, 0.12);
@@ -1218,7 +1316,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
   transition: all 0.3s ease;
 }
 
@@ -1232,17 +1330,18 @@ a {
 
 .gpo-exp-col h5 {
   font-family: var(--font-serif);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--c-teal-deep);
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   letter-spacing: 0.2px;
 }
 
 .gpo-exp-col p {
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   color: var(--c-text-muted);
-  line-height: 1.4;
+  line-height: 1.35;
+  margin-bottom: 0;
 }
 
 /* Reviews / Testimonials 3 Cards */
